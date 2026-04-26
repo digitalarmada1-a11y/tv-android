@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi TV Player</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #050505;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    #home {
+      width: 100vw;
+      height: 100vh;
+      padding: 60px;
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.95), rgba(0,0,0,0.55), rgba(0,0,0,0.95)),
+        linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0.15));
+    }
+
+    .top {
+      margin-bottom: 38px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 52px;
+      margin: 0 0 12px;
+      line-height: 1.05;
+    }
+
+    p {
+      font-size: 22px;
+      color: #ddd;
+      margin: 0;
+      max-width: 850px;
+    }
+
+    #grid {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 10px 8px 30px 8px;
+      scroll-behavior: smooth;
+    }
+
+    .item {
+      min-width: 250px;
+      width: 250px;
+      height: 375px;
+      border: 0;
+      border-radius: 18px;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .item:focus {
+      outline: 6px solid white;
+      outline-offset: 6px;
+      transform: scale(1.04);
+    }
+
+    .poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #222;
+    }
+
+    .fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 18px;
+      font-size: 28px;
+      font-weight: bold;
+      background: linear-gradient(145deg, #333, #111);
+    }
+
+    .label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0));
+      font-size: 20px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    #playerScreen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    #msg {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      color: white;
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 18px;
+      border-radius: 10px;
+      z-index: 10;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="home">
+    <div class="top">
+      <div class="badge">Mi reproductor</div>
+      <h1>Catálogo</h1>
+      <p>Elige un vídeo y pulsa Enter / OK para reproducir.</p>
+    </div>
+
+    <div id="grid"></div>
+  </div>
+
+  <div id="playerScreen">
+    <div id="msg">Cargando...</div>
+    <video id="video" controls autoplay></video>
+  </div>
+
+  <script>
+    let catalogo = [];
+    let player = null;
+    let lastFocusedIndex = 0;
+
+    async function cargarCatalogo() {
+      const res = await fetch("catalogo.json?cache=" + Date.now());
+      catalogo = await res.json();
+
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+
+      catalogo.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "item";
+        btn.onclick = () => {
+          lastFocusedIndex = index;
+          playVideo(item.manifest);
+        };
+
+        if (item.poster) {
+          btn.innerHTML = `
+            <img class="poster" src="${item.poster}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="fallback" style="display:none">${item.title}</div>
+            <div class="label">${item.title}</div>
+          `;
+        } else {
+          btn.innerHTML = `
+            <div class="fallback">${item.title}</div>
+            <div class="label">${item.title}</div>
+          `;
+        }
+
+        grid.appendChild(btn);
+
+        if (index === 0) {
+          setTimeout(() => btn.focus(), 100);
+        }
+      });
+
+      if (catalogo.length === 0) {
+        grid.innerHTML = "<p>No hay vídeos todavía. Añade uno desde admin.html.</p>";
+      }
+    }
+
+    async function playVideo(manifestUrl) {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("playerScreen").style.display = "block";
+
+      const msg = document.getElementById("msg");
+      const video = document.getElementById("video");
+
+      msg.style.display = "block";
+      msg.textContent = "Cargando...";
+
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        msg.textContent = "Este navegador no soporta Shaka Player";
+        return;
+      }
+
+      if (player) {
+        await player.destroy();
+      }
+
+      player = new shaka.Player(video);
+
+      player.addEventListener("error", function(event) {
+        console.error("Error Shaka:", event.detail);
+        msg.textContent = "Error cargando el vídeo";
+      });
+
+      try {
+        await player.load(manifestUrl);
+        msg.style.display = "none";
+        video.focus();
+        await video.play();
+      } catch (error) {
+        console.error(error);
+        msg.textContent = "No se pudo cargar: " + manifestUrl;
+      }
+    }
+
+    document.addEventListener("keydown", async function(e) {
+      const items = Array.from(document.querySelectorAll(".item"));
+      const current = document.activeElement;
+      const index = items.indexOf(current);
+
+      if (document.getElementById("playerScreen").style.display === "block") {
+        if (e.key === "Escape" || e.key === "Backspace") {
+          const video = document.getElementById("video");
+          video.pause();
+
+          if (player) {
+            await player.unload();
+          }
+
+          document.getElementById("playerScreen").style.display = "none";
+          document.getElementById("home").style.display = "block";
+
+          setTimeout(() => {
+            const itemsNow = Array.from(document.querySelectorAll(".item"));
+            if (itemsNow[lastFocusedIndex]) {
+              itemsNow[lastFocusedIndex].focus();
+            } else if (itemsNow[0]) {
+              itemsNow[0].focus();
+            }
+          }, 100);
+        }
+
+        return;
+      }
+
+      if (e.key === "ArrowRight" && index < items.length - 1) {
+        lastFocusedIndex = index + 1;
+        items[index + 1].focus();
+        items[index + 1].scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+
+      if (e.key === "ArrowLeft" && index > 0) {
+        lastFocusedIndex = index - 1;
+        items[index - 1].focus();
+        items[index - 1].scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+
+      if (e.key === "Enter" && index >= 0) {
+        lastFocusedIndex = index;
+        playVideo(catalogo[index].manifest);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", cargarCatalogo);
+  </script>
+</body>
+</html>

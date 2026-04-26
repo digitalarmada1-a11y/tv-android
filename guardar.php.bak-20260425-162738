@@ -1,0 +1,388 @@
+<?php
+
+declare(strict_types=1);
+
+$PASSWORD = getenv('TV_ADMIN_PASS') ?: '1234';
+$catalogFile = __DIR__ . '/catalogo.json';
+$manifestDir = __DIR__ . '/manifests';
+$posterDir = __DIR__ . '/posters';
+
+function respond(int $status, array $payload): void
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+function ensureDirectory(string $path): void
+{
+    if (!is_dir($path)) {
+        mkdir($path, 0775, true);
+    }
+}
+
+function slugify(string $text): string
+{
+    $text = strtolower(trim($text));
+    $converted = iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+
+    if ($converted !== false) {
+        $text = $converted;
+    }
+
+    $text = preg_replace('/[^a-z0-9]+/', '-', $text) ?? '';
+    $text = trim($text, '-');
+
+    return $text !== '' ? $text : 'video';
+}
+
+function inferTypeFromSource(string $source): string
+{
+    $clean = strtolower(strtok($source, '?') ?: $source);
+
+    if (str_ends_with($clean, '.mpd')) {
+        return 'dash';
+    }
+
+    if (str_ends_with($clean, '.m3u8')) {
+        return 'hls';
+    }
+
+    if (str_ends_with($clean, '.mp4') || str_ends_with($clean, '.webm') || str_ends_with($clean, '.mov')) {
+        return 'video';
+    }
+
+    return 'stream';
+}
+
+function normalizeSourceReference(string $value): string
+{
+    return trim($value);
+}
+
+function isValidReference(string $value): bool
+{
+    if ($value === '') {
+        return false;
+    }
+
+    if (filter_var($value, FILTER_VALIDATE_URL)) {
+        return true;
+    }
+
+    return preg_match('/^[A-Za-z0-9_\\.\\-\\/:%?=&+#]+$/', $value) === 1;
+}
+
+function createItemId(string $title): string
+{
+    return slugify($title) . '-' . substr(bin2hex(random_bytes(6)), 0, 12);
+}
+
+function readCatalog(string $catalogFile): array
+{
+    if (!file_exists($catalogFile)) {
+        return [];
+    }
+
+    $raw = file_get_contents($catalogFile);
+
+    if ($raw === false || trim($raw) === '') {
+        return [];
+    }
+
+    $decoded = json_decode($raw, true);
+
+    return is_array($decoded) ? $decoded : [];
+}
+
+function normalizeItem(array $item, int $index): array
+{
+    $source = normalizeSourceReference((string) ($item['source'] ?? $item['manifest'] ?? ''));
+    $title = trim((string) ($item['title'] ?? ('Video ' . ($index + 1))));
+    $description = trim((string) ($item['description'] ?? ''));
+    $poster = trim((string) ($item['poster'] ?? ''));
+    $id = trim((string) ($item['id'] ?? ''));
+    $createdAt = trim((string) ($item['createdAt'] ?? ''));
+    $updatedAt = trim((string) ($item['updatedAt'] ?? ''));
+
+    if ($id === '') {
+        $id = createItemId($title);
+    }
+
+    if ($createdAt === '') {
+        $createdAt = gmdate('c');
+    }
+
+    if ($updatedAt === '') {
+        $updatedAt = $createdAt;
+    }
+
+    return [
+        'id' => $id,
+        'title' => $title,
+        'description' => $description,
+        'source' => $source,
+        'manifest' => $source,
+        'poster' => $poster,
+        'type' => trim((string) ($item['type'] ?? inferTypeFromSource($source))),
+        'createdAt' => $createdAt,
+        'updatedAt' => $updatedAt,
+    ];
+}
+
+function normalizeCatalog(array $items): array
+{
+    $normalized = [];
+
+    foreach ($items as $index => $item) {
+        if (!is_array($item)) {
+            continue;
+        }
+
+        $normalized[] = normalizeItem($item, $index);
+    }
+
+    return $normalized;
+}
+
+function saveCatalog(string $catalogFile, array $items): void
+{
+    $payload = json_encode(
+        array_values($items),
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
+    );
+
+    if ($payload === false) {
+        respond(500, ['ok' => false, 'message' => 'No se pudo serializar el catalogo.']);
+    }
+
+    file_put_contents($catalogFile, $payload . PHP_EOL);
+}
+
+function findItemIndex(array $catalog, string $id): int
+{
+    foreach ($catalog as $index => $item) {
+        if (($item['id'] ?? '') === $id) {
+            return $index;
+        }
+    }
+
+    return -1;
+}
+
+function cleanManagedFile(string $relativePath, string $baseDir, string $expectedPrefix): void
+{
+    $relativePath = trim($relativePath);
+
+    if ($relativePath === '' || !str_starts_with($relativePath, $expectedPrefix . '/')) {
+        return;
+    }
+
+    $filename = basename($relativePath);
+    $target = $baseDir . DIRECTORY_SEPARATOR . $filename;
+
+    if (is_file($target)) {
+        unlink($target);
+    }
+}
+
+function resolveStreamSource(string $manifestDir): array
+{
+    $sourceUrl = normalizeSourceReference((string) ($_POST['source_url'] ?? $_POST['manifest_url'] ?? ''));
+    $manifestXml = trim((string) ($_POST['manifest_xml'] ?? ''));
+
+    if ($sourceUrl !== '') {
+        if (!isValidReference($sourceUrl)) {
+            respond(400, ['ok' => false, 'message' => 'La fuente indicada no parece valida.']);
+        }
+
+        return [
+            'source' => $sourceUrl,
+            'type' => inferTypeFromSource($sourceUrl),
+        ];
+    }
+
+    if (isset($_FILES['manifest_file']) && ($_FILES['manifest_file']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
+        $content = file_get_contents($_FILES['manifest_file']['tmp_name']);
+
+        if ($content === false || stripos($content, '<MPD') === false) {
+            respond(400, ['ok' => false, 'message' => 'El archivo subido no parece un MPD valido.']);
+        }
+
+        ensureDirectory($manifestDir);
+        $filename = 'manifest-' . substr(bin2hex(random_bytes(6)), 0, 12) . '.mpd';
+        $target = $manifestDir . DIRECTORY_SEPARATOR . $filename;
+        file_put_contents($target, $content);
+
+        return [
+            'source' => 'manifests/' . $filename,
+            'type' => 'dash',
+        ];
+    }
+
+    if ($manifestXml !== '') {
+        if (stripos($manifestXml, '<MPD') === false) {
+            respond(400, ['ok' => false, 'message' => 'El XML pegado no parece un MPD valido.']);
+        }
+
+        ensureDirectory($manifestDir);
+        $filename = 'manifest-' . substr(bin2hex(random_bytes(6)), 0, 12) . '.mpd';
+        $target = $manifestDir . DIRECTORY_SEPARATOR . $filename;
+        file_put_contents($target, $manifestXml);
+
+        return [
+            'source' => 'manifests/' . $filename,
+            'type' => 'dash',
+        ];
+    }
+
+    respond(400, ['ok' => false, 'message' => 'Debes enviar una URL, un archivo MPD o XML MPD.']);
+}
+
+function resolvePoster(string $posterDir): string
+{
+    $posterUrl = normalizeSourceReference((string) ($_POST['poster_url'] ?? ''));
+
+    if (isset($_FILES['poster_file']) && ($_FILES['poster_file']['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
+        $tmp = $_FILES['poster_file']['tmp_name'];
+        $info = getimagesize($tmp);
+
+        if ($info === false) {
+            respond(400, ['ok' => false, 'message' => 'El poster subido no parece una imagen valida.']);
+        }
+
+        $mime = (string) ($info['mime'] ?? '');
+
+        if ($mime === 'image/jpeg') {
+            $extension = 'jpg';
+        } elseif ($mime === 'image/png') {
+            $extension = 'png';
+        } elseif ($mime === 'image/webp') {
+            $extension = 'webp';
+        } else {
+            respond(400, ['ok' => false, 'message' => 'Formato de poster no soportado. Usa JPG, PNG o WEBP.']);
+        }
+
+        ensureDirectory($posterDir);
+        $filename = 'poster-' . substr(bin2hex(random_bytes(6)), 0, 12) . '.' . $extension;
+        $target = $posterDir . DIRECTORY_SEPARATOR . $filename;
+        move_uploaded_file($tmp, $target);
+
+        return 'posters/' . $filename;
+    }
+
+    if ($posterUrl !== '') {
+        if (!isValidReference($posterUrl)) {
+            respond(400, ['ok' => false, 'message' => 'La URL del poster no parece valida.']);
+        }
+
+        return $posterUrl;
+    }
+
+    return '';
+}
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    respond(405, ['ok' => false, 'message' => 'Metodo no permitido.']);
+}
+
+$pass = trim((string) ($_POST['pass'] ?? ''));
+
+if ($pass !== $PASSWORD) {
+    respond(403, ['ok' => false, 'message' => 'Clave incorrecta.']);
+}
+
+$action = strtolower(trim((string) ($_POST['action'] ?? 'create')));
+$catalog = normalizeCatalog(readCatalog($catalogFile));
+saveCatalog($catalogFile, $catalog);
+
+if ($action === 'create') {
+    $title = trim((string) ($_POST['title'] ?? ''));
+    $description = trim((string) ($_POST['description'] ?? ''));
+
+    if ($title === '') {
+        respond(400, ['ok' => false, 'message' => 'Falta el titulo.']);
+    }
+
+    $sourceInfo = resolveStreamSource($manifestDir);
+    $poster = resolvePoster($posterDir);
+    $now = gmdate('c');
+
+    $item = [
+        'id' => createItemId($title),
+        'title' => $title,
+        'description' => $description,
+        'source' => $sourceInfo['source'],
+        'manifest' => $sourceInfo['source'],
+        'poster' => $poster,
+        'type' => $sourceInfo['type'],
+        'createdAt' => $now,
+        'updatedAt' => $now,
+    ];
+
+    $catalog[] = $item;
+    saveCatalog($catalogFile, $catalog);
+
+    respond(200, [
+        'ok' => true,
+        'message' => 'Item guardado correctamente.',
+        'item' => $item,
+        'count' => count($catalog),
+    ]);
+}
+
+if ($action === 'delete') {
+    $id = trim((string) ($_POST['id'] ?? ''));
+    $index = findItemIndex($catalog, $id);
+
+    if ($index < 0) {
+        respond(404, ['ok' => false, 'message' => 'No se encontro el item a borrar.']);
+    }
+
+    $item = $catalog[$index];
+    cleanManagedFile((string) ($item['source'] ?? ''), $manifestDir, 'manifests');
+    cleanManagedFile((string) ($item['poster'] ?? ''), $posterDir, 'posters');
+
+    array_splice($catalog, $index, 1);
+    saveCatalog($catalogFile, $catalog);
+
+    respond(200, [
+        'ok' => true,
+        'message' => 'Item borrado correctamente.',
+        'count' => count($catalog),
+    ]);
+}
+
+if ($action === 'move') {
+    $id = trim((string) ($_POST['id'] ?? ''));
+    $direction = strtolower(trim((string) ($_POST['direction'] ?? 'up')));
+    $index = findItemIndex($catalog, $id);
+
+    if ($index < 0) {
+        respond(404, ['ok' => false, 'message' => 'No se encontro el item a mover.']);
+    }
+
+    $targetIndex = $direction === 'down' ? $index + 1 : $index - 1;
+
+    if (!isset($catalog[$targetIndex])) {
+        respond(200, [
+            'ok' => true,
+            'message' => 'El item ya estaba en el borde del catalogo.',
+            'count' => count($catalog),
+        ]);
+    }
+
+    $current = $catalog[$index];
+    $catalog[$index] = $catalog[$targetIndex];
+    $catalog[$targetIndex] = $current;
+    saveCatalog($catalogFile, $catalog);
+
+    respond(200, [
+        'ok' => true,
+        'message' => 'Orden actualizado.',
+        'count' => count($catalog),
+    ]);
+}
+
+respond(400, ['ok' => false, 'message' => 'Accion no soportada.']);

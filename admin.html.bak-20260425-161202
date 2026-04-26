@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin TV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 18px;
+      font-size: 18px;
+      padding: 12px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 0;
+    }
+
+    textarea {
+      height: 180px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    button {
+      background: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .box {
+      background: #1d1d1d;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    #msg {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #8cff8c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin TV</h1>
+
+  <div class="box">
+    <label>Título</label>
+    <input id="title" placeholder="Película 1">
+
+    <label>Descripción</label>
+    <input id="description" placeholder="Opcional">
+
+    <label>URL .mpd</label>
+    <input id="manifestUrl" placeholder="https://.../video.mpd">
+
+    <label>O pegar XML MPD completo</label>
+    <textarea id="manifestXml" placeholder="<MPD>...</MPD>"></textarea>
+
+    <label>O subir archivo .mpd</label>
+    <input id="manifestFile" type="file" accept=".mpd,.xml,text/xml,application/dash+xml">
+
+    <label>Poster opcional</label>
+    <input id="posterFile" type="file" accept="image/*">
+
+    <button onclick="guardar()">Guardar en catálogo</button>
+
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    async function guardar() {
+      const msg = document.getElementById("msg");
+      msg.textContent = "Guardando...";
+
+      const form = new FormData();
+
+      form.append("pass", "1234");
+      form.append("title", document.getElementById("title").value.trim());
+      form.append("description", document.getElementById("description").value.trim());
+      form.append("manifest_url", document.getElementById("manifestUrl").value.trim());
+      form.append("manifest_xml", document.getElementById("manifestXml").value.trim());
+
+      const manifestFile = document.getElementById("manifestFile").files[0];
+      const posterFile = document.getElementById("posterFile").files[0];
+
+      if (manifestFile) {
+        form.append("manifest_file", manifestFile);
+      }
+
+      if (posterFile) {
+        form.append("poster_file", posterFile);
+      }
+
+      try {
+        const res = await fetch("guardar.php", {
+          method: "POST",
+          body: form
+        });
+
+        const text = await res.text();
+
+        if (!res.ok) {
+          msg.style.color = "#ff7777";
+          msg.textContent = "Error: " + text;
+          return;
+        }
+
+        msg.style.color = "#8cff8c";
+        msg.textContent = "Guardado correctamente";
+
+        document.getElementById("title").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("manifestUrl").value = "";
+        document.getElementById("manifestXml").value = "";
+        document.getElementById("manifestFile").value = "";
+        document.getElementById("posterFile").value = "";
+
+      } catch (e) {
+        msg.style.color = "#ff7777";
+        msg.textContent = "Error de conexión";
+      }
+    }
+  </script>
+</body>
+</html>

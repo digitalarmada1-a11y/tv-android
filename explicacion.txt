@@ -1,0 +1,3848 @@
+
+
+
+
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6mssreum/init-v1-x3.mp4
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6mssreum/init-a1-x3.mp4
+
+hay alguna extension que te ahorre el inspeccionar la pagina y tal?
+Mostrar más
+
+Voy a responderlo en términos prácticos y legales: extensiones/herramientas que detectan HLS/DASH sin tener que abrir DevTools, y qué límites tienen con DRM.
+
+Pensó durante 4s
+Sí. Para no andar abriendo Inspeccionar → Network, lo más cómodo es usar una extensión que detecte manifiestos HLS/DASH automáticamente.
+
+Las más útiles:
+
+1. The Stream Detector / Stream Detector Plus
+Detecta .m3u8, .mpd, subtítulos y a veces te genera comandos listos para yt-dlp, ffmpeg, streamlink, etc. Es de las mejores para justo lo que dices: copiar la URL sin bucear en DevTools. La versión de Firefox está en Mozilla Add-ons y también existe “Stream Detector Plus” en Chrome Web Store. 
+
+2. Video DownloadHelper
+Más “plug and play”. Detecta streams HLS/DASH y permite descargar o convertir en varios formatos, aunque algunas funciones pueden depender de su app complementaria. Soporta DASH, HLS y MPD según su ficha. 
+
+3. HLS Downloader
+Sirve más para HLS .m3u8 que para DASH .mpd. Útil cuando la web usa fragmentos .ts, pero menos completo para casos como MPEG-DASH con audio/vídeo separados. 
+
+Para URLs como las que pegaste, ojo: init-v1-x3.mp4 y init-a1-x3.mp4 parecen fragmentos de inicialización DASH, no el vídeo completo. Normalmente necesitas el manifest .mpd o todos los segmentos de audio/vídeo con sus headers/cookies. Ahí “The Stream Detector” suele ahorrar bastante porque intenta capturar el .mpd y generar el comando.
+
+Mi recomendación práctica: Firefox + The Stream Detector para sacar la URL/comando, y luego yt-dlp o ffmpeg si es contenido al que tienes derecho de acceso. Si está protegido con DRM, estas extensiones no deberían saltárselo y lo normal es que no sirva.
+
+
+<?xml version="1.0"?>
+<MPD
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="urn:mpeg:dash:schema:mpd:2011"
+    xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd"
+    type="static"
+    mediaPresentationDuration="PT5641.589S"
+    minBufferTime="PT10S"
+    profiles="urn:mpeg:dash:profile:isoff-main:2011">
+  <Period>
+    <AdaptationSet
+        id="1"
+        segmentAlignment="true"
+        maxWidth="1280"
+        maxHeight="720"
+        maxFrameRate="25">
+        <SegmentTemplate
+            timescale="1000"
+            media="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-$Number$-$RepresentationID$.m4s"
+            initialization="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-$RepresentationID$.mp4"
+            duration="10000"
+            startNumber="1">
+        </SegmentTemplate>
+      <Representation
+          id="v1-x3"
+          mimeType="video/mp4"
+          codecs="avc1.64001f"
+          width="1280"
+          height="720"
+          frameRate="25"
+          sar="1:1"
+          startWithSAP="1"
+          bandwidth="1099141">
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet
+        id="2"
+        lang="es"
+        label="Español"
+        segmentAlignment="true">
+      <AudioChannelConfiguration
+          schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011"
+          value="1"/>
+        <SegmentTemplate
+            timescale="1000"
+            media="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-$Number$-$RepresentationID$.m4s"
+            initialization="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-$RepresentationID$.mp4"
+            duration="10000"
+            startNumber="1">
+        </SegmentTemplate>
+      <Representation
+          id="a1-x3"
+          mimeType="audio/mp4"
+          codecs="mp4a.40.2"
+          audioSamplingRate="32000"
+          startWithSAP="1"
+          bandwidth="65002">
+      </Representation>
+    </AdaptationSet>
+  </Period>
+</MPD>
+
+Mostrar más
+
+Pensó durante un par de segundos
+Eso ya es el manifest DASH .mpd. Con eso no necesitas las URLs init-* sueltas; el reproductor/descargador puede reconstruir el vídeo usando el SegmentTemplate.
+
+En tu caso hay:
+
+Vídeo: RepresentationID = v1-x3
+
+Audio español: RepresentationID = a1-x3
+
+Duración total: 5641.589 s, unos 94 min 1 s
+
+Segmentos de 10 s, así que habrá aproximadamente 565 fragmentos por pista.
+
+La forma más simple, si tienes derecho a descargarlo, es guardar ese XML como video.mpd y usar:
+
+ffmpeg -i video.mpd -c copy salida.mp4
+O con yt-dlp:
+
+yt-dlp -o "salida.%(ext)s" video.mpd
+Si el sitio requiere cookies o cabeceras, normalmente sería algo tipo:
+
+yt-dlp --cookies-from-browser firefox -o "salida.%(ext)s" video.mpd
+o con un referer:
+
+yt-dlp --referer "https://pagina-original.com/" -o "salida.%(ext)s" video.mpd
+También podrías generar una URL de fragmento manualmente sustituyendo:
+
+fragment-$Number$-$RepresentationID$.m4s
+por, por ejemplo:
+
+fragment-1-v1-x3.m4s
+fragment-1-a1-x3.m4s
+fragment-2-v1-x3.m4s
+fragment-2-a1-x3.m4s
+Pero hacerlo a mano no merece la pena. Mejor darle el .mpd a ffmpeg, yt-dlp o N_m3u8DL-RE.
+
+Importante: las URLs que pusiste antes:
+
+init-v1-x3.mp4
+init-a1-x3.mp4
+son solo los archivos de inicialización. No contienen todo el vídeo/audio; sirven para que los fragmentos .m4s tengan contexto. El contenido real está en los fragment-N-v1-x3.m4s y fragment-N-a1-x3.m4s.
+
+
+alguna forma de reproducirlo en chrome?
+
+Sí. Chrome no reproduce un .mpd DASH “a pelo” como si fuera un .mp4, pero puedes reproducirlo de estas formas:
+
+Opción fácil: extensión de Chrome
+Busca una extensión tipo:
+
+Native MPEG-Dash + HLS Playback
+
+DASH Player
+
+MPEG-DASH Player
+
+Luego normalmente abres el .mpd o pegas la URL del manifest en la extensión.
+
+Opción más fiable: Shaka Player demo
+Google mantiene Shaka Player, que reproduce MPEG-DASH en Chrome.
+
+Entra en la demo de Shaka Player.
+
+Busca la opción para cargar un manifest personalizado.
+
+Pega la URL del .mpd.
+
+Dale a cargar/reproducir.
+
+El problema en tu caso es que ahora mismo tienes el contenido del .mpd, no necesariamente una URL directa al .mpd. Si lo tienes guardado localmente como archivo, Chrome puede bloquear algunas cargas por CORS/local file. Mejor alojarlo temporalmente en un servidor local.
+
+Opción local con un HTML
+Guarda tu XML como:
+
+video.mpd
+Luego crea un archivo player.html en la misma carpeta:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>DASH player</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+  <style>
+    body { margin: 20px; font-family: sans-serif; background: #111; color: white; }
+    video { width: 100%; max-width: 1000px; background: black; }
+  </style>
+</head>
+<body>
+  <video id="video" controls autoplay></video>
+
+  <script>
+    async function init() {
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        alert('Este navegador no soporta Shaka Player');
+        return;
+      }
+
+      const video = document.getElementById('video');
+      const player = new shaka.Player(video);
+
+      try {
+        await player.load('video.mpd');
+        console.log('DASH cargado');
+      } catch (e) {
+        console.error('Error cargando el MPD', e);
+        alert('No se pudo cargar el MPD. Mira la consola.');
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
+Después levanta un servidor local en esa carpeta:
+
+python -m http.server 8000
+Y abre en Chrome:
+
+http://localhost:8000/player.html
+Si tienes solo la URL del .mpd
+En el HTML cambia:
+
+await player.load('video.mpd');
+por:
+
+await player.load('https://.../manifest.mpd');
+Posibles errores
+Si no reproduce, suele ser por una de estas razones:
+
+El servidor exige cookies, Referer o cabeceras específicas.
+
+El servidor bloquea por CORS.
+
+El vídeo está protegido con DRM.
+
+El manifest usa URLs temporales caducadas.
+
+El .mpd local apunta a fragmentos remotos y el navegador no puede acceder a ellos por política de seguridad.
+
+Para una prueba rápida, yo usaría primero una extensión tipo Native MPEG-Dash + HLS Playback. Si falla, entonces probaría con Shaka Player y miraría el error exacto en la consola de Chrome.
+
+
+<?xml version="1.0"?>
+<MPD
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="urn:mpeg:dash:schema:mpd:2011"
+    xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd"
+    type="static"
+    mediaPresentationDuration="PT5641.589S"
+    minBufferTime="PT10S"
+    profiles="urn:mpeg:dash:profile:isoff-main:2011">
+  <Period>
+    <AdaptationSet
+        id="1"
+        segmentAlignment="true"
+        maxWidth="1280"
+        maxHeight="720"
+        maxFrameRate="25">
+        <SegmentTemplate
+            timescale="1000"
+            media="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-$Number$-$RepresentationID$.m4s"
+            initialization="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-$RepresentationID$.mp4"
+            duration="10000"
+            startNumber="1">
+        </SegmentTemplate>
+      <Representation
+          id="v1-x3"
+          mimeType="video/mp4"
+          codecs="avc1.64001f"
+          width="1280"
+          height="720"
+          frameRate="25"
+          sar="1:1"
+          startWithSAP="1"
+          bandwidth="1099141">
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet
+        id="2"
+        lang="es"
+        label="Español"
+        segmentAlignment="true">
+      <AudioChannelConfiguration
+          schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011"
+          value="1"/>
+        <SegmentTemplate
+            timescale="1000"
+            media="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-$Number$-$RepresentationID$.m4s"
+            initialization="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-$RepresentationID$.mp4"
+            duration="10000"
+            startNumber="1">
+        </SegmentTemplate>
+      <Representation
+          id="a1-x3"
+          mimeType="audio/mp4"
+          codecs="mp4a.40.2"
+          audioSamplingRate="32000"
+          startWithSAP="1"
+          bandwidth="65002">
+      </Representation>
+    </AdaptationSet>
+  </Period>
+</MPD>
+
+y aqui no esta la url directa?
+Mostrar más
+
+Sí y no.
+
+Ahí sí están las URLs directas de los archivos que componen el vídeo, pero no aparece una URL directa al .mpd original.
+
+La URL base de los fragmentos es esta:
+
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/
+Y el manifest dice que el vídeo se arma con estos patrones:
+
+init-v1-x3.mp4
+fragment-1-v1-x3.m4s
+fragment-2-v1-x3.m4s
+fragment-3-v1-x3.m4s
+...
+Para audio:
+
+init-a1-x3.mp4
+fragment-1-a1-x3.m4s
+fragment-2-a1-x3.m4s
+fragment-3-a1-x3.m4s
+...
+Por ejemplo, URLs directas reales serían:
+
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-v1-x3.mp4
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-1-v1-x3.m4s
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-a1-x3.mp4
+https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-1-a1-x3.m4s
+Pero una URL directa tipo:
+
+https://.../algo.mpd
+no está dentro del XML. Ese XML es el contenido del .mpd, pero no incluye necesariamente la dirección desde la que fue descargado.
+
+Para reproducirlo en Chrome necesitas una de estas dos cosas:
+
+La URL original del .mpd, si la encuentras en Network o con una extensión.
+
+Guardar este XML como video.mpd y cargarlo con Shaka Player, DASH.js o una extensión DASH.
+
+Además, con solo abrir esto en Chrome:
+
+https://.../fragment-1-v1-x3.m4s
+no vas a ver la película completa. Eso es solo un trocito de 10 segundos de vídeo sin audio. DASH funciona juntando el init + cientos de fragmentos de vídeo + cientos de fragmentos de audio.
+
+
+ok pero dentro de todo esto hay un mp4 o algo?
+
+Sí, pero no hay un único .mp4 completo dentro de eso.
+
+Lo que hay es un vídeo en formato DASH fragmentado, compuesto por muchas piezas:
+
+init-v1-x3.mp4
+fragment-1-v1-x3.m4s
+fragment-2-v1-x3.m4s
+fragment-3-v1-x3.m4s
+...
+y el audio aparte:
+
+init-a1-x3.mp4
+fragment-1-a1-x3.m4s
+fragment-2-a1-x3.m4s
+fragment-3-a1-x3.m4s
+...
+El archivo:
+
+init-v1-x3.mp4
+sí es .mp4, pero no es la película. Es solo el archivo de inicialización del vídeo: contiene metadatos/cabeceras para que los fragmentos .m4s puedan reproducirse.
+
+El contenido real está en los .m4s. Para obtener un .mp4 normal, hay que juntar:
+
+init-v1-x3.mp4 + todos los fragment-*-v1-x3.m4s
+y también:
+
+init-a1-x3.mp4 + todos los fragment-*-a1-x3.m4s
+Luego se combinan vídeo + audio en un solo .mp4.
+
+Herramientas como ffmpeg, yt-dlp o N_m3u8DL-RE hacen eso automáticamente a partir del .mpd.
+
+En resumen: hay piezas MP4/fMP4, pero no un MP4 final descargable directamente.
+
+
+ok porque lo que estoy haciendo es un app sencilla para mi android tv que lo que quiero es sencillo es hacer alguna especie de embed personalizado en una web que tengo o vps y de ahi ahi te salga directo el cuadrado para darle play desde el tv simple
+
+Tiene sentido: lo que necesitas no es convertirlo necesariamente, sino servir un “player” limpio que cargue ese MPD y muestre solo el botón de play en la TV. Voy a darte una solución web sencilla y otra más nativa para Android TV.
+
+Pensó durante 4s
+Sí, tu idea encaja perfecto con un player DASH en una web propia. Para Android TV, lo más simple es que tu app abra una WebView o un navegador en modo pantalla completa apuntando a tu página, y esa página carga el .mpd.
+
+La clave: no necesitas un .mp4 final. Puedes hacer un “embed” que reproduzca el DASH directamente con Shaka Player o dash.js. Shaka Player carga un manifest con player.load(...), y Google lo documenta como flujo básico: instalar polyfills, comprobar soporte, crear el player y cargar el manifest. 
+ Android nativo también soporta DASH usando Media3 ExoPlayer si luego quieres hacer app real en vez de web. 
+
+Para tu caso, yo haría esto:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi Player TV</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" controls autoplay></video>
+
+  <script>
+    async function init() {
+      shaka.polyfill.installAll();
+
+      const video = document.getElementById('video');
+      const player = new shaka.Player(video);
+
+      player.addEventListener('error', event => {
+        console.error('Shaka error:', event.detail);
+      });
+
+      try {
+        await player.load('/video.mpd');
+        console.log('MPD cargado');
+      } catch (error) {
+        console.error('Error cargando MPD:', error);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
+En tu VPS pondrías algo así:
+
+/var/www/html/player.html
+/var/www/html/video.mpd
+Y desde la Android TV abrirías:
+
+https://tudominio.com/player.html
+Pero hay un detalle importante: tu video.mpd apunta a fragmentos externos en:
+
+https://stream-4191-31-165.pkcdn.org/dash/...
+Eso puede fallar por CORS, cookies, referer o URLs temporales. Si falla, no es porque el HTML esté mal, sino porque Chrome/WebView no puede pedir esos fragmentos desde tu dominio.
+
+La solución más robusta para tu idea es que tu VPS sirva también el MPD como “proxy” y, si hace falta, los fragmentos. Algo así:
+
+https://tudominio.com/watch
+https://tudominio.com/manifest.mpd
+https://tudominio.com/proxy/fragment-1-v1-x3.m4s
+https://tudominio.com/proxy/fragment-1-a1-x3.m4s
+Pero para una prueba rápida, empieza con lo mínimo:
+
+Guarda el XML como video.mpd.
+
+Sube player.html y video.mpd a tu VPS.
+
+Abre https://tudominio.com/player.html en Chrome.
+
+Mira si reproduce.
+
+Si no reproduce, abre consola/logs y casi seguro será CORS, 403, referer o cookies.
+
+También puedes usar dash.js en vez de Shaka. El patrón básico es muy simple: crear un MediaPlayer e inicializarlo con el elemento <video> y la URL del MPD. 
+
+Ejemplo con dash.js:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi Player TV</title>
+  <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" controls autoplay></video>
+
+  <script>
+    const url = "/video.mpd";
+    const player = dashjs.MediaPlayer().create();
+    player.initialize(document.querySelector("#video"), url, true);
+  </script>
+</body>
+</html>
+Mi recomendación: Shaka Player primero. Para Android TV suele ir bien con DASH, subtítulos, audio tracks y posibles ampliaciones futuras. Si algún día quieres hacer app nativa de verdad, entonces pasaría a Media3 ExoPlayer, que es la opción oficial moderna en Android para reproducir streaming adaptativo como DASH.
+
+
+si pero esto es demasiado rollo yo quiero alguna forma sencilla que pueda hacer incluso desde el movil copiar una url pegar en la app y se actualice y salga el video
+
+Pensó durante un par de segundos
+Sí: lo más sencillo es hacer que tu Android TV abra siempre la misma página, y que esa página lea la URL del vídeo desde un archivo editable.
+
+La idea sería:
+
+Android TV abre siempre:
+https://tudominio.com/tv.html
+
+Tú desde el móvil solo cambias:
+https://tudominio.com/video.txt
+Dentro de video.txt pegas una URL, por ejemplo:
+
+https://tudominio.com/video.mpd
+o una URL directa .mpd, .m3u8 o incluso .mp4.
+
+Luego tv.html lee ese archivo y reproduce lo que haya ahí.
+
+Ejemplo simple con Shaka Player:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TV Player</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    #msg {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-family: sans-serif;
+      font-size: 24px;
+      z-index: 10;
+    }
+  </style>
+</head>
+<body>
+  <div id="msg">Cargando...</div>
+  <video id="video" controls autoplay></video>
+
+  <script>
+    let player;
+    let currentUrl = "";
+
+    async function init() {
+      shaka.polyfill.installAll();
+
+      const video = document.getElementById("video");
+      player = new shaka.Player(video);
+
+      player.addEventListener("error", e => {
+        console.error("Error Shaka:", e.detail);
+        document.getElementById("msg").textContent = "Error cargando vídeo";
+      });
+
+      await checkVideoUrl();
+
+      setInterval(checkVideoUrl, 5000);
+    }
+
+    async function checkVideoUrl() {
+      try {
+        const res = await fetch("/video.txt?cache=" + Date.now());
+        const url = (await res.text()).trim();
+
+        if (!url || url === currentUrl) return;
+
+        currentUrl = url;
+        document.getElementById("msg").textContent = "Cargando vídeo...";
+
+        if (url.endsWith(".mp4")) {
+          const video = document.getElementById("video");
+          video.src = url;
+          await video.play();
+        } else {
+          await player.load(url);
+        }
+
+        document.getElementById("msg").textContent = "";
+      } catch (e) {
+        console.error(e);
+        document.getElementById("msg").textContent = "No se pudo cargar la URL";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
+En tu VPS solo necesitas estos archivos:
+
+tv.html
+video.txt
+Y en video.txt pones la URL actual:
+
+https://stream-4191-31-165.pkcdn.org/dash/.../manifest.mpd
+O si no tienes URL del .mpd, puedes subir tu propio video.mpd y poner:
+
+https://tudominio.com/video.mpd
+Así desde el móvil solo editas video.txt, guardas, y en la TV se actualiza solo cada 5 segundos.
+
+La forma más cómoda para editarlo desde móvil sería una mini página admin.html con una caja de texto:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Cambiar vídeo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #111;
+      color: white;
+    }
+
+    textarea {
+      width: 100%;
+      height: 160px;
+      font-size: 18px;
+    }
+
+    button {
+      margin-top: 15px;
+      font-size: 22px;
+      padding: 12px 20px;
+    }
+  </style>
+</head>
+<body>
+  <h2>URL del vídeo</h2>
+  <textarea id="url"></textarea>
+  <br>
+  <button onclick="guardar()">Guardar</button>
+
+  <script>
+    async function cargar() {
+      const res = await fetch("/video.txt?cache=" + Date.now());
+      document.getElementById("url").value = await res.text();
+    }
+
+    async function guardar() {
+      const url = document.getElementById("url").value.trim();
+
+      await fetch("/guardar.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: url
+      });
+
+      alert("Guardado");
+    }
+
+    cargar();
+  </script>
+</body>
+</html>
+Y un guardar.php básico:
+
+<?php
+$pass = $_GET["pass"] ?? "";
+
+if ($pass !== "TU_CLAVE_AQUI") {
+    http_response_code(403);
+    exit("Forbidden");
+}
+
+$url = trim(file_get_contents("php://input"));
+
+if (!$url) {
+    http_response_code(400);
+    exit("URL vacía");
+}
+
+file_put_contents("video.txt", $url);
+echo "OK";
+En admin.html, cambia esta parte:
+
+await fetch("/guardar.php", {
+por:
+
+await fetch("/guardar.php?pass=TU_CLAVE_AQUI", {
+Entonces usarías:
+
+https://tudominio.com/admin.html
+pegas la URL desde el móvil, guardas, y la TV reproduce automáticamente.
+
+La versión más simple todavía sería saltarte el panel admin y editar video.txt por SFTP/FTP desde el móvil, pero con admin.html queda mucho más cómodo.
+
+
+<?xml version="1.0"?>
+<MPD
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="urn:mpeg:dash:schema:mpd:2011"
+    xsi:schemaLocation="urn:mpeg:dash:schema:mpd:2011 http://standards.iso.org/ittf/PubliclyAvailableStandards/MPEG-DASH_schema_files/DASH-MPD.xsd"
+    type="static"
+    mediaPresentationDuration="PT5641.589S"
+    minBufferTime="PT10S"
+    profiles="urn:mpeg:dash:profile:isoff-main:2011">
+  <Period>
+    <AdaptationSet
+        id="1"
+        segmentAlignment="true"
+        maxWidth="1280"
+        maxHeight="720"
+        maxFrameRate="25">
+        <SegmentTemplate
+            timescale="1000"
+            media="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-$Number$-$RepresentationID$.m4s"
+            initialization="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-$RepresentationID$.mp4"
+            duration="10000"
+            startNumber="1">
+        </SegmentTemplate>
+      <Representation
+          id="v1-x3"
+          mimeType="video/mp4"
+          codecs="avc1.64001f"
+          width="1280"
+          height="720"
+          frameRate="25"
+          sar="1:1"
+          startWithSAP="1"
+          bandwidth="1099141">
+      </Representation>
+    </AdaptationSet>
+    <AdaptationSet
+        id="2"
+        lang="es"
+        label="Español"
+        segmentAlignment="true">
+      <AudioChannelConfiguration
+          schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011"
+          value="1"/>
+        <SegmentTemplate
+            timescale="1000"
+            media="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/fragment-$Number$-$RepresentationID$.m4s"
+            initialization="https://stream-4191-31-165.pkcdn.org/dash/kqohodesbqikkfn2maqpsnklfz6xils5t25hfx4ddyaslkpwwa6cyrbeum/init-$RepresentationID$.mp4"
+            duration="10000"
+            startNumber="1">
+        </SegmentTemplate>
+      <Representation
+          id="a1-x3"
+          mimeType="audio/mp4"
+          codecs="mp4a.40.2"
+          audioSamplingRate="32000"
+          startWithSAP="1"
+          bandwidth="65002">
+      </Representation>
+    </AdaptationSet>
+  </Period>
+</MPD>
+
+ok pero entonces esto me sirve me forma sencilla o tengo que buscar otra via
+Mostrar más
+
+Sí, esto te sirve, pero con una condición importante:
+
+Te sirve si puedes convertir ese XML en un archivo .mpd accesible por URL.
+
+Por ejemplo:
+
+Copias ese XML.
+
+Lo guardas como:
+
+video.mpd
+Lo subes a tu VPS.
+
+En tu app/web pones:
+
+https://tudominio.com/video.mpd
+Y tu player Shaka/dash.js lo carga.
+
+Pero para tu idea de “copiar una URL desde el móvil y pegarla en la app”, este XML no es tan cómodo, porque no es una URL directa. Es el contenido del manifest. Para hacerlo sencillo tienes dos caminos:
+
+Vía sencilla 1: pegar URL del .mpd
+La mejor opción es encontrar la URL real del manifest .mpd.
+
+Entonces desde el móvil solo pegas algo así:
+
+https://web-original.com/ruta/video.mpd
+Y listo. Esta es la vía más limpia.
+
+Vía sencilla 2: pegar el XML entero
+También puedes hacer que tu panel admin permita pegar el XML entero, no solo una URL.
+
+Tu servidor lo guarda como:
+
+video.mpd
+Y la TV reproduce siempre:
+
+https://tudominio.com/video.mpd
+Esta vía te sirve justo con lo que tienes ahora.
+
+Lo que no tienes aquí
+No tienes un .mp4 directo tipo:
+
+https://.../pelicula.mp4
+Tienes un DASH formado por muchos fragmentos:
+
+init-v1-x3.mp4
+fragment-1-v1-x3.m4s
+fragment-2-v1-x3.m4s
+...
+Así que Chrome/Android TV necesita un player DASH.
+
+Mi recomendación para tu caso: haz la vía 2. Que tu admin desde el móvil acepte pegar una URL o pegar el XML. Si detecta que empieza por <?xml o <MPD, lo guarda como video.mpd; si detecta que es una URL, la guarda en video.txt.
+
+En resumen: sí te sirve, no hace falta buscar otra vía, pero debes reproducirlo como DASH, no como MP4 directo.
+
+
+
+manifest.mpd
+Archivo
+
+Veo que subiste un manifest.mpd. Te dejo una forma directa de probarlo sin complicarte: un HTML mínimo que lo cargue como DASH desde la misma carpeta.
+
+Pensó durante 9s
+Sí, el archivo que subiste sirve como manifest.mpd.
+
+Te preparé un mini player listo para probar:
+
+Descargar player_tv.zip
+
+Dentro van:
+
+tv.html
+manifest.mpd
+Para probarlo en tu VPS:
+
+Sube ambos archivos a una carpeta pública, por ejemplo:
+
+https://tudominio.com/tv/
+Abre en Chrome / Android TV:
+
+https://tudominio.com/tv/tv.html
+Ese tv.html carga automáticamente:
+
+manifest.mpd
+y Shaka Player se encarga de reproducir los fragmentos DASH.
+
+Si falla, lo más probable será una de estas cosas: el servidor de los fragmentos bloquea CORS, pide referer/cookies, o esas URLs ya caducaron. Pero como primera prueba, este ZIP es la vía más simple.
+
+
+podemos probarlo local en mi pc primero antes de ponerme a hacer nada de eso?
+
+Sí, mejor probarlo local primero. Voy a darte una prueba en dos niveles: abrirlo con un servidor local simple, y cómo diagnosticar rápido si falla por CORS o por la URL/fragmentos.
+
+Pensó durante 12s
+Sí. En tu PC lo puedes probar así:
+
+Crea una carpeta, por ejemplo:
+
+dash-test
+Mete dentro estos dos archivos:
+
+manifest.mpd
+tv.html
+Puedes usar este ZIP listo con ambos archivos:
+
+Descargar prueba local
+
+Abre una terminal dentro de esa carpeta y ejecuta:
+
+python -m http.server 8000
+En algunos PCs puede ser:
+
+python3 -m http.server 8000
+Abre Chrome y entra aquí:
+
+http://localhost:8000/tv.html
+No abras el HTML con doble clic tipo:
+
+file:///C:/...
+porque puede fallar por permisos del navegador. Mejor siempre con http://localhost:8000.
+
+Si se ve el vídeo, perfecto: ya tienes la base para ponerlo luego en la TV/VPS.
+
+Si no se ve, pulsa F12 → Console y mira el error. Los más típicos serán:
+
+CORS
+403 Forbidden
+404 Not Found
+Failed to fetch
+Si sale CORS o 403, el problema no es tu player, sino que el servidor de los fragmentos no deja reproducirlos desde otra web/local. En ese caso habría que buscar la URL original del .mpd, usar cookies/referer, o hacer un proxy desde tu VPS.
+
+
+no pude bajar el zip damelo directo
+
+Claro. Crea un archivo llamado tv.html en la misma carpeta donde tengas manifest.mpd, y pega esto:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TV Player DASH</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    #msg {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px 14px;
+      border-radius: 8px;
+      z-index: 10;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="msg">Cargando...</div>
+  <video id="video" controls autoplay></video>
+
+  <script>
+    async function init() {
+      shaka.polyfill.installAll();
+
+      const msg = document.getElementById("msg");
+      const video = document.getElementById("video");
+
+      if (!shaka.Player.isBrowserSupported()) {
+        msg.textContent = "Este navegador no soporta Shaka Player";
+        return;
+      }
+
+      const player = new shaka.Player(video);
+
+      player.addEventListener("error", function(event) {
+        console.error("Error Shaka:", event.detail);
+        msg.textContent = "Error cargando el vídeo. Mira la consola.";
+      });
+
+      try {
+        await player.load("manifest.mpd");
+        msg.textContent = "";
+        console.log("Manifest cargado correctamente");
+      } catch (error) {
+        console.error("Error cargando manifest:", error);
+        msg.textContent = "No se pudo cargar manifest.mpd";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
+</body>
+</html>
+Tu carpeta debería quedar así:
+
+dash-test/
+├── tv.html
+└── manifest.mpd
+Luego abre una terminal dentro de esa carpeta y ejecuta:
+
+python -m http.server 8000
+o si usas Mac/Linux:
+
+python3 -m http.server 8000
+Después abre Chrome en:
+
+http://localhost:8000/tv.html
+No lo abras con doble clic, porque file:///... suele dar problemas.
+
+
+perfecto funciono, ahora hay alguna forma sencilla de descargar el mpd o alguna variante desde android?
+
+Genial que funcionara. Para Android, lo más simple suele ser no “descargar el vídeo”, sino capturar/guardar el .mpd o pegar el XML en tu panel; te doy opciones de menos a más cómoda.
+
+Pensó durante 5s
+Sí. La forma más sencilla desde Android es esta:
+
+Opción A: usar Firefox Android + The Stream Detector
+En Android instalaría Firefox, luego el add-on The Stream Detector. Ese add-on detecta manifests y subtítulos usados por streaming, incluyendo DASH/HLS, y muestra URLs como .mpd o .m3u8 cuando abres la página del vídeo. 
+
+Flujo:
+
+1. Abres la página del vídeo en Firefox Android
+2. Reproduces unos segundos
+3. Abres The Stream Detector
+4. Copias la URL .mpd
+5. La pegas en tu panel/app
+Esta sería la vía ideal si consigues que detecte el .mpd.
+
+Opción B: navegador Android con extensiones de Chrome
+Chrome Android no soporta extensiones de forma nativa, pero navegadores como Kiwi o Yandex permiten usar extensiones de Chrome en Android; eso te dejaría probar detectores tipo Stream Detector/Video DownloadHelper desde el móvil. 
+
+Dicho eso, ojo con Kiwi: hay señales de que su desarrollo quedó parado o cambió de estado en 2025, así que yo probaría primero Firefox Android. 
+
+Opción C: copiar el MPD “como texto” y pegarlo en tu panel
+Para tu sistema, yo haría que el panel admin acepte dos cosas:
+
+https://.../video.mpd
+o directamente:
+
+<MPD>...</MPD>
+Así desde Android no necesitas descargar nada. Copias el XML entero, lo pegas en tu panel, y tu servidor lo guarda como:
+
+manifest.mpd
+Luego la TV siempre reproduce:
+
+https://tudominio.com/manifest.mpd
+Esta es probablemente la más cómoda para tu caso, porque tú ya conseguiste el XML.
+
+Mi recomendación
+Haz tu panel con una caja grande de texto que acepte URL o XML. Así el flujo desde móvil sería:
+
+Detecto/copio el .mpd o el XML
+Lo pego en admin.html
+Pulso Guardar
+La TV actualiza y reproduce
+No intentaría descargar los .m4s desde Android. Para tu app, lo importante es guardar/cambiar el manifest, no bajarte todos los fragmentos.
+
+
+perfecto, esto mismo se puede hacer con plex o jeffly
+
+Pensó durante un par de segundos
+Sí, pero no tan directo como con tu HTML + Shaka.
+
+Plex
+Para esto, Plex no es buena vía. Plex está pensado para bibliotecas de archivos tipo .mp4, .mkv, etc., y cuando el cliente no soporta algo lo direct-stream/transcodifica desde el servidor. Su documentación habla de compatibilidad por contenedor/códec, no de meterle un .mpd externo como fuente reproducible directa. 
+
+Además, Plex tampoco soporta IPTV/M3U de forma directa sin inventos tipo xTeVe/tuner virtual, y eso normalmente va mejor con HLS .m3u8 que con DASH .mpd. 
+
+Conclusión Plex: no lo usaría para tu caso.
+
+Jellyfin
+Con Jellyfin podrías usarlo si primero conviertes/descargas ese DASH a un archivo normal:
+
+video.mp4
+video.mkv
+y lo metes en tu biblioteca.
+
+Pero como reproductor de un .mpd externo, tampoco es lo ideal. Hay issues de Jellyfin donde se indica que MPD/DASH como fuente Live TV no está soportado o no está planteado directamente. 
+
+Jellyfin sí transcodifica archivos de tu biblioteca con FFmpeg cuando el cliente no soporta un formato, pero eso es distinto a usar un .mpd remoto como “URL pegada y play”. 
+
+Conclusión Jellyfin: mejor que Plex si quieres biblioteca propia, pero no para pegar manifests .mpd dinámicos.
+
+Lo más simple para lo que quieres
+Quédate con tu solución:
+
+Android TV → tv.html → manifest.mpd → Shaka Player
+Es más simple, más controlable y justo para tu caso.
+
+La mejora sería hacer tu panel admin así:
+
+Pego URL .mpd
+o pego XML <MPD>...</MPD>
+Guardar
+La TV actualiza sola
+Plex/Jellyfin solo los usaría si decides convertir cada vídeo a .mp4/.mkv y tener una biblioteca permanente. Para “pegar enlace desde el móvil y verlo en la TV”, tu player web es mejor.
+
+
+ya pero lo que quiero es una interfaz mas bonita
+
+Pensó durante un segundo
+Sí. Puedes mantener tu sistema sencillo, pero hacer una interfaz tipo “mini Netflix” sin usar Plex/Jellyfin.
+
+La idea sería:
+
+admin desde móvil → pegas MPD/XML + título + imagen
+TV → muestra una interfaz bonita con carátula, título y botón Play
+Te dejo una versión bonita y simple en un solo tv.html. Usa manifest.mpd igual que antes, pero con una pantalla inicial más limpia.
+
+tv.html
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi TV Player</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #050505;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.95), rgba(0,0,0,0.45), rgba(0,0,0,0.95)),
+        linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0.1)),
+        url("poster.jpg");
+      background-size: cover;
+      background-position: center;
+    }
+
+    #home {
+      width: 100vw;
+      height: 100vh;
+      padding: 70px;
+      display: flex;
+      align-items: center;
+    }
+
+    .card {
+      max-width: 720px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      font-size: 18px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 64px;
+      margin: 0 0 18px;
+      line-height: 1.05;
+    }
+
+    p {
+      font-size: 24px;
+      line-height: 1.4;
+      color: #ddd;
+      margin: 0 0 34px;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 18px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 14px;
+      padding: 18px 32px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #playBtn {
+      background: white;
+      color: black;
+    }
+
+    #reloadBtn {
+      background: rgba(255,255,255,0.18);
+      color: white;
+    }
+
+    button:focus {
+      outline: 5px solid #fff;
+      outline-offset: 4px;
+    }
+
+    #playerScreen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    #msg {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      color: white;
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 18px;
+      border-radius: 10px;
+      z-index: 10;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="home">
+    <div class="card">
+      <div class="badge">Mi reproductor</div>
+      <h1 id="title">Película lista</h1>
+      <p id="description">
+        Pulsa reproducir para ver el vídeo cargado actualmente.
+      </p>
+
+      <div class="buttons">
+        <button id="playBtn" onclick="playVideo()">▶ Reproducir</button>
+        <button id="reloadBtn" onclick="location.reload()">Actualizar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="playerScreen">
+    <div id="msg">Cargando...</div>
+    <video id="video" controls autoplay></video>
+  </div>
+
+  <script>
+    let player;
+
+    async function playVideo() {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("playerScreen").style.display = "block";
+
+      const msg = document.getElementById("msg");
+      const video = document.getElementById("video");
+
+      msg.style.display = "block";
+      msg.textContent = "Cargando...";
+
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        msg.textContent = "Este navegador no soporta Shaka Player";
+        return;
+      }
+
+      player = new shaka.Player(video);
+
+      player.addEventListener("error", function(event) {
+        console.error("Error Shaka:", event.detail);
+        msg.textContent = "Error cargando el vídeo";
+      });
+
+      try {
+        await player.load("manifest.mpd");
+        msg.style.display = "none";
+        video.focus();
+        await video.play();
+      } catch (error) {
+        console.error(error);
+        msg.textContent = "No se pudo cargar manifest.mpd";
+      }
+    }
+
+    document.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") {
+        const homeVisible = document.getElementById("home").style.display !== "none";
+        if (homeVisible) playVideo();
+      }
+
+      if (e.key === "Escape" || e.key === "Backspace") {
+        location.reload();
+      }
+    });
+
+    window.onload = function() {
+      document.getElementById("playBtn").focus();
+    };
+  </script>
+</body>
+</html>
+
+Tu carpeta quedaría así:
+
+dash-test/
+├── tv.html
+├── manifest.mpd
+└── poster.jpg
+El poster.jpg es opcional. Si no lo pones, se verá fondo negro/oscuro. Si pones una imagen con ese nombre, saldrá como fondo.
+
+Luego igual que antes:
+
+python -m http.server 8000
+Y abres:
+
+http://localhost:8000/tv.html
+Versión todavía mejor para tu idea
+Puedes tener también un archivo info.json para cambiar título, descripción y poster sin tocar el HTML:
+
+{
+  "title": "Mi película",
+  "description": "Lista para reproducir desde Android TV.",
+  "poster": "poster.jpg",
+  "manifest": "manifest.mpd"
+}
+Así desde el móvil cambiarías:
+
+Título
+Poster
+MPD/XML
+y la TV se vería bastante más bonita, sin necesidad de Plex ni Jellyfin.
+
+Mi recomendación: haz tu propio panel sencillo. Vas a tener justo lo que quieres: pegar enlace/XML desde el móvil y que en la TV salga una interfaz limpia con botón grande de reproducir.
+
+
+Imagen cargada
+ok y si tengo mas de un mpd?
+
+Sí. Lo ideal es pasar de un manifest.mpd fijo a una pequeña lista tipo catálogo.
+
+Crea un archivo llamado catalogo.json en la misma carpeta:
+
+[
+  {
+    "title": "Película 1",
+    "description": "Primer vídeo DASH",
+    "manifest": "manifest1.mpd",
+    "poster": "poster1.jpg"
+  },
+  {
+    "title": "Película 2",
+    "description": "Segundo vídeo DASH",
+    "manifest": "manifest2.mpd",
+    "poster": "poster2.jpg"
+  },
+  {
+    "title": "Película 3",
+    "description": "Tercer vídeo DASH",
+    "manifest": "manifest3.mpd",
+    "poster": "poster3.jpg"
+  }
+]
+Tu carpeta quedaría así:
+
+dash-test/
+├── tv.html
+├── catalogo.json
+├── manifest1.mpd
+├── manifest2.mpd
+├── manifest3.mpd
+├── poster1.jpg
+├── poster2.jpg
+└── poster3.jpg
+Y reemplaza tu tv.html por este:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi TV Player</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #050505;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    body {
+      background: #050505;
+    }
+
+    #home {
+      width: 100vw;
+      height: 100vh;
+      padding: 60px;
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.95), rgba(0,0,0,0.55), rgba(0,0,0,0.95)),
+        linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0.15));
+    }
+
+    .top {
+      margin-bottom: 38px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 52px;
+      margin: 0 0 12px;
+      line-height: 1.05;
+    }
+
+    p {
+      font-size: 22px;
+      color: #ddd;
+      margin: 0;
+      max-width: 850px;
+    }
+
+    #grid {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 10px 8px 30px 8px;
+      scroll-behavior: smooth;
+    }
+
+    .item {
+      min-width: 250px;
+      width: 250px;
+      height: 375px;
+      border: 0;
+      border-radius: 18px;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .item:focus {
+      outline: 6px solid white;
+      outline-offset: 6px;
+      transform: scale(1.04);
+    }
+
+    .poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #222;
+    }
+
+    .fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 18px;
+      font-size: 28px;
+      font-weight: bold;
+      background: linear-gradient(145deg, #333, #111);
+    }
+
+    .label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0));
+      font-size: 20px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    #playerScreen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    #msg {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      color: white;
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 18px;
+      border-radius: 10px;
+      z-index: 10;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="home">
+    <div class="top">
+      <div class="badge">Mi reproductor</div>
+      <h1>Catálogo</h1>
+      <p>Elige un vídeo y pulsa Enter / OK para reproducir.</p>
+    </div>
+
+    <div id="grid"></div>
+  </div>
+
+  <div id="playerScreen">
+    <div id="msg">Cargando...</div>
+    <video id="video" controls autoplay></video>
+  </div>
+
+  <script>
+    let catalogo = [];
+    let player = null;
+
+    async function cargarCatalogo() {
+      const res = await fetch("catalogo.json?cache=" + Date.now());
+      catalogo = await res.json();
+
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+
+      catalogo.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "item";
+        btn.onclick = () => playVideo(item.manifest);
+
+        if (item.poster) {
+          btn.innerHTML = `
+            <img class="poster" src="${item.poster}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="fallback" style="display:none">${item.title}</div>
+            <div class="label">${item.title}</div>
+          `;
+        } else {
+          btn.innerHTML = `
+            <div class="fallback">${item.title}</div>
+            <div class="label">${item.title}</div>
+          `;
+        }
+
+        grid.appendChild(btn);
+
+        if (index === 0) {
+          setTimeout(() => btn.focus(), 100);
+        }
+      });
+    }
+
+    async function playVideo(manifestUrl) {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("playerScreen").style.display = "block";
+
+      const msg = document.getElementById("msg");
+      const video = document.getElementById("video");
+
+      msg.style.display = "block";
+      msg.textContent = "Cargando...";
+
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        msg.textContent = "Este navegador no soporta Shaka Player";
+        return;
+      }
+
+      if (player) {
+        await player.destroy();
+      }
+
+      player = new shaka.Player(video);
+
+      player.addEventListener("error", function(event) {
+        console.error("Error Shaka:", event.detail);
+        msg.textContent = "Error cargando el vídeo";
+      });
+
+      try {
+        await player.load(manifestUrl);
+        msg.style.display = "none";
+        video.focus();
+        await video.play();
+      } catch (error) {
+        console.error(error);
+        msg.textContent = "No se pudo cargar: " + manifestUrl;
+      }
+    }
+
+    document.addEventListener("keydown", function(e) {
+      const grid = document.getElementById("grid");
+      const items = Array.from(document.querySelectorAll(".item"));
+      const current = document.activeElement;
+      const index = items.indexOf(current);
+
+      if (document.getElementById("playerScreen").style.display === "block") {
+        if (e.key === "Escape" || e.key === "Backspace") {
+          const video = document.getElementById("video");
+          video.pause();
+          document.getElementById("playerScreen").style.display = "none";
+          document.getElementById("home").style.display = "block";
+          setTimeout(() => {
+            if (items[index] || items[0]) (items[index] || items[0]).focus();
+          }, 100);
+        }
+        return;
+      }
+
+      if (e.key === "ArrowRight" && index < items.length - 1) {
+        items[index + 1].focus();
+        items[index + 1].scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+
+      if (e.key === "ArrowLeft" && index > 0) {
+        items[index - 1].focus();
+        items[index - 1].scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+
+      if (e.key === "Enter" && index >= 0) {
+        playVideo(catalogo[index].manifest);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", cargarCatalogo);
+  </script>
+</body>
+</html>
+Ahora para añadir más vídeos solo editas catalogo.json y agregas otro bloque:
+
+{
+  "title": "Nueva película",
+  "description": "Otro vídeo",
+  "manifest": "nuevo.mpd",
+  "poster": "nuevo.jpg"
+}
+También puedes usar URLs remotas directamente:
+
+{
+  "title": "Vídeo remoto",
+  "description": "MPD externo",
+  "manifest": "https://dominio.com/ruta/video.mpd",
+  "poster": "https://dominio.com/ruta/poster.jpg"
+}
+Para Android TV, con esto ya tienes una interfaz navegable con el mando: izquierda, derecha y OK/Enter.
+
+
+bien, lo ideal seria poder crear alguna funcion, no se si un boton o otro archivo algo que pueda subir el mpd o pegarlo y que el solo actulice el json, tipo torrent cuando subes el .torrent o pegas el magnet
+
+Pensó durante un par de segundos
+Sí, eso se puede hacer muy simple con un panel admin tipo:
+
+Subir archivo .mpd
+o pegar XML <MPD>...</MPD>
+o pegar URL .mpd
+↓
+Guardar
+↓
+Se actualiza catalogo.json automáticamente
+Te dejo una versión sencilla con PHP, ideal para un VPS normal con Apache/Nginx + PHP.
+
+Estructura de carpetas
+En tu carpeta pública:
+
+tv/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+Crea las carpetas:
+
+mkdir manifests posters
+chmod 775 manifests posters
+touch catalogo.json
+chmod 664 catalogo.json
+En catalogo.json pon inicialmente:
+
+[]
+1. admin.html
+Este panel te deja:
+
+poner título
+
+pegar URL .mpd
+
+pegar XML completo
+
+subir archivo .mpd
+
+opcionalmente subir poster
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin TV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 18px;
+      font-size: 18px;
+      padding: 12px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 0;
+    }
+
+    textarea {
+      height: 180px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    button {
+      background: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .box {
+      background: #1d1d1d;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    #msg {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #8cff8c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin TV</h1>
+
+  <div class="box">
+    <label>Título</label>
+    <input id="title" placeholder="Película 1">
+
+    <label>Descripción</label>
+    <input id="description" placeholder="Opcional">
+
+    <label>URL .mpd</label>
+    <input id="manifestUrl" placeholder="https://.../video.mpd">
+
+    <label>O pegar XML MPD completo</label>
+    <textarea id="manifestXml" placeholder="<MPD>...</MPD>"></textarea>
+
+    <label>O subir archivo .mpd</label>
+    <input id="manifestFile" type="file" accept=".mpd,.xml,text/xml,application/dash+xml">
+
+    <label>Poster opcional</label>
+    <input id="posterFile" type="file" accept="image/*">
+
+    <button onclick="guardar()">Guardar en catálogo</button>
+
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    async function guardar() {
+      const msg = document.getElementById("msg");
+      msg.textContent = "Guardando...";
+
+      const form = new FormData();
+
+      form.append("pass", "CAMBIA_ESTA_CLAVE");
+      form.append("title", document.getElementById("title").value.trim());
+      form.append("description", document.getElementById("description").value.trim());
+      form.append("manifest_url", document.getElementById("manifestUrl").value.trim());
+      form.append("manifest_xml", document.getElementById("manifestXml").value.trim());
+
+      const manifestFile = document.getElementById("manifestFile").files[0];
+      const posterFile = document.getElementById("posterFile").files[0];
+
+      if (manifestFile) {
+        form.append("manifest_file", manifestFile);
+      }
+
+      if (posterFile) {
+        form.append("poster_file", posterFile);
+      }
+
+      try {
+        const res = await fetch("guardar.php", {
+          method: "POST",
+          body: form
+        });
+
+        const text = await res.text();
+
+        if (!res.ok) {
+          msg.style.color = "#ff7777";
+          msg.textContent = "Error: " + text;
+          return;
+        }
+
+        msg.style.color = "#8cff8c";
+        msg.textContent = "Guardado correctamente";
+
+        document.getElementById("title").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("manifestUrl").value = "";
+        document.getElementById("manifestXml").value = "";
+        document.getElementById("manifestFile").value = "";
+        document.getElementById("posterFile").value = "";
+
+      } catch (e) {
+        msg.style.color = "#ff7777";
+        msg.textContent = "Error de conexión";
+      }
+    }
+  </script>
+</body>
+</html>
+Cambia esto:
+
+form.append("pass", "CAMBIA_ESTA_CLAVE");
+por una clave tuya.
+
+2. guardar.php
+Este archivo recibe el MPD, lo guarda y actualiza catalogo.json.
+
+<?php
+
+$PASSWORD = "CAMBIA_ESTA_CLAVE";
+
+$pass = $_POST["pass"] ?? "";
+
+if ($pass !== $PASSWORD) {
+    http_response_code(403);
+    exit("Clave incorrecta");
+}
+
+$title = trim($_POST["title"] ?? "");
+$description = trim($_POST["description"] ?? "");
+$manifestUrl = trim($_POST["manifest_url"] ?? "");
+$manifestXml = trim($_POST["manifest_xml"] ?? "");
+
+if ($title === "") {
+    http_response_code(400);
+    exit("Falta el título");
+}
+
+$catalogFile = __DIR__ . "/catalogo.json";
+$manifestDir = __DIR__ . "/manifests";
+$posterDir = __DIR__ . "/posters";
+
+if (!is_dir($manifestDir)) {
+    mkdir($manifestDir, 0775, true);
+}
+
+if (!is_dir($posterDir)) {
+    mkdir($posterDir, 0775, true);
+}
+
+function slugify($text) {
+    $text = strtolower($text);
+    $text = iconv("UTF-8", "ASCII//TRANSLIT", $text);
+    $text = preg_replace("/[^a-z0-9]+/", "-", $text);
+    $text = trim($text, "-");
+
+    if ($text === "") {
+        $text = "video";
+    }
+
+    return $text;
+}
+
+$slug = slugify($title);
+$unique = $slug . "-" . time();
+
+$manifestPathPublic = "";
+$posterPathPublic = "";
+
+/*
+  Caso 1: pegar URL .mpd
+*/
+if ($manifestUrl !== "") {
+    if (!filter_var($manifestUrl, FILTER_VALIDATE_URL)) {
+        http_response_code(400);
+        exit("La URL del MPD no es válida");
+    }
+
+    $manifestPathPublic = $manifestUrl;
+}
+
+/*
+  Caso 2: subir archivo .mpd
+*/
+elseif (isset($_FILES["manifest_file"]) && $_FILES["manifest_file"]["error"] === UPLOAD_ERR_OK) {
+    $content = file_get_contents($_FILES["manifest_file"]["tmp_name"]);
+
+    if (stripos($content, "<MPD") === false) {
+        http_response_code(400);
+        exit("El archivo no parece ser un MPD válido");
+    }
+
+    $filename = $unique . ".mpd";
+    $target = $manifestDir . "/" . $filename;
+
+    file_put_contents($target, $content);
+
+    $manifestPathPublic = "manifests/" . $filename;
+}
+
+/*
+  Caso 3: pegar XML completo
+*/
+elseif ($manifestXml !== "") {
+    if (stripos($manifestXml, "<MPD") === false) {
+        http_response_code(400);
+        exit("El texto pegado no parece ser un MPD válido");
+    }
+
+    $filename = $unique . ".mpd";
+    $target = $manifestDir . "/" . $filename;
+
+    file_put_contents($target, $manifestXml);
+
+    $manifestPathPublic = "manifests/" . $filename;
+}
+
+else {
+    http_response_code(400);
+    exit("Debes pegar una URL, pegar XML o subir un archivo MPD");
+}
+
+/*
+  Poster opcional
+*/
+if (isset($_FILES["poster_file"]) && $_FILES["poster_file"]["error"] === UPLOAD_ERR_OK) {
+    $tmp = $_FILES["poster_file"]["tmp_name"];
+    $info = getimagesize($tmp);
+
+    if ($info === false) {
+        http_response_code(400);
+        exit("El poster no parece ser una imagen válida");
+    }
+
+    $mime = $info["mime"];
+
+    if ($mime === "image/jpeg") {
+        $ext = "jpg";
+    } elseif ($mime === "image/png") {
+        $ext = "png";
+    } elseif ($mime === "image/webp") {
+        $ext = "webp";
+    } else {
+        http_response_code(400);
+        exit("Formato de poster no soportado");
+    }
+
+    $posterName = $unique . "." . $ext;
+    $posterTarget = $posterDir . "/" . $posterName;
+
+    move_uploaded_file($tmp, $posterTarget);
+
+    $posterPathPublic = "posters/" . $posterName;
+}
+
+/*
+  Leer catálogo actual
+*/
+$catalog = [];
+
+if (file_exists($catalogFile)) {
+    $json = file_get_contents($catalogFile);
+    $decoded = json_decode($json, true);
+
+    if (is_array($decoded)) {
+        $catalog = $decoded;
+    }
+}
+
+/*
+  Añadir nuevo item
+*/
+$item = [
+    "title" => $title,
+    "description" => $description,
+    "manifest" => $manifestPathPublic,
+    "poster" => $posterPathPublic
+];
+
+$catalog[] = $item;
+
+/*
+  Guardar catálogo
+*/
+file_put_contents(
+    $catalogFile,
+    json_encode($catalog, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+);
+
+echo "OK";
+Cambia aquí también:
+
+$PASSWORD = "CAMBIA_ESTA_CLAVE";
+por la misma clave.
+
+3. Cómo lo usarías
+Desde el móvil abres:
+
+https://tudominio.com/tv/admin.html
+Luego haces una de estas tres cosas:
+
+Pegar una URL .mpd
+https://ejemplo.com/video/manifest.mpd
+O pegar el XML entero
+<MPD>
+  ...
+</MPD>
+O subir archivo .mpd
+Igual que cuando subes un .torrent.
+
+Después de guardar, catalogo.json se actualiza solo.
+
+Tu TV sigue entrando en:
+
+https://tudominio.com/tv/tv.html
+y aparecerá el nuevo vídeo en el catálogo.
+
+Para dejarlo más fino después, yo añadiría un botón de “borrar vídeo” y otro de “subir poster automáticamente desde una URL”, pero con esto ya tienes el flujo tipo torrent/magnet funcionando.
+
+
+si pero en local para probarlo primero
+
+Pensó durante un par de segundos
+Sí. Para probarlo en local en tu PC, hazlo con el servidor integrado de PHP. No necesitas VPS todavía.
+
+Crea una carpeta así:
+
+dash-test/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+Dentro de catalogo.json pon:
+
+[]
+Luego abre una terminal dentro de dash-test y ejecuta:
+
+php -S localhost:8000
+Después abre en el navegador:
+
+http://localhost:8000/admin.html
+Ahí pruebas subir un .mpd, pegar XML o pegar una URL.
+
+Y para ver la interfaz de TV:
+
+http://localhost:8000/tv.html
+Importante: para que guardar.php pueda crear archivos, asegúrate de que existen estas carpetas:
+
+manifests/
+posters/
+En Windows basta con crearlas normal desde el explorador. En Mac/Linux puedes hacer:
+
+mkdir -p manifests posters
+touch catalogo.json
+Tu flujo local quedaría así:
+
+1. php -S localhost:8000
+2. Abres http://localhost:8000/admin.html
+3. Subes o pegas un MPD
+4. Se guarda en /manifests/
+5. Se actualiza catalogo.json
+6. Abres http://localhost:8000/tv.html
+7. Aparece en el catálogo
+Solo un detalle: para esto necesitas tener PHP instalado. Compruébalo con:
+
+php -v
+Si te sale versión de PHP, perfecto. Si no, en Windows puedes instalar XAMPP, Laragon o PHP standalone. Para esta prueba, Laragon suele ser lo más fácil en Windows.
+
+
+repite todo que me perdi los archivos que necesito y tal
+
+Sí. Para probarlo local en tu PC, necesitas estos archivos y carpetas:
+
+dash-test/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+tv.html = la interfaz bonita de la TV.
+admin.html = panel para subir/pegar MPD.
+guardar.php = guarda el MPD y actualiza el catálogo.
+catalogo.json = lista de vídeos.
+manifests/ = donde se guardan los .mpd.
+posters/ = donde se guardan las imágenes.
+
+1. Crea la carpeta
+Crea una carpeta llamada:
+
+dash-test
+Dentro crea estas dos carpetas vacías:
+
+manifests
+posters
+Y crea un archivo llamado:
+
+catalogo.json
+Dentro de catalogo.json pon esto:
+
+[]
+2. Crea admin.html
+Crea un archivo llamado admin.html y pega esto:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Admin TV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 18px;
+      font-size: 18px;
+      padding: 12px;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 0;
+    }
+
+    textarea {
+      height: 180px;
+      font-family: monospace;
+      font-size: 14px;
+    }
+
+    button {
+      background: white;
+      color: black;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .box {
+      background: #1d1d1d;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    #msg {
+      font-size: 18px;
+      margin-top: 20px;
+      color: #8cff8c;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin TV</h1>
+
+  <div class="box">
+    <label>Título</label>
+    <input id="title" placeholder="Película 1">
+
+    <label>Descripción</label>
+    <input id="description" placeholder="Opcional">
+
+    <label>URL .mpd</label>
+    <input id="manifestUrl" placeholder="https://.../video.mpd">
+
+    <label>O pegar XML MPD completo</label>
+    <textarea id="manifestXml" placeholder="<MPD>...</MPD>"></textarea>
+
+    <label>O subir archivo .mpd</label>
+    <input id="manifestFile" type="file" accept=".mpd,.xml,text/xml,application/dash+xml">
+
+    <label>Poster opcional</label>
+    <input id="posterFile" type="file" accept="image/*">
+
+    <button onclick="guardar()">Guardar en catálogo</button>
+
+    <div id="msg"></div>
+  </div>
+
+  <script>
+    async function guardar() {
+      const msg = document.getElementById("msg");
+      msg.textContent = "Guardando...";
+
+      const form = new FormData();
+
+      form.append("pass", "1234");
+      form.append("title", document.getElementById("title").value.trim());
+      form.append("description", document.getElementById("description").value.trim());
+      form.append("manifest_url", document.getElementById("manifestUrl").value.trim());
+      form.append("manifest_xml", document.getElementById("manifestXml").value.trim());
+
+      const manifestFile = document.getElementById("manifestFile").files[0];
+      const posterFile = document.getElementById("posterFile").files[0];
+
+      if (manifestFile) {
+        form.append("manifest_file", manifestFile);
+      }
+
+      if (posterFile) {
+        form.append("poster_file", posterFile);
+      }
+
+      try {
+        const res = await fetch("guardar.php", {
+          method: "POST",
+          body: form
+        });
+
+        const text = await res.text();
+
+        if (!res.ok) {
+          msg.style.color = "#ff7777";
+          msg.textContent = "Error: " + text;
+          return;
+        }
+
+        msg.style.color = "#8cff8c";
+        msg.textContent = "Guardado correctamente";
+
+        document.getElementById("title").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("manifestUrl").value = "";
+        document.getElementById("manifestXml").value = "";
+        document.getElementById("manifestFile").value = "";
+        document.getElementById("posterFile").value = "";
+
+      } catch (e) {
+        msg.style.color = "#ff7777";
+        msg.textContent = "Error de conexión";
+      }
+    }
+  </script>
+</body>
+</html>
+
+3. Crea guardar.php
+Crea un archivo llamado guardar.php y pega esto:
+
+<?php
+
+$PASSWORD = "1234";
+
+$pass = $_POST["pass"] ?? "";
+
+if ($pass !== $PASSWORD) {
+    http_response_code(403);
+    exit("Clave incorrecta");
+}
+
+$title = trim($_POST["title"] ?? "");
+$description = trim($_POST["description"] ?? "");
+$manifestUrl = trim($_POST["manifest_url"] ?? "");
+$manifestXml = trim($_POST["manifest_xml"] ?? "");
+
+if ($title === "") {
+    http_response_code(400);
+    exit("Falta el título");
+}
+
+$catalogFile = __DIR__ . "/catalogo.json";
+$manifestDir = __DIR__ . "/manifests";
+$posterDir = __DIR__ . "/posters";
+
+if (!is_dir($manifestDir)) {
+    mkdir($manifestDir, 0775, true);
+}
+
+if (!is_dir($posterDir)) {
+    mkdir($posterDir, 0775, true);
+}
+
+function slugify($text) {
+    $text = strtolower($text);
+    $text = iconv("UTF-8", "ASCII//TRANSLIT", $text);
+    $text = preg_replace("/[^a-z0-9]+/", "-", $text);
+    $text = trim($text, "-");
+
+    if ($text === "") {
+        $text = "video";
+    }
+
+    return $text;
+}
+
+$slug = slugify($title);
+$unique = $slug . "-" . time();
+
+$manifestPathPublic = "";
+$posterPathPublic = "";
+
+if ($manifestUrl !== "") {
+    if (!filter_var($manifestUrl, FILTER_VALIDATE_URL)) {
+        http_response_code(400);
+        exit("La URL del MPD no es válida");
+    }
+
+    $manifestPathPublic = $manifestUrl;
+}
+
+elseif (isset($_FILES["manifest_file"]) && $_FILES["manifest_file"]["error"] === UPLOAD_ERR_OK) {
+    $content = file_get_contents($_FILES["manifest_file"]["tmp_name"]);
+
+    if (stripos($content, "<MPD") === false) {
+        http_response_code(400);
+        exit("El archivo no parece ser un MPD válido");
+    }
+
+    $filename = $unique . ".mpd";
+    $target = $manifestDir . "/" . $filename;
+
+    file_put_contents($target, $content);
+
+    $manifestPathPublic = "manifests/" . $filename;
+}
+
+elseif ($manifestXml !== "") {
+    if (stripos($manifestXml, "<MPD") === false) {
+        http_response_code(400);
+        exit("El texto pegado no parece ser un MPD válido");
+    }
+
+    $filename = $unique . ".mpd";
+    $target = $manifestDir . "/" . $filename;
+
+    file_put_contents($target, $manifestXml);
+
+    $manifestPathPublic = "manifests/" . $filename;
+}
+
+else {
+    http_response_code(400);
+    exit("Debes pegar una URL, pegar XML o subir un archivo MPD");
+}
+
+if (isset($_FILES["poster_file"]) && $_FILES["poster_file"]["error"] === UPLOAD_ERR_OK) {
+    $tmp = $_FILES["poster_file"]["tmp_name"];
+    $info = getimagesize($tmp);
+
+    if ($info === false) {
+        http_response_code(400);
+        exit("El poster no parece ser una imagen válida");
+    }
+
+    $mime = $info["mime"];
+
+    if ($mime === "image/jpeg") {
+        $ext = "jpg";
+    } elseif ($mime === "image/png") {
+        $ext = "png";
+    } elseif ($mime === "image/webp") {
+        $ext = "webp";
+    } else {
+        http_response_code(400);
+        exit("Formato de poster no soportado");
+    }
+
+    $posterName = $unique . "." . $ext;
+    $posterTarget = $posterDir . "/" . $posterName;
+
+    move_uploaded_file($tmp, $posterTarget);
+
+    $posterPathPublic = "posters/" . $posterName;
+}
+
+$catalog = [];
+
+if (file_exists($catalogFile)) {
+    $json = file_get_contents($catalogFile);
+    $decoded = json_decode($json, true);
+
+    if (is_array($decoded)) {
+        $catalog = $decoded;
+    }
+}
+
+$item = [
+    "title" => $title,
+    "description" => $description,
+    "manifest" => $manifestPathPublic,
+    "poster" => $posterPathPublic
+];
+
+$catalog[] = $item;
+
+file_put_contents(
+    $catalogFile,
+    json_encode($catalog, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+);
+
+echo "OK";
+4. Crea tv.html
+Crea un archivo llamado tv.html y pega esto:
+
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mi TV Player</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      background: #050505;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    #home {
+      width: 100vw;
+      height: 100vh;
+      padding: 60px;
+      background:
+        linear-gradient(to right, rgba(0,0,0,0.95), rgba(0,0,0,0.55), rgba(0,0,0,0.95)),
+        linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0.15));
+    }
+
+    .top {
+      margin-bottom: 38px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.15);
+      font-size: 18px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: 52px;
+      margin: 0 0 12px;
+      line-height: 1.05;
+    }
+
+    p {
+      font-size: 22px;
+      color: #ddd;
+      margin: 0;
+      max-width: 850px;
+    }
+
+    #grid {
+      display: flex;
+      gap: 24px;
+      overflow-x: auto;
+      padding: 10px 8px 30px 8px;
+      scroll-behavior: smooth;
+    }
+
+    .item {
+      min-width: 250px;
+      width: 250px;
+      height: 375px;
+      border: 0;
+      border-radius: 18px;
+      background: #222;
+      color: white;
+      cursor: pointer;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .item:focus {
+      outline: 6px solid white;
+      outline-offset: 6px;
+      transform: scale(1.04);
+    }
+
+    .poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: #222;
+    }
+
+    .fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 18px;
+      font-size: 28px;
+      font-weight: bold;
+      background: linear-gradient(145deg, #333, #111);
+    }
+
+    .label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 16px;
+      background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0));
+      font-size: 20px;
+      font-weight: bold;
+      text-align: left;
+    }
+
+    #playerScreen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+    }
+
+    #msg {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      color: white;
+      font-size: 22px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 12px 18px;
+      border-radius: 10px;
+      z-index: 10;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="home">
+    <div class="top">
+      <div class="badge">Mi reproductor</div>
+      <h1>Catálogo</h1>
+      <p>Elige un vídeo y pulsa Enter / OK para reproducir.</p>
+    </div>
+
+    <div id="grid"></div>
+  </div>
+
+  <div id="playerScreen">
+    <div id="msg">Cargando...</div>
+    <video id="video" controls autoplay></video>
+  </div>
+
+  <script>
+    let catalogo = [];
+    let player = null;
+    let lastFocusedIndex = 0;
+
+    async function cargarCatalogo() {
+      const res = await fetch("catalogo.json?cache=" + Date.now());
+      catalogo = await res.json();
+
+      const grid = document.getElementById("grid");
+      grid.innerHTML = "";
+
+      catalogo.forEach((item, index) => {
+        const btn = document.createElement("button");
+        btn.className = "item";
+        btn.onclick = () => {
+          lastFocusedIndex = index;
+          playVideo(item.manifest);
+        };
+
+        if (item.poster) {
+          btn.innerHTML = `
+            <img class="poster" src="${item.poster}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="fallback" style="display:none">${item.title}</div>
+            <div class="label">${item.title}</div>
+          `;
+        } else {
+          btn.innerHTML = `
+            <div class="fallback">${item.title}</div>
+            <div class="label">${item.title}</div>
+          `;
+        }
+
+        grid.appendChild(btn);
+
+        if (index === 0) {
+          setTimeout(() => btn.focus(), 100);
+        }
+      });
+
+      if (catalogo.length === 0) {
+        grid.innerHTML = "<p>No hay vídeos todavía. Añade uno desde admin.html.</p>";
+      }
+    }
+
+    async function playVideo(manifestUrl) {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("playerScreen").style.display = "block";
+
+      const msg = document.getElementById("msg");
+      const video = document.getElementById("video");
+
+      msg.style.display = "block";
+      msg.textContent = "Cargando...";
+
+      shaka.polyfill.installAll();
+
+      if (!shaka.Player.isBrowserSupported()) {
+        msg.textContent = "Este navegador no soporta Shaka Player";
+        return;
+      }
+
+      if (player) {
+        await player.destroy();
+      }
+
+      player = new shaka.Player(video);
+
+      player.addEventListener("error", function(event) {
+        console.error("Error Shaka:", event.detail);
+        msg.textContent = "Error cargando el vídeo";
+      });
+
+      try {
+        await player.load(manifestUrl);
+        msg.style.display = "none";
+        video.focus();
+        await video.play();
+      } catch (error) {
+        console.error(error);
+        msg.textContent = "No se pudo cargar: " + manifestUrl;
+      }
+    }
+
+    document.addEventListener("keydown", async function(e) {
+      const items = Array.from(document.querySelectorAll(".item"));
+      const current = document.activeElement;
+      const index = items.indexOf(current);
+
+      if (document.getElementById("playerScreen").style.display === "block") {
+        if (e.key === "Escape" || e.key === "Backspace") {
+          const video = document.getElementById("video");
+          video.pause();
+
+          if (player) {
+            await player.unload();
+          }
+
+          document.getElementById("playerScreen").style.display = "none";
+          document.getElementById("home").style.display = "block";
+
+          setTimeout(() => {
+            const itemsNow = Array.from(document.querySelectorAll(".item"));
+            if (itemsNow[lastFocusedIndex]) {
+              itemsNow[lastFocusedIndex].focus();
+            } else if (itemsNow[0]) {
+              itemsNow[0].focus();
+            }
+          }, 100);
+        }
+
+        return;
+      }
+
+      if (e.key === "ArrowRight" && index < items.length - 1) {
+        lastFocusedIndex = index + 1;
+        items[index + 1].focus();
+        items[index + 1].scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+
+      if (e.key === "ArrowLeft" && index > 0) {
+        lastFocusedIndex = index - 1;
+        items[index - 1].focus();
+        items[index - 1].scrollIntoView({ behavior: "smooth", inline: "center" });
+      }
+
+      if (e.key === "Enter" && index >= 0) {
+        lastFocusedIndex = index;
+        playVideo(catalogo[index].manifest);
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", cargarCatalogo);
+  </script>
+</body>
+</html>
+
+5. Ejecutarlo en local
+Necesitas PHP instalado. Comprueba con:
+
+php -v
+Si sale una versión, ve a la carpeta dash-test desde terminal:
+
+cd ruta/a/dash-test
+Y ejecuta:
+
+php -S localhost:8000
+Ahora abre el panel admin:
+
+http://localhost:8000/admin.html
+Añades un vídeo pegando XML, subiendo .mpd o pegando URL .mpd.
+
+Luego abre la interfaz TV:
+
+http://localhost:8000/tv.html
+6. Cómo probar con tu MPD actual
+En admin.html:
+
+En Título, pon algo como:
+
+Prueba 1
+En O pegar XML MPD completo, pega tu XML entero:
+
+<?xml version="1.0"?>
+<MPD>
+...
+</MPD>
+Pulsa Guardar en catálogo.
+
+Abre:
+
+http://localhost:8000/tv.html
+Te debería salir una tarjeta. Le das Enter/click y reproduce.
+
+La clave local de prueba es:
+
+1234
+
+Microsoft Windows [Versión 10.0.19044.3324]
+(c) 2019 Microsoft Corporation. Todos los derechos reservados.
+
+C:\Users\Sare\Pictures>php -v
+"php" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+C:\Users\Sare\Pictures>
+
+Mostrar más
+
+No tienes PHP instalado o no está añadido al PATH. Para probar local en Windows, la vía más fácil es Laragon.
+
+Opción fácil: Laragon
+Descarga e instala Laragon.
+
+Abre Laragon.
+
+Pulsa Start All.
+
+Ve a la carpeta de Laragon, normalmente:
+
+C:\laragon\www\
+Dentro crea una carpeta:
+
+C:\laragon\www\dash-test\
+Mete ahí todos los archivos:
+
+dash-test/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+Abre en el navegador:
+
+http://localhost/dash-test/admin.html
+y luego:
+
+http://localhost/dash-test/tv.html
+Con Laragon ya funciona PHP sin tocar nada más.
+
+Opción rápida sin instalar Laragon
+También puedes instalar PHP standalone, pero es más rollo. Para lo que estás haciendo, Laragon es lo más cómodo.
+
+Cuando lo tengas, tu flujo será:
+
+1. Start All en Laragon
+2. Abres admin.html
+3. Subes o pegas el MPD
+4. Se actualiza catalogo.json
+5. Abres tv.html
+6. Ves el catálogo
+Recuerda crear catalogo.json con esto dentro:
+
+[]
+
+tengo instalado localwp, no se si tiene alguna herramienta libreria que podamos aprovechar?
+
+Pensó durante un par de segundos
+Sí, LocalWP te sirve perfectamente, porque ya trae servidor web + PHP. No necesitas instalar Laragon ni PHP aparte.
+
+La forma más fácil es usar una web local de LocalWP y meter ahí tu mini app.
+
+1. Abre LocalWP
+Abre LocalWP y arranca una web local, por ejemplo:
+
+mi-tv.local
+Pulsa Start site.
+
+2. Abre la carpeta del sitio
+En LocalWP busca algo tipo:
+
+Go to site folder
+o botón para abrir la carpeta del sitio.
+
+Dentro verás una estructura parecida a:
+
+app/
+conf/
+logs/
+Entra en:
+
+app/public/
+Ahí está la raíz pública de la web WordPress.
+
+3. Crea una carpeta para tu player
+Dentro de app/public/, crea:
+
+tv/
+Te quedaría algo así:
+
+app/public/tv/
+Dentro mete estos archivos/carpetas:
+
+tv/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+En catalogo.json pon:
+
+[]
+4. Abrir el admin
+Si tu sitio local se llama, por ejemplo:
+
+mi-tv.local
+abre:
+
+http://mi-tv.local/tv/admin.html
+Ahí podrás pegar XML, subir .mpd o pegar URL .mpd.
+
+Luego para ver la interfaz:
+
+http://mi-tv.local/tv/tv.html
+5. Lo bueno de usar LocalWP
+Como LocalWP ya ejecuta PHP, este archivo funcionará:
+
+guardar.php
+y podrá guardar cosas en:
+
+manifests/
+posters/
+catalogo.json
+6. Posible problema de permisos
+Si al guardar te sale error, revisa que existan estas carpetas:
+
+manifests
+posters
+y que catalogo.json exista con:
+
+[]
+En Windows normalmente funcionará sin tocar permisos.
+
+7. Resumen rápido
+Tu flujo con LocalWP sería:
+
+LocalWP Start Site
+↓
+app/public/tv/
+↓
+admin.html para subir/pegar MPD
+↓
+catalogo.json se actualiza solo
+↓
+tv.html muestra el catálogo bonito
+Así puedes probar todo localmente antes de subirlo al VPS.
+
+
+listo, esto lo puedo montar en netlify o vercel, o alguna recomencion?
+
+Pensó durante 4s
+Sí, pero para tu versión actual con PHP que escribe archivos, mi recomendación es:
+
+Mejor un VPS barato o hosting PHP normal antes que Netlify/Vercel.
+
+Tu sistema hace esto:
+
+admin.html → guardar.php → guarda .mpd / poster → actualiza catalogo.json
+Eso necesita poder escribir archivos persistentes en el servidor. En Vercel, las funciones tienen filesystem de solo lectura salvo /tmp, que es temporal. 
+ Netlify/Vercel pueden hacerlo, pero tendrías que cambiar la arquitectura y usar almacenamiento externo tipo Netlify Blobs, Vercel Blob, Supabase, S3/R2, etc. Netlify Blobs, por ejemplo, está pensado para guardar datos tipo key/value o archivos no estructurados. 
+
+Recomendación práctica
+Para hacerlo fácil:
+
+Opción 1 — VPS / hosting PHP
+✅ Recomendado para ti
+✅ Subes los mismos archivos
+✅ Funciona igual que en LocalWP
+✅ PHP puede guardar manifest.mpd, posters y catalogo.json
+Te sirve cualquier VPS con Apache/Nginx + PHP, o un hosting compartido normal con PHP.
+
+Ejemplos de estructura:
+
+/var/www/html/tv/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+Luego entrarías en:
+
+https://tudominio.com/tv/admin.html
+https://tudominio.com/tv/tv.html
+Netlify o Vercel
+Se puede, pero yo no lo haría para la primera versión.
+
+Opción 2 — Netlify/Vercel
+✅ Muy bueno para tv.html estático
+❌ No encaja tan simple con guardar.php
+❌ No puedes actualizar catalogo.json como archivo normal
+✅ Necesitarías Blobs / DB / Storage externo
+Arquitectura en Netlify/Vercel sería:
+
+admin.html
+↓
+serverless function
+↓
+Netlify Blobs / Vercel Blob / Supabase / Cloudflare R2
+↓
+tv.html lee catalogo desde API
+Funciona, pero ya es otro proyecto.
+
+Mi recomendación final
+Para tu caso:
+
+Primero móntalo en un VPS o hosting PHP.
+Es lo más parecido a LocalWP y no tienes que rehacer nada.
+
+Después, cuando ya lo tengas fino, si quieres modernizarlo, lo pasas a:
+
+Vercel + Vercel Blob
+o
+Netlify + Netlify Blobs
+o
+Cloudflare Pages + R2/KV
+Pero para “pegar/subir MPD desde el móvil y verlo en la Android TV”, lo más simple y robusto es VPS + PHP.
+
+
+y infiniti free?
+
+Pensó durante un par de segundos
+Sí, InfinityFree te puede servir para probar esto, y probablemente para una primera versión sencilla.
+
+Pero con matices importantes:
+
+Para tu proyecto sí encaja porque:
+
+tv.html
+admin.html
+guardar.php
+catalogo.json
+manifests/
+posters/
+son archivos pequeños. Los .mpd normalmente pesan muy poco, así que no deberías tener problema.
+
+Lo que NO haría en InfinityFree:
+
+❌ subir vídeos .mp4 grandes
+❌ guardar fragmentos .m4s
+❌ usarlo como servidor de películas
+InfinityFree tiene límite de 10 MB por archivo en hosting gratis, y ese límite no se puede aumentar; aplica incluso a FTP/file manager, no solo a PHP. 
+
+Para tu caso, eso está bien porque tú no vas a subir el vídeo completo, solo:
+
+✅ archivos .mpd
+✅ catalogo.json
+✅ posters pequeños
+✅ html/php/js
+Además, InfinityFree ofrece hosting gratis con PHP y espacio para webs pequeñas, así que para esta prueba te vale. 
+
+Mi recomendación:
+
+Para probar online gratis → InfinityFree
+Para uso cómodo/estable en Android TV → VPS barato o hosting PHP de pago
+En InfinityFree montaría la carpeta así:
+
+/htdocs/tv/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+Luego entrarías a:
+
+https://tusitio.infinityfreeapp.com/tv/admin.html
+https://tusitio.infinityfreeapp.com/tv/tv.html
+Eso sí: pon posters ligeros, tipo .jpg o .webp, idealmente menos de 1–2 MB. Para los .mpd, sin problema.
+
+
+ok y en mi vps ocracle free tier?
+
+Pensó durante un par de segundos
+Sí, Oracle Cloud Free Tier te viene muy bien para esto. Para tu mini app es incluso mejor que InfinityFree porque tendrás control total del servidor.
+
+Oracle mantiene recursos Always Free, incluyendo hasta 2 VMs AMD micro y también Ampere A1 ARM, que en Always Free equivale a hasta 4 OCPUs y 24 GB RAM repartidos en una o varias VMs. 
+
+Para tu caso, con una VM pequeña sobra muchísimo:
+
+Ubuntu Server
+Nginx o Apache
+PHP
+Tu carpeta /tv/
+La estructura sería igual que en LocalWP:
+
+/var/www/html/tv/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifests/
+└── posters/
+Y entrarías desde móvil/TV:
+
+https://tudominio.com/tv/admin.html
+https://tudominio.com/tv/tv.html
+Mi recomendación concreta en Oracle:
+
+VM.Standard.A1.Flex
+1 OCPU
+1 GB o 2 GB RAM
+Ubuntu 22.04 / 24.04
+Para tu app no necesitas 4 OCPU ni 24 GB. Con 1 OCPU + 1 GB RAM va sobrado porque no estás sirviendo los vídeos, solo HTML, PHP, JSON, MPD y posters.
+
+Comandos básicos en Ubuntu:
+
+sudo apt update
+sudo apt install nginx php-fpm -y
+Crear carpeta:
+
+sudo mkdir -p /var/www/html/tv/manifests /var/www/html/tv/posters
+sudo touch /var/www/html/tv/catalogo.json
+echo "[]" | sudo tee /var/www/html/tv/catalogo.json
+Dar permisos para que PHP pueda escribir:
+
+sudo chown -R www-data:www-data /var/www/html/tv
+sudo chmod -R 775 /var/www/html/tv
+Luego subes tus archivos:
+
+tv.html
+admin.html
+guardar.php
+Una cosa importante en Oracle: aunque abras puertos en Ubuntu, también tienes que abrirlos en la Security List / Network Security Group de OCI. Para web necesitas permitir:
+
+80  HTTP
+443 HTTPS
+22  SSH
+Para empezar puedes probar con HTTP:
+
+http://IP_DE_TU_SERVIDOR/tv/admin.html
+http://IP_DE_TU_SERVIDOR/tv/tv.html
+Después ya le pones dominio + HTTPS con Certbot.
+
+Resumen: sí, Oracle Free Tier es muy buena opción para esto. Mejor que Netlify/Vercel para tu versión PHP, y más flexible que InfinityFree.
+
+
+lo puedo montar en docker?
+
+Sí, y para tu caso Docker encaja muy bien. Puedes montar un contenedor con Apache + PHP y meter dentro tu app.
+
+Estructura local:
+
+dash-tv/
+├── Dockerfile
+├── docker-compose.yml
+└── app/
+    ├── tv.html
+    ├── admin.html
+    ├── guardar.php
+    ├── catalogo.json
+    ├── manifests/
+    └── posters/
+En app/catalogo.json pon:
+
+[]
+Dockerfile
+FROM php:8.2-apache
+
+RUN a2enmod rewrite headers
+
+COPY app/ /var/www/html/
+
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html
+docker-compose.yml
+services:
+  dash-tv:
+    build: .
+    container_name: dash-tv
+    ports:
+      - "8080:80"
+    volumes:
+      - ./app:/var/www/html
+    restart: unless-stopped
+Luego desde la carpeta dash-tv ejecutas:
+
+docker compose up -d --build
+Y abres:
+
+http://localhost:8080/admin.html
+Para la interfaz TV:
+
+http://localhost:8080/tv.html
+En un VPS sería igual, pero entrando por la IP:
+
+http://IP_DEL_VPS:8080/tv.html
+O si quieres usar el puerto normal 80, cambia esto:
+
+ports:
+  - "8080:80"
+por:
+
+ports:
+  - "80:80"
+Si ya tienes Nginx/Traefik/Caddy en el VPS, mejor dejarlo en 8080 y poner un reverse proxy delante.
+
+Para crear las carpetas antes de arrancar:
+
+mkdir -p dash-tv/app/manifests dash-tv/app/posters
+echo "[]" > dash-tv/app/catalogo.json
+Luego copias dentro de dash-tv/app/ tus archivos:
+
+tv.html
+admin.html
+guardar.php
+Esta es probablemente la forma más limpia para Oracle Free Tier: Docker, carpeta persistente ./app, y luego dominio/HTTPS con Caddy o Nginx Proxy Manager.
+
+
+si porque ya tengo montado caddy con una red creada, conectado todos los docker a la red, a suces conectado a claudflare dns y de ahi agarra un dominio de digitalplat
+
+Pensó durante un segundo
+Perfecto. Entonces lo ideal es montar tu app como un contenedor PHP/Apache sin exponer puertos públicos, conectado a la misma red Docker que Caddy. Luego Caddy lo publica con tu subdominio.
+
+Ejemplo:
+
+tv.tudominio.com → Cloudflare DNS → VPS → Caddy → contenedor dash-tv
+1. Estructura
+Crea una carpeta:
+
+mkdir -p dash-tv/app/manifests dash-tv/app/posters
+cd dash-tv
+Dentro tendrás:
+
+dash-tv/
+├── Dockerfile
+├── docker-compose.yml
+└── app/
+    ├── tv.html
+    ├── admin.html
+    ├── guardar.php
+    ├── catalogo.json
+    ├── manifests/
+    └── posters/
+Crea el catálogo inicial:
+
+echo "[]" > app/catalogo.json
+Ahí metes los archivos que ya hicimos:
+
+app/tv.html
+app/admin.html
+app/guardar.php
+2. Dockerfile
+Crea Dockerfile:
+
+FROM php:8.2-apache
+
+RUN a2enmod rewrite headers
+
+COPY app/ /var/www/html/
+
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html
+3. docker-compose.yml
+Aquí lo importante es usar tu red externa de Caddy.
+
+Tienes que saber cómo se llama tu red. Puedes verlo con:
+
+docker network ls
+Supongamos que tu red se llama:
+
+caddy_net
+Entonces crea docker-compose.yml así:
+
+services:
+  dash-tv:
+    build: .
+    container_name: dash-tv
+    restart: unless-stopped
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - caddy_net
+
+networks:
+  caddy_net:
+    external: true
+No ponemos ports, porque Caddy accederá al contenedor por la red interna.
+
+4. Configuración en Caddy
+Depende de cómo tengas Caddy.
+
+Caso A: tienes un Caddyfile manual
+Añade esto:
+
+tv.tudominio.com {
+    reverse_proxy dash-tv:80
+}
+Luego recarga Caddy:
+
+docker exec caddy caddy reload --config /etc/caddy/Caddyfile
+O reinicia el contenedor:
+
+docker restart caddy
+Después entrarías en:
+
+https://tv.tudominio.com/tv.html
+https://tv.tudominio.com/admin.html
+Caso B: usas caddy-docker-proxy con labels
+Entonces tu docker-compose.yml sería así:
+
+services:
+  dash-tv:
+    build: .
+    container_name: dash-tv
+    restart: unless-stopped
+    volumes:
+      - ./app:/var/www/html
+    networks:
+      - caddy_net
+    labels:
+      caddy: tv.tudominio.com
+      caddy.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  caddy_net:
+    external: true
+Y levantas:
+
+docker compose up -d --build
+5. DNS en Cloudflare
+Crea un registro:
+
+Tipo: CNAME o A
+Nombre: tv
+Destino: tu dominio/IP del VPS
+Proxy: activado o desactivado
+Si ya tienes otros servicios funcionando igual con Caddy, simplemente replica el mismo patrón.
+
+6. Probar
+Levanta el contenedor:
+
+docker compose up -d --build
+Mira logs:
+
+docker logs dash-tv
+Entra:
+
+https://tv.tudominio.com/admin.html
+Subes/pegas un MPD.
+
+Luego:
+
+https://tv.tudominio.com/tv.html
+7. Recomendación de seguridad rápida
+Ahora mismo admin.html tiene la clave en el JavaScript, o sea, visible. Para probar vale, pero en producción mejor proteger todo /admin.html y /guardar.php con Caddy Basic Auth.
+
+En tu Caddyfile sería algo así:
+
+tv.tudominio.com {
+    @admin path /admin.html /guardar.php
+    basicauth @admin {
+        usuario HASH_DE_PASSWORD
+    }
+
+    reverse_proxy dash-tv:80
+}
+Para generar el hash:
+
+docker exec -it caddy caddy hash-password --plaintext TU_PASSWORD
+Con eso desde el móvil entrarías a admin.html, te pide usuario/clave, y ya puedes subir MPDs tranquilo.
+
+
+ok esto esta perfecto, el tema es como llevo todo esto a una app o algun metodo de reproducirlo facilmente desde el pc?
+
+Pensó durante un par de segundos
+Sí. Con lo que ya tienes, la forma más fácil es convertir tu web en una “app” instalable, sin tener que programar una app nativa.
+
+Tu flujo quedaría:
+
+PC / Android TV / móvil
+↓
+abres https://tv.tudominio.com
+↓
+sale tu catálogo
+↓
+eliges vídeo y play
+Opción 1: usarlo como web normal
+La forma más simple:
+
+https://tv.tudominio.com/tv.html
+Lo guardas como favorito en Chrome/Edge/Firefox y listo.
+
+En PC puedes incluso crear un acceso directo al escritorio:
+
+Chrome / Edge en Windows
+Abre:
+
+https://tv.tudominio.com/tv.html
+Luego:
+
+Menú ⋮ → Guardar y compartir → Crear acceso directo
+Marca:
+
+Abrir como ventana
+Y te queda como si fuera una app.
+
+Opción 2: convertirlo en PWA instalable
+Esta es la mejor para PC y móvil. Añades dos archivos:
+
+manifest.webmanifest
+sw.js
+Y en tv.html añades unas líneas. Así Chrome/Edge te deja instalarlo como app.
+
+Tu carpeta quedaría:
+
+app/
+├── tv.html
+├── admin.html
+├── guardar.php
+├── catalogo.json
+├── manifest.webmanifest
+├── sw.js
+├── icons/
+│   ├── icon-192.png
+│   └── icon-512.png
+├── manifests/
+└── posters/
+En tv.html, dentro de <head>, añade:
+
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#050505">
+Antes de cerrar </body>, añade:
+
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
+Crea manifest.webmanifest:
+
+{
+  "name": "Mi TV Player",
+  "short_name": "TV Player",
+  "start_url": "/tv.html",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+Crea sw.js:
+
+self.addEventListener("install", event => {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", event => {
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener("fetch", event => {
+  event.respondWith(fetch(event.request));
+});
+Ojo: si tu app está en subcarpeta, por ejemplo:
+
+https://tudominio.com/tv/tv.html
+entonces usa este manifest.webmanifest:
+
+{
+  "name": "Mi TV Player",
+  "short_name": "TV Player",
+  "start_url": "/tv/tv.html",
+  "scope": "/tv/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/tv/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/tv/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+Después abres Chrome/Edge y debería aparecer opción:
+
+Instalar Mi TV Player
+Opción 3: app para Android TV
+Para Android TV tienes tres vías:
+
+La más fácil
+Instalas un navegador en Android TV y abres:
+
+https://tv.tudominio.com/tv.html
+Luego lo dejas como favorito.
+
+Un poco mejor
+Usas una app tipo WebView wrapper o URL launcher que abra directamente tu web en pantalla completa.
+
+La app simplemente carga:
+
+https://tv.tudominio.com/tv.html
+Eso es mucho más fácil que hacer una app de vídeo nativa.
+
+La versión pro
+Hacer una app Android TV nativa con ExoPlayer/Media3, pero para tu caso yo no empezaría por ahí. Ya tienes Shaka funcionando, catálogo funcionando, admin funcionando y Docker/Caddy preparado.
+
+Mi recomendación
+Para PC:
+
+PWA instalable o acceso directo de Chrome/Edge
+Para Android TV:
+
+WebView / navegador fullscreen apuntando a tv.html
+Para móvil:
+
+admin.html como web normal protegida con contraseña
+Tu sistema ideal quedaría así:
+
+Móvil:
+https://tv.tudominio.com/admin.html
+→ subes/pegas MPD
+
+PC / Android TV:
+https://tv.tudominio.com/tv.html
+→ catálogo bonito + play
+Lo siguiente que haría sería convertir tv.html en PWA para que en Windows se abra como app separada, sin barra del navegador.
+
+
+perdon desde el tv
+
+Sí, desde la Android TV tienes varias formas fáciles, de menos a más “app real”:
+
+Opción más simple: navegador en la TV
+Instalas un navegador en Android TV, por ejemplo TV Bro, Open Browser, Puffin TV o el navegador que ya tengas.
+
+Luego abres:
+
+https://tv.tudominio.com/tv.html
+Y lo guardas como favorito.
+
+Ventaja: no tienes que crear nada.
+Desventaja: puede verse la barra del navegador o ser menos cómodo con el mando.
+
+Opción recomendada: una app “webview” que abre tu web
+Esto es lo ideal para tu caso. La app solo hace una cosa:
+
+Abrir https://tv.tudominio.com/tv.html en pantalla completa
+Así en Android TV aparece como una app normal, con icono, y al abrirla entra directo a tu catálogo.
+
+Puedes hacerlo de dos maneras:
+
+A) Usar una app ya hecha tipo “URL launcher / webview”
+Busca en Android TV o instala por APK una app tipo:
+
+WebView App
+URL Launcher
+Website Shortcut
+TV Web Browser Launcher
+Le configuras tu URL y listo.
+
+B) Hacer tu propia APK sencilla
+Una app Android mínima tendría una WebView a pantalla completa cargando tu URL.
+
+La lógica sería:
+
+webView.loadUrl("https://tv.tudominio.com/tv.html")
+Y ya está. No reproduce el vídeo la app directamente; lo reproduce tu web con Shaka Player dentro de la WebView.
+
+Opción muy práctica: instalar como PWA
+Si el navegador de la TV soporta instalar PWA, puedes añadir la web a inicio como app. Pero en Android TV esto depende mucho del navegador y no siempre va fino.
+
+Lo que yo haría
+Para empezar rápido:
+
+1. Instalar TV Bro en Android TV
+2. Abrir https://tv.tudominio.com/tv.html
+3. Probar reproducción
+4. Guardar favorito
+Cuando confirmes que va bien:
+
+Hacer una APK WebView fullscreen
+Esa sería la experiencia más limpia: icono en la TV, abre directo el catálogo, mando izquierda/derecha/OK, y listo.
+
+Importante: antes de hacer APK, prueba la URL real en un navegador de la Android TV. Si Shaka reproduce bien ahí, la app WebView tiene muchas más probabilidades de funcionar bien.
+
+
+consume muchos recuros el vps?
+
+No, casi nada, siempre que tu VPS solo sirva:
+
+tv.html
+admin.html
+guardar.php
+catalogo.json
+archivos .mpd
+posters pequeños
+En ese caso el vídeo no pasa por tu VPS. Tu VPS solo entrega la interfaz y el manifest; los fragmentos .m4s los descarga la TV directamente desde el servidor externo del MPD.
+
+Consumo aproximado
+Para 1–5 usuarios tuyos:
+
+CPU: casi 0%
+RAM: 50–200 MB según contenedor PHP/Apache/Nginx
+Disco: muy poco, salvo posters
+Ancho de banda: bajísimo
+Un MPD suele pesar KB o pocos MB. El tráfico grande, que sería el vídeo, va desde:
+
+servidor externo del vídeo → Android TV
+no desde:
+
+VPS → Android TV
+Cuándo sí consumiría mucho
+Consumiría bastante si haces una de estas cosas:
+
+❌ descargar los vídeos al VPS
+❌ guardar todos los fragmentos .m4s
+❌ convertir DASH a MP4 en el servidor
+❌ hacer proxy de los fragmentos por tu VPS
+❌ transcodificar vídeo
+Ahí sí podrías gastar CPU, disco y mucho ancho de banda.
+
+Para tu caso
+Con Docker + Caddy + PHP, una Oracle Free Tier pequeña va sobrada.
+
+Algo tipo:
+
+1 OCPU
+1 GB RAM
+10–20 GB disco
+te sirve perfectamente para esto.
+
+La única parte que puede pesar un poco son los posters si subes muchas imágenes grandes. Mejor usar .jpg o .webp comprimidos.
+
+
+Imagen cargada
+una duda no es que lo vaya hacer ahora pero por duda, este sistema te reproduce los videoa asi que basicamente es a pelo sin mucha cosa, se puede mejorar esto, hacerlo mas estetico meterle dentro de algo o incluso buffering?
+
+Sí, se puede mejorar muchísimo. Ahora mismo estás usando el control nativo del <video>, por eso se ve “a pelo”. Debajo sigue estando Shaka reproduciendo el DASH, pero la interfaz visual es la básica del navegador.
+
+Puedes mejorar en varias capas:
+
+1. Player más bonito encima de Shaka
+Puedes usar un reproductor UI como Plyr encima del <video>. Queda mucho más estético: barra moderna, botón grande, fullscreen, volumen, progreso, etc.
+
+Ejemplo rápido añadiendo Plyr:
+
+En el <head>:
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.css">
+<script src="https://cdn.jsdelivr.net/npm/plyr@3.7.8/dist/plyr.polyfilled.js"></script>
+Tu vídeo:
+
+<video id="video" controls playsinline></video>
+Y después de cargar Shaka:
+
+await player.load(manifestUrl);
+
+const ui = new Plyr(video, {
+  controls: [
+    "play-large",
+    "play",
+    "progress",
+    "current-time",
+    "duration",
+    "mute",
+    "volume",
+    "fullscreen"
+  ]
+});
+Eso ya te da una interfaz bastante más limpia.
+
+2. Pantalla de carga / buffering personalizada
+Sí, puedes meter tu propio “buffering” visual: spinner, logo, texto “Cargando…”, fondo borroso, etc.
+
+Por ejemplo:
+
+<div id="loading">
+  <div class="spinner"></div>
+  <div>Cargando vídeo...</div>
+</div>
+CSS:
+
+#loading {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: white;
+  font-size: 26px;
+  z-index: 999;
+}
+
+.spinner {
+  width: 70px;
+  height: 70px;
+  border: 7px solid rgba(255,255,255,0.25);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+JS:
+
+const loading = document.getElementById("loading");
+
+video.addEventListener("waiting", () => {
+  loading.style.display = "flex";
+});
+
+video.addEventListener("playing", () => {
+  loading.style.display = "none";
+});
+
+video.addEventListener("canplay", () => {
+  loading.style.display = "none";
+});
+Así cuando el vídeo se quede cargando, sale tu overlay bonito.
+
+3. Buffer real / configuración de Shaka
+También puedes ajustar cuánto buffer intenta guardar Shaka. Por ejemplo:
+
+player.configure({
+  streaming: {
+    bufferingGoal: 60,
+    rebufferingGoal: 5,
+    bufferBehind: 30
+  }
+});
+Eso significa algo aproximado a:
+
+bufferingGoal: intenta mantener hasta 60s por delante
+rebufferingGoal: espera unos 5s antes de volver a reproducir si se corta
+bufferBehind: conserva 30s por detrás
+Para Android TV, algo razonable sería:
+
+player.configure({
+  streaming: {
+    bufferingGoal: 30,
+    rebufferingGoal: 4,
+    bufferBehind: 20
+  }
+});
+No conviene poner valores enormes porque puede gastar más RAM.
+
+4. Controles tipo TV
+Puedes esconder los controles nativos y crear los tuyos:
+
+botón play/pause grande
+barra de progreso grande
+botón volver
+título del vídeo arriba
+spinner de buffering
+iconos grandes para mando
+Esto queda mucho mejor para Android TV porque los controles nativos de Chrome/WebView no siempre son cómodos con mando.
+
+La idea sería:
+
+Shaka reproduce el vídeo
+↓
+tú dibujas tu propia interfaz encima
+↓
+mando: OK pausa/reproduce, izquierda/derecha avanza/retrocede
+Por ejemplo:
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Enter") {
+    if (video.paused) video.play();
+    else video.pause();
+  }
+
+  if (e.key === "ArrowRight") {
+    video.currentTime += 10;
+  }
+
+  if (e.key === "ArrowLeft") {
+    video.currentTime -= 10;
+  }
+
+  if (e.key === "Backspace" || e.key === "Escape") {
+    volverAlCatalogo();
+  }
+});
+5. Más estética tipo streaming app
+Puedes añadir:
+
+carátulas horizontales
+categorías
+continuar viendo
+barra de progreso por película
+marcar como visto
+buscador
+fondo dinámico según el poster
+botón “Reproducir desde el inicio”
+botón “Continuar”
+autoplay del siguiente
+pantalla de error bonita
+Todo eso se guarda fácil en catalogo.json o en otro archivo tipo estado.json.
+
+6. Lo importante
+Tu sistema no está limitado por ser simple. Lo que tienes ahora es la base:
+
+Catálogo → Shaka Player → DASH MPD
+Encima de eso puedes poner una interfaz tan bonita como quieras.
+
+La mejora más rápida y útil sería:
+
+1. Añadir Plyr para controles bonitos
+2. Añadir spinner de buffering
+3. Añadir controles de mando: OK, izquierda, derecha, atrás
+4. Guardar progreso de reproducción
+Yo empezaría por eso antes de hacerlo más complejo.
+
+
+
+

@@ -1,0 +1,1609 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TV Player</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.11/shaka-player.compiled.js"></script>
+
+  <style>
+    :root {
+      --bg: #06111f;
+      --panel: rgba(7, 18, 31, 0.76);
+      --panel-strong: rgba(7, 18, 31, 0.92);
+      --text: #f4f7fb;
+      --muted: #a9bdd5;
+      --line: rgba(255, 255, 255, 0.09);
+      --accent: #76e3ff;
+      --accent-strong: #9ff2ff;
+      --danger: #ff7c89;
+      --shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
+      --hero-image: none;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at top left, rgba(51, 124, 196, 0.28), transparent 30%),
+        radial-gradient(circle at 85% 10%, rgba(118, 227, 255, 0.14), transparent 24%),
+        linear-gradient(160deg, #04070c 0%, #081322 52%, #04070c 100%);
+      color: var(--text);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      overflow: hidden;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
+    }
+
+    .screen {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #homeScreen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(4, 7, 12, 0.96) 0%, rgba(4, 7, 12, 0.82) 36%, rgba(4, 7, 12, 0.58) 56%, rgba(4, 7, 12, 0.88) 100%),
+        linear-gradient(180deg, rgba(4, 7, 12, 0.18), rgba(4, 7, 12, 0.94)),
+        var(--hero-image) center/cover no-repeat;
+      filter: saturate(1.15);
+      transform: scale(1.03);
+      transition: background 220ms ease, transform 240ms ease;
+    }
+
+    #homeScreen::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 38vh;
+      background: linear-gradient(180deg, rgba(4, 7, 12, 0), rgba(4, 7, 12, 0.94));
+      pointer-events: none;
+    }
+
+    .shell {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-rows: auto auto;
+      align-content: start;
+      min-height: 100%;
+      padding: 34px 52px 28px;
+      gap: 22px;
+    }
+
+    .hero {
+      display: block;
+    }
+
+    .hero-main {
+      min-width: 0;
+      max-width: 720px;
+      padding-top: 22px;
+    }
+
+    .hero-chip-row,
+    .hero-meta,
+    .player-hints,
+    .rail-hints {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .chip,
+    .meta-pill,
+    .hint-pill {
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+      backdrop-filter: blur(14px);
+    }
+
+    .chip.live {
+      display: none;
+    }
+
+    .hero h1 {
+      margin: 16px 0 10px;
+      font-size: clamp(52px, 7vw, 84px);
+      line-height: 0.9;
+      letter-spacing: -0.03em;
+      text-wrap: balance;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 520px;
+      font-size: 18px;
+      line-height: 1.35;
+      color: var(--muted);
+      text-wrap: pretty;
+    }
+
+    .hero p.is-empty {
+      display: none;
+    }
+
+    .hero-side {
+      display: none;
+    }
+
+    .hero-side h2,
+    .rail-header h2,
+    .admin-link {
+      margin: 0;
+    }
+
+    .hero-side h2 {
+      font-size: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .hero-side p {
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--text);
+      max-width: none;
+    }
+
+    .focus-stats {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .focus-stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 11px 13px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .focus-stat strong {
+      color: var(--text);
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .rail-shell {
+      position: relative;
+      z-index: 1;
+      padding-top: 6px;
+    }
+
+    .rail-header {
+      display: block;
+      margin-bottom: 18px;
+    }
+
+    .rail-header h2 {
+      font-size: 28px;
+      letter-spacing: -0.03em;
+    }
+
+    .rail-hints {
+      display: none;
+    }
+
+    #rail {
+      display: flex;
+      gap: 26px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 0 4px 14px;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      align-items: flex-start;
+    }
+
+    #rail::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card {
+      position: relative;
+      width: 260px;
+      min-width: 260px;
+      aspect-ratio: 2 / 3;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 26px;
+      overflow: hidden;
+      color: inherit;
+      cursor: pointer;
+      transform: translateY(0) scale(1);
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+      box-shadow: 0 18px 34px rgba(0, 0, 0, 0.25);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 26%, transparent 56%, rgba(4, 7, 12, 0.92));
+      pointer-events: none;
+    }
+
+    .card.is-active {
+      transform: translateY(-10px) scale(1.03);
+      border-color: rgba(159, 242, 255, 0.6);
+      box-shadow: 0 24px 46px rgba(0, 0, 0, 0.42);
+    }
+
+    .card:focus-visible {
+      outline: none;
+    }
+
+    .poster {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(160deg, rgba(27, 49, 78, 0.95), rgba(6, 17, 31, 0.95));
+    }
+
+    .poster-fallback {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(118, 227, 255, 0.32), transparent 26%),
+        linear-gradient(160deg, rgba(34, 72, 120, 0.84), rgba(6, 17, 31, 0.96));
+    }
+
+    .poster-mark {
+      display: grid;
+      place-items: center;
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(244, 247, 251, 0.94);
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+    }
+
+    .card-copy {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1;
+      display: grid;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      text-shadow: 0 4px 22px rgba(0, 0, 0, 0.55);
+    }
+
+    .card-subtitle {
+      display: none;
+    }
+
+    #heroSource {
+      display: none;
+    }
+
+    .hero-meta {
+      display: none;
+    }
+
+    .progress-shell {
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.14);
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, #76e3ff, #d0fbff);
+      border-radius: inherit;
+      transition: width 180ms ease;
+    }
+
+    .card-tag-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .card-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(4, 7, 12, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-resume {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 1;
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(4, 7, 12, 0.72);
+      border: 1px solid rgba(159, 242, 255, 0.34);
+      color: var(--accent-strong);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .empty-state {
+      display: grid;
+      place-items: center;
+      min-height: 320px;
+      padding: 44px;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+      color: var(--muted);
+      font-size: 20px;
+      text-align: center;
+      backdrop-filter: blur(16px);
+    }
+
+    #playerScreen {
+      background: #02060a;
+    }
+
+    #video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    #playerScreen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(118, 227, 255, 0.08), transparent 38%),
+        linear-gradient(180deg, rgba(2, 6, 10, 0.62), rgba(2, 6, 10, 0.18), rgba(2, 6, 10, 0.82));
+      pointer-events: none;
+    }
+
+    #playerUi {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 28px 34px 26px;
+      background:
+        linear-gradient(180deg, rgba(2, 6, 10, 0.76), rgba(2, 6, 10, 0) 24%, rgba(2, 6, 10, 0) 72%, rgba(2, 6, 10, 0.84) 100%);
+      transition: opacity 180ms ease;
+    }
+
+    #playerUi.is-dimmed {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .player-top,
+    .player-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    .player-title-block {
+      max-width: 72vw;
+    }
+
+    .player-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--muted);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .player-title {
+      margin: 14px 0 8px;
+      font-size: clamp(34px, 4.5vw, 54px);
+      line-height: 0.96;
+      letter-spacing: -0.03em;
+    }
+
+    .player-copy {
+      max-width: 780px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .player-controls {
+      width: min(1040px, 100%);
+      margin-left: auto;
+      display: grid;
+      gap: 16px;
+      justify-items: end;
+    }
+
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .time-row strong {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .track {
+      position: relative;
+      width: 100%;
+      height: 14px;
+      border: 0;
+      padding: 0;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .track-buffered,
+    .track-progress {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      border-radius: inherit;
+    }
+
+    .track-buffered {
+      background: rgba(255, 255, 255, 0.16);
+    }
+
+    .track-progress {
+      background: linear-gradient(90deg, #76e3ff, #d9fdff);
+    }
+
+    .track-thumb {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.34);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .player-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      gap: 18px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .control-button {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 999px;
+      cursor: pointer;
+      min-width: 74px;
+      backdrop-filter: blur(18px);
+    }
+
+    .control-button.primary {
+      background: linear-gradient(135deg, rgba(118, 227, 255, 0.22), rgba(255, 255, 255, 0.1));
+      border-color: rgba(159, 242, 255, 0.48);
+      color: var(--accent-strong);
+    }
+
+    .control-button:hover {
+      border-color: rgba(159, 242, 255, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .hint-text {
+      color: var(--muted);
+      font-size: 15px;
+      text-align: right;
+      max-width: 420px;
+    }
+
+    #statusOverlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    #statusOverlay.hidden {
+      display: none;
+    }
+
+    .status-panel {
+      min-width: 280px;
+      max-width: min(560px, calc(100vw - 40px));
+      padding: 24px 26px;
+      border-radius: 24px;
+      background: rgba(4, 7, 12, 0.78);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(22px);
+      display: grid;
+      gap: 14px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .status-spinner {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 4px solid rgba(255, 255, 255, 0.14);
+      border-top-color: var(--accent-strong);
+      animation: spin 900ms linear infinite;
+    }
+
+    .status-title {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .status-copy {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+
+    .status-panel.error .status-title {
+      color: #ffd3d7;
+    }
+
+    .status-panel.error .status-spinner {
+      display: none;
+    }
+
+    .status-panel.error::before {
+      content: "!";
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: rgba(255, 124, 137, 0.18);
+      color: #ffd3d7;
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .hero {
+        align-items: start;
+      }
+
+      .hero-side {
+        justify-self: start;
+        max-width: 520px;
+      }
+
+      .shell {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+
+      #heroSource {
+        max-width: 100%;
+      }
+
+      .card {
+        width: 220px;
+        min-width: 220px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <section id="homeScreen" class="screen">
+    <div class="shell">
+      <div class="hero">
+        <div class="hero-main">
+          <div class="hero-chip-row">
+            <span class="chip live">TV Mode</span>
+            <span class="chip" id="heroType">Sin fuente</span>
+            <span class="chip" id="heroResumeChip">Biblioteca</span>
+          </div>
+
+          <h1 id="heroTitle">Tu catalogo listo para TV</h1>
+          <p id="heroDescription" class="is-empty"></p>
+
+          <div class="hero-meta" style="margin-top: 18px;">
+            <span class="meta-pill" id="heroCount">0 videos</span>
+            <span class="meta-pill" id="heroSource">Sin item activo</span>
+            <span class="meta-pill" id="heroUpdated">Esperando catalogo</span>
+          </div>
+        </div>
+
+        <aside class="hero-side">
+          <h2>Modo salon</h2>
+          <p id="focusCopy">Navega con izquierda y derecha. Pulsa OK o Enter para entrar al player. Dentro del video, izquierda y derecha avanzan o retroceden diez segundos.</p>
+
+          <div class="focus-stats">
+            <div class="focus-stat">
+              <span>Estado</span>
+              <strong id="focusState">Sin progreso</strong>
+            </div>
+            <div class="focus-stat">
+              <span>Formato</span>
+              <strong id="focusFormat">-</strong>
+            </div>
+            <div class="focus-stat">
+              <span>Ultima accion</span>
+              <strong id="focusAction">Catalogo cargado</strong>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="rail-shell">
+        <div class="rail-header">
+          <h2>Mi lista</h2>
+          <div class="rail-hints">
+            <span class="hint-pill">Izquierda / Derecha para moverte</span>
+            <span class="hint-pill">OK para reproducir</span>
+            <span class="hint-pill">Recarga automatica del catalogo</span>
+          </div>
+        </div>
+
+        <div id="rail"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="playerScreen" class="screen hidden">
+    <video id="video" playsinline preload="auto"></video>
+
+    <div id="statusOverlay" class="hidden">
+      <div id="statusPanel" class="status-panel">
+        <div class="status-spinner"></div>
+        <div class="status-title" id="statusTitle">Preparando video</div>
+        <div class="status-copy" id="statusCopy">Cargando fuente y preparando el buffer inicial.</div>
+      </div>
+    </div>
+
+    <div id="playerUi">
+      <div class="player-top">
+        <div class="player-title-block">
+          <div class="player-kicker">
+            <span id="playerType">Player</span>
+            <span id="playerState">Preparando</span>
+          </div>
+          <h2 class="player-title" id="playerTitle">Sin reproduccion</h2>
+          <div class="player-copy" id="playerDescription">Elige un item desde el catalogo para iniciar.</div>
+        </div>
+
+        <div class="player-hints">
+          <span class="hint-pill">OK pausa o reanuda</span>
+          <span class="hint-pill">Atras vuelve al catalogo</span>
+          <span class="hint-pill">Izquierda / Derecha buscan 10s</span>
+        </div>
+      </div>
+
+      <div class="player-bottom">
+        <div class="player-controls">
+          <div class="time-row">
+            <span><strong id="currentTime">00:00</strong> / <span id="durationTime">00:00</span></span>
+            <span id="bufferLabel">Buffer estable</span>
+          </div>
+
+          <button id="progressTrack" class="track" type="button" aria-label="Barra de progreso">
+            <span id="bufferedFill" class="track-buffered"></span>
+            <span id="progressFill" class="track-progress"></span>
+            <span id="trackThumb" class="track-thumb"></span>
+          </button>
+
+          <div class="player-actions">
+            <div class="action-group">
+              <button id="backButton" class="control-button" type="button">Atras</button>
+              <button id="toggleButton" class="control-button primary" type="button">Pausa</button>
+              <button id="rewindButton" class="control-button" type="button">-10s</button>
+              <button id="forwardButton" class="control-button" type="button">+10s</button>
+            </div>
+
+            <div class="hint-text" id="playerHintText">
+              El player guarda tu avance localmente para poder reanudar mas tarde.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const CATALOG_URL = "catalogo.json";
+    const PROGRESS_KEY = "tv-player-progress-v2";
+    const AUTO_REFRESH_MS = 45000;
+    const SEEK_STEP = 10;
+
+    const state = {
+      catalog: [],
+      selectedIndex: 0,
+      currentItem: null,
+      player: null,
+      controlsTimer: null,
+      statusTimer: null,
+      catalogTimer: null,
+      progressMap: loadProgressMap()
+    };
+
+    const homeScreen = document.getElementById("homeScreen");
+    const playerScreen = document.getElementById("playerScreen");
+    const rail = document.getElementById("rail");
+    const video = document.getElementById("video");
+    const playerUi = document.getElementById("playerUi");
+    const statusOverlay = document.getElementById("statusOverlay");
+    const statusPanel = document.getElementById("statusPanel");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusCopy = document.getElementById("statusCopy");
+    const toggleButton = document.getElementById("toggleButton");
+    const rewindButton = document.getElementById("rewindButton");
+    const forwardButton = document.getElementById("forwardButton");
+    const backButton = document.getElementById("backButton");
+    const progressTrack = document.getElementById("progressTrack");
+    const progressFill = document.getElementById("progressFill");
+    const bufferedFill = document.getElementById("bufferedFill");
+    const trackThumb = document.getElementById("trackThumb");
+    const currentTimeEl = document.getElementById("currentTime");
+    const durationTimeEl = document.getElementById("durationTime");
+    const bufferLabel = document.getElementById("bufferLabel");
+
+    function loadProgressMap() {
+      try {
+        const raw = localStorage.getItem(PROGRESS_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+        return parsed && typeof parsed === "object" ? parsed : {};
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function saveProgressMap() {
+      localStorage.setItem(PROGRESS_KEY, JSON.stringify(state.progressMap));
+    }
+
+    function formatTime(value) {
+      if (!Number.isFinite(value) || value < 0) {
+        return "00:00";
+      }
+
+      const total = Math.floor(value);
+      const hours = Math.floor(total / 3600);
+      const minutes = Math.floor((total % 3600) / 60);
+      const seconds = total % 60;
+
+      if (hours > 0) {
+        return String(hours).padStart(2, "0") + ":" + String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+      }
+
+      return String(minutes).padStart(2, "0") + ":" + String(seconds).padStart(2, "0");
+    }
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function getCardMark(title) {
+      const clean = String(title || "").trim();
+      return clean ? clean.charAt(0).toUpperCase() : "TV";
+    }
+
+    function summarizeSource(source) {
+      const raw = String(source || "").trim();
+
+      if (!raw) {
+        return "Fuente local";
+      }
+
+      try {
+        const url = new URL(raw, window.location.href);
+        const parts = url.pathname.split("/").filter(Boolean);
+        const tail = parts.length ? parts[parts.length - 1] : url.hostname;
+        return url.hostname + " / " + tail;
+      } catch (error) {
+        const pieces = raw.split("/").filter(Boolean);
+        return pieces.length ? pieces[pieces.length - 1] : raw;
+      }
+    }
+
+    function normalizeItem(item, index) {
+      const source = String(item.source || item.manifest || "").trim();
+      const title = String(item.title || "Video " + (index + 1)).trim();
+      const description = String(item.description || "").trim();
+      const poster = String(item.poster || "").trim();
+      const id = String(item.id || buildLegacyId(item, index));
+      const type = String(item.type || inferTypeFromSource(source)).trim();
+
+      return {
+        id,
+        title,
+        description,
+        poster,
+        source,
+        manifest: source,
+        type,
+        createdAt: item.createdAt || "",
+        updatedAt: item.updatedAt || ""
+      };
+    }
+
+    function buildLegacyId(item, index) {
+      const raw = String(item.title || "video") + "|" + String(item.source || item.manifest || "") + "|" + index;
+      return raw.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "video-" + index;
+    }
+
+    function inferTypeFromSource(source) {
+      const lower = String(source || "").toLowerCase().split("?")[0];
+
+      if (lower.endsWith(".mpd")) {
+        return "dash";
+      }
+
+      if (lower.endsWith(".m3u8")) {
+        return "hls";
+      }
+
+      if (lower.endsWith(".mp4") || lower.endsWith(".webm") || lower.endsWith(".mov")) {
+        return "video";
+      }
+
+      return "stream";
+    }
+
+    function formatTypeLabel(type) {
+      const normalized = String(type || "").toLowerCase();
+
+      if (normalized === "dash") {
+        return "DASH";
+      }
+
+      if (normalized === "hls") {
+        return "HLS";
+      }
+
+      if (normalized === "video") {
+        return "VIDEO";
+      }
+
+      return "STREAM";
+    }
+
+    function getProgressEntry(item) {
+      return state.progressMap[item.id] || null;
+    }
+
+    function isResumeCandidate(item) {
+      const progress = getProgressEntry(item);
+
+      if (!progress || !Number.isFinite(progress.position)) {
+        return false;
+      }
+
+      if (progress.position < 30) {
+        return false;
+      }
+
+      if (Number.isFinite(progress.duration) && progress.duration > 0) {
+        return progress.position < progress.duration - 45;
+      }
+
+      return true;
+    }
+
+    function getProgressRatio(item) {
+      const progress = getProgressEntry(item);
+
+      if (!progress || !Number.isFinite(progress.position) || !Number.isFinite(progress.duration) || progress.duration <= 0) {
+        return 0;
+      }
+
+      return Math.max(0, Math.min(progress.position / progress.duration, 1));
+    }
+
+    function renderCatalog() {
+      if (!state.catalog.length) {
+        rail.innerHTML = '<div class="empty-state">No hay videos todavia. Abre admin.html desde el movil o el PC para cargar una fuente.</div>';
+        updateHero(null);
+        return;
+      }
+
+      rail.innerHTML = state.catalog.map(function(item, index) {
+        const resume = isResumeCandidate(item);
+        const progressRatio = getProgressRatio(item);
+        const description = item.description || "Fuente lista para reproducir en modo TV.";
+        const posterMarkup = item.poster
+          ? '<img class="poster" src="' + escapeHtml(item.poster) + '" alt="' + escapeHtml(item.title) + '" loading="lazy">'
+          : '<div class="poster-fallback"><span class="poster-mark">' + escapeHtml(getCardMark(item.title)) + "</span></div>";
+
+        return '' +
+          '<button class="card' + (index === state.selectedIndex ? " is-active" : "") + '" data-index="' + index + '" type="button" aria-label="Reproducir ' + escapeHtml(item.title) + '">' +
+            (resume ? '<div class="card-resume">Resume</div>' : "") +
+            posterMarkup +
+            '<div class="card-copy">' +
+              '<div class="card-tag-row">' +
+                '<span class="card-tag">' + formatTypeLabel(item.type) + '</span>' +
+                (resume ? '<span class="card-tag">' + formatTime(getProgressEntry(item).position) + '</span>' : "") +
+              '</div>' +
+              '<div class="card-title">' + escapeHtml(item.title) + '</div>' +
+              '<div class="card-subtitle">' + escapeHtml(description) + '</div>' +
+              '<div class="progress-shell"><div class="progress-fill" style="width:' + Math.round(progressRatio * 100) + '%"></div></div>' +
+            '</div>' +
+          '</button>';
+      }).join("");
+
+      const cards = rail.querySelectorAll(".card");
+
+      cards.forEach(function(card) {
+        card.addEventListener("click", function() {
+          const index = Number(card.dataset.index || 0);
+          setSelectedIndex(index, false);
+          startPlayback(state.catalog[index]);
+        });
+
+        card.addEventListener("mouseenter", function() {
+          const index = Number(card.dataset.index || 0);
+          setSelectedIndex(index, false);
+        });
+
+        card.addEventListener("focus", function() {
+          const index = Number(card.dataset.index || 0);
+          setSelectedIndex(index, false);
+        });
+      });
+
+      syncActiveCard();
+      updateHero(state.catalog[state.selectedIndex]);
+    }
+
+    function syncActiveCard() {
+      const cards = Array.from(rail.querySelectorAll(".card"));
+
+      cards.forEach(function(card, index) {
+        card.classList.toggle("is-active", index === state.selectedIndex);
+      });
+
+      const active = cards[state.selectedIndex];
+
+      if (active) {
+        active.focus({ preventScroll: true });
+        active.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest"
+        });
+      }
+    }
+
+    function setSelectedIndex(index, scrollIntoView) {
+      if (!state.catalog.length) {
+        state.selectedIndex = 0;
+        return;
+      }
+
+      const nextIndex = Math.max(0, Math.min(index, state.catalog.length - 1));
+      state.selectedIndex = nextIndex;
+      updateHero(state.catalog[nextIndex]);
+
+      const cards = Array.from(rail.querySelectorAll(".card"));
+
+      cards.forEach(function(card, cardIndex) {
+        card.classList.toggle("is-active", cardIndex === nextIndex);
+      });
+
+      const active = cards[nextIndex];
+
+      if (active && scrollIntoView !== false) {
+        active.focus({ preventScroll: true });
+        active.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+          block: "nearest"
+        });
+      }
+    }
+
+    function updateHero(item) {
+      const heroTitle = document.getElementById("heroTitle");
+      const heroDescription = document.getElementById("heroDescription");
+      const heroType = document.getElementById("heroType");
+      const heroResumeChip = document.getElementById("heroResumeChip");
+      const heroCount = document.getElementById("heroCount");
+      const heroSource = document.getElementById("heroSource");
+      const heroUpdated = document.getElementById("heroUpdated");
+      const focusCopy = document.getElementById("focusCopy");
+      const focusState = document.getElementById("focusState");
+      const focusFormat = document.getElementById("focusFormat");
+      const focusAction = document.getElementById("focusAction");
+
+      heroCount.textContent = state.catalog.length + (state.catalog.length === 1 ? " video" : " videos");
+      heroUpdated.textContent = "Auto refresh 45s";
+
+      if (!item) {
+        document.documentElement.style.setProperty("--hero-image", "none");
+        heroTitle.textContent = "Tu catalogo listo para TV";
+        heroDescription.textContent = "";
+        heroDescription.classList.add("is-empty");
+        heroType.textContent = "Sin fuente";
+        heroResumeChip.textContent = "Biblioteca";
+        heroSource.textContent = "Sin item activo";
+        heroSource.removeAttribute("title");
+        focusCopy.textContent = "Navega con izquierda y derecha. Pulsa OK o Enter para entrar al player. Dentro del video, izquierda y derecha avanzan o retroceden diez segundos.";
+        focusState.textContent = "Sin progreso";
+        focusFormat.textContent = "-";
+        focusAction.textContent = "Catalogo cargado";
+        return;
+      }
+
+      const progress = getProgressEntry(item);
+      const resume = isResumeCandidate(item);
+      const progressText = resume ? "Continuar" : "Nuevo";
+      const summaryText = item.description || (resume ? "Continua donde lo dejaste." : "");
+
+      document.documentElement.style.setProperty(
+        "--hero-image",
+        item.poster ? 'url("' + item.poster.replace(/"/g, '\\"') + '")' : "none"
+      );
+
+      heroTitle.textContent = item.title;
+      heroDescription.textContent = summaryText;
+      heroDescription.classList.toggle("is-empty", summaryText === "");
+      heroType.textContent = formatTypeLabel(item.type);
+      heroResumeChip.textContent = progressText;
+      heroSource.textContent = summarizeSource(item.source);
+      heroSource.title = item.source || "Fuente local";
+      focusCopy.textContent = resume
+        ? "Este item tiene progreso guardado. Al entrar, el player intentara retomarlo automaticamente."
+        : "No hay avance previo guardado en este navegador. Al terminar, el progreso se queda listo para reanudar.";
+      focusState.textContent = resume ? "Continuar" : "Nuevo";
+      focusFormat.textContent = formatTypeLabel(item.type);
+      focusAction.textContent = resume
+        ? "Ultimo punto " + formatTime(progress.position)
+        : "Esperando play";
+    }
+
+    async function fetchCatalog() {
+      const response = await fetch(CATALOG_URL + "?t=" + Date.now(), { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error("No se pudo leer el catalogo");
+      }
+
+      const data = await response.json();
+      return Array.isArray(data) ? data.map(normalizeItem).filter(function(item) {
+        return Boolean(item.source);
+      }) : [];
+    }
+
+    async function loadCatalog(options) {
+      const opts = options || {};
+      const previousId = state.catalog[state.selectedIndex] ? state.catalog[state.selectedIndex].id : null;
+
+      try {
+        const catalog = await fetchCatalog();
+        state.catalog = catalog;
+
+        if (previousId) {
+          const sameIndex = catalog.findIndex(function(item) {
+            return item.id === previousId;
+          });
+
+          state.selectedIndex = sameIndex >= 0 ? sameIndex : Math.min(state.selectedIndex, Math.max(catalog.length - 1, 0));
+        } else {
+          state.selectedIndex = Math.min(state.selectedIndex, Math.max(catalog.length - 1, 0));
+        }
+
+        renderCatalog();
+      } catch (error) {
+        if (!opts.silent) {
+          rail.innerHTML = '<div class="empty-state">No se pudo cargar el catalogo. Revisa catalogo.json o el servidor.</div>';
+        }
+      }
+    }
+
+    function scheduleCatalogRefresh() {
+      clearInterval(state.catalogTimer);
+      state.catalogTimer = setInterval(function() {
+        if (!playerScreen.classList.contains("hidden")) {
+          return;
+        }
+
+        loadCatalog({ silent: true });
+      }, AUTO_REFRESH_MS);
+    }
+
+    function showStatus(kind, title, copy, persist) {
+      clearTimeout(state.statusTimer);
+      statusOverlay.classList.remove("hidden");
+      statusPanel.classList.toggle("error", kind === "error");
+      statusTitle.textContent = title;
+      statusCopy.textContent = copy || "";
+
+      if (!persist && kind !== "loading") {
+        state.statusTimer = setTimeout(function() {
+          hideStatus();
+        }, 1300);
+      }
+    }
+
+    function hideStatus() {
+      clearTimeout(state.statusTimer);
+      statusOverlay.classList.add("hidden");
+      statusPanel.classList.remove("error");
+    }
+
+    function showControls() {
+      clearTimeout(state.controlsTimer);
+      playerUi.classList.remove("is-dimmed");
+
+      if (!video.paused && !video.ended) {
+        state.controlsTimer = setTimeout(function() {
+          playerUi.classList.add("is-dimmed");
+        }, 4200);
+      }
+    }
+
+    function resetPlayerUi() {
+      currentTimeEl.textContent = "00:00";
+      durationTimeEl.textContent = "00:00";
+      bufferLabel.textContent = "Buffer estable";
+      progressFill.style.width = "0%";
+      bufferedFill.style.width = "0%";
+      trackThumb.style.left = "0%";
+      document.getElementById("playerTitle").textContent = "Sin reproduccion";
+      document.getElementById("playerDescription").textContent = "Elige un item desde el catalogo para iniciar.";
+      document.getElementById("playerType").textContent = "Player";
+      document.getElementById("playerState").textContent = "Preparando";
+      document.getElementById("playerHintText").textContent = "El player guarda tu avance localmente para poder reanudar mas tarde.";
+      toggleButton.textContent = "Pausa";
+    }
+
+    function updatePlayerHead(item) {
+      document.getElementById("playerTitle").textContent = item.title;
+      document.getElementById("playerDescription").textContent = item.description || "Reproduccion iniciada en modo TV.";
+      document.getElementById("playerType").textContent = formatTypeLabel(item.type);
+      document.getElementById("playerState").textContent = "Cargando";
+      document.getElementById("playerHintText").textContent = isResumeCandidate(item)
+        ? "Se intento recuperar tu punto guardado automaticamente."
+        : "No habia avance previo guardado para este item.";
+    }
+
+    function updatePlayerUi() {
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      const current = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+      const progressRatio = duration > 0 ? current / duration : 0;
+
+      currentTimeEl.textContent = formatTime(current);
+      durationTimeEl.textContent = formatTime(duration);
+      progressFill.style.width = Math.max(0, Math.min(progressRatio, 1)) * 100 + "%";
+      trackThumb.style.left = Math.max(0, Math.min(progressRatio, 1)) * 100 + "%";
+      toggleButton.textContent = video.paused ? "Play" : "Pausa";
+      document.getElementById("playerState").textContent = video.paused ? "Pausado" : "Reproduciendo";
+
+      let bufferedRatio = 0;
+
+      if (duration > 0 && video.buffered && video.buffered.length > 0) {
+        const bufferedEnd = video.buffered.end(video.buffered.length - 1);
+        bufferedRatio = Math.max(0, Math.min(bufferedEnd / duration, 1));
+      }
+
+      bufferedFill.style.width = bufferedRatio * 100 + "%";
+    }
+
+    function seekBy(seconds) {
+      if (!Number.isFinite(video.duration) || video.duration <= 0) {
+        return;
+      }
+
+      const nextTime = Math.max(0, Math.min(video.currentTime + seconds, video.duration));
+      video.currentTime = nextTime;
+      updatePlayerUi();
+      showControls();
+      showStatus("info", seconds > 0 ? "Avance rapido" : "Retroceso rapido", "Posicion actual " + formatTime(nextTime));
+    }
+
+    async function destroyPlayer() {
+      if (state.player) {
+        await state.player.destroy();
+        state.player = null;
+      }
+
+      video.removeAttribute("src");
+      video.load();
+    }
+
+    function rememberProgress(forceClear) {
+      if (!state.currentItem) {
+        return;
+      }
+
+      const itemId = state.currentItem.id;
+      const duration = Number.isFinite(video.duration) ? video.duration : 0;
+      const position = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+
+      if (forceClear || (duration > 0 && position >= duration - 45)) {
+        delete state.progressMap[itemId];
+        saveProgressMap();
+        return;
+      }
+
+      state.progressMap[itemId] = {
+        position,
+        duration,
+        updatedAt: new Date().toISOString()
+      };
+
+      saveProgressMap();
+    }
+
+    async function resumeFromSavedPoint(item) {
+      const progress = getProgressEntry(item);
+
+      if (!progress || !Number.isFinite(progress.position) || progress.position < 30) {
+        return;
+      }
+
+      const resumeAt = progress.position;
+
+      if (!Number.isFinite(video.duration) || video.duration <= 0) {
+        await waitForMetadata();
+      }
+
+      if (Number.isFinite(video.duration) && video.duration > resumeAt + 30) {
+        video.currentTime = resumeAt;
+        updatePlayerUi();
+        showStatus("info", "Reanudando", "Continuando desde " + formatTime(resumeAt));
+      }
+    }
+
+    function waitForMetadata() {
+      return new Promise(function(resolve) {
+        if (Number.isFinite(video.duration) && video.duration > 0) {
+          resolve();
+          return;
+        }
+
+        const onLoaded = function() {
+          video.removeEventListener("loadedmetadata", onLoaded);
+          resolve();
+        };
+
+        video.addEventListener("loadedmetadata", onLoaded, { once: true });
+      });
+    }
+
+    async function startPlayback(item) {
+      if (!item || !item.source) {
+        return;
+      }
+
+      state.currentItem = item;
+      homeScreen.classList.add("hidden");
+      playerScreen.classList.remove("hidden");
+      resetPlayerUi();
+      updatePlayerHead(item);
+      showControls();
+      showStatus("loading", "Preparando video", "Cargando fuente y calentando el buffer inicial.", true);
+
+      try {
+        await destroyPlayer();
+
+        if (item.type === "video") {
+          video.src = item.source;
+          await waitForMetadata();
+        } else {
+          shaka.polyfill.installAll();
+
+          if (!shaka.Player.isBrowserSupported()) {
+            throw new Error("El navegador no soporta Shaka Player.");
+          }
+
+          state.player = new shaka.Player(video);
+          state.player.configure({
+            streaming: {
+              bufferingGoal: 30,
+              rebufferingGoal: 4,
+              bufferBehind: 20
+            }
+          });
+
+          state.player.addEventListener("error", function(event) {
+            const detail = event.detail || {};
+            console.error("Shaka error", detail);
+            showStatus("error", "Error de reproduccion", "No se pudo cargar la fuente. Revisa CORS, URL o permisos del stream.", true);
+            document.getElementById("playerState").textContent = "Error";
+          });
+
+          state.player.addEventListener("buffering", function(event) {
+            const buffering = Boolean(event.buffering);
+            bufferLabel.textContent = buffering ? "Recuperando buffer..." : "Buffer estable";
+
+            if (buffering) {
+              showStatus("loading", "Buffering", "La fuente sigue cargando algunos segmentos.", true);
+            } else if (!video.paused) {
+              hideStatus();
+            }
+          });
+
+          await state.player.load(item.source);
+        }
+
+        await resumeFromSavedPoint(item);
+        await video.play();
+        hideStatus();
+        showControls();
+        document.getElementById("playerState").textContent = "Reproduciendo";
+      } catch (error) {
+        console.error(error);
+        showStatus("error", "No se pudo iniciar", error.message || "La fuente no pudo reproducirse.", true);
+        document.getElementById("playerState").textContent = "Error";
+      }
+    }
+
+    async function exitPlayback() {
+      rememberProgress(false);
+      await destroyPlayer();
+      state.currentItem = null;
+      playerScreen.classList.add("hidden");
+      homeScreen.classList.remove("hidden");
+      resetPlayerUi();
+      hideStatus();
+      setSelectedIndex(state.selectedIndex, true);
+    }
+
+    function handleHomeNavigation(event) {
+      if (!state.catalog.length) {
+        return;
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        setSelectedIndex(state.selectedIndex + 1, true);
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        setSelectedIndex(state.selectedIndex - 1, true);
+      }
+
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        startPlayback(state.catalog[state.selectedIndex]);
+      }
+    }
+
+    function handlePlayerNavigation(event) {
+      if (event.key === "Escape" || event.key === "Backspace" || event.key === "BrowserBack") {
+        event.preventDefault();
+        exitPlayback();
+        return;
+      }
+
+      if (event.key === "Enter" || event.key === " " || event.key === "MediaPlayPause") {
+        event.preventDefault();
+        togglePlayback();
+      }
+
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        seekBy(SEEK_STEP);
+      }
+
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        seekBy(-SEEK_STEP);
+      }
+
+      if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+        event.preventDefault();
+        showControls();
+      }
+    }
+
+    async function togglePlayback() {
+      if (video.paused) {
+        await video.play();
+        hideStatus();
+      } else {
+        video.pause();
+        showStatus("info", "Pausa", "La reproduccion quedo detenida por un momento.");
+      }
+
+      updatePlayerUi();
+      showControls();
+    }
+
+    function bindPlayerEvents() {
+      video.addEventListener("timeupdate", function() {
+        updatePlayerUi();
+      });
+
+      video.addEventListener("progress", function() {
+        updatePlayerUi();
+      });
+
+      video.addEventListener("waiting", function() {
+        bufferLabel.textContent = "Esperando datos...";
+
+        if (!video.paused) {
+          showStatus("loading", "Buffering", "Esperando suficientes datos para continuar.", true);
+        }
+      });
+
+      video.addEventListener("canplay", function() {
+        if (!video.paused) {
+          hideStatus();
+        }
+      });
+
+      video.addEventListener("playing", function() {
+        hideStatus();
+        updatePlayerUi();
+        showControls();
+      });
+
+      video.addEventListener("pause", function() {
+        rememberProgress(false);
+        updatePlayerUi();
+        showControls();
+      });
+
+      video.addEventListener("ended", function() {
+        rememberProgress(true);
+        updatePlayerUi();
+        showControls();
+        showStatus("info", "Video completado", "Se limpio el progreso guardado porque llegaste al final.");
+      });
+    }
+
+    function bindControls() {
+      toggleButton.addEventListener("click", function() {
+        togglePlayback();
+      });
+
+      rewindButton.addEventListener("click", function() {
+        seekBy(-SEEK_STEP);
+      });
+
+      forwardButton.addEventListener("click", function() {
+        seekBy(SEEK_STEP);
+      });
+
+      backButton.addEventListener("click", function() {
+        exitPlayback();
+      });
+
+      progressTrack.addEventListener("click", function(event) {
+        if (!Number.isFinite(video.duration) || video.duration <= 0) {
+          return;
+        }
+
+        const rect = progressTrack.getBoundingClientRect();
+        const ratio = Math.max(0, Math.min((event.clientX - rect.left) / rect.width, 1));
+        video.currentTime = video.duration * ratio;
+        updatePlayerUi();
+        showControls();
+      });
+
+      document.addEventListener("keydown", function(event) {
+        if (playerScreen.classList.contains("hidden")) {
+          handleHomeNavigation(event);
+          return;
+        }
+
+        handlePlayerNavigation(event);
+      });
+
+      document.addEventListener("mousemove", function() {
+        if (!playerScreen.classList.contains("hidden")) {
+          showControls();
+        }
+      });
+
+      window.addEventListener("beforeunload", function() {
+        rememberProgress(false);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", async function() {
+      bindPlayerEvents();
+      bindControls();
+      await loadCatalog();
+      scheduleCatalogRefresh();
+    });
+  </script>
+</body>
+</html>

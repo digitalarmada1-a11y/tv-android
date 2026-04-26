@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TV Admin</title>
+  <style>
+    :root {
+      --bg: #08111d;
+      --panel: rgba(7, 18, 31, 0.9);
+      --line: rgba(255, 255, 255, 0.08);
+      --text: #f3f7fb;
+      --muted: #9cb4ca;
+      --accent: #8cefff;
+      --danger: #ff9aa5;
+      --ok: #90ffc2;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      color: var(--text);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(118, 227, 255, 0.12), transparent 28%),
+        linear-gradient(160deg, #05070d 0%, #091321 52%, #05070d 100%);
+    }
+
+    .shell {
+      max-width: 1024px;
+      margin: 0 auto;
+      display: grid;
+      gap: 22px;
+    }
+
+    .panel {
+      padding: 22px;
+      border-radius: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(34px, 6vw, 52px);
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 24px;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .top-actions,
+    .button-row,
+    .item-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .top-actions {
+      margin-top: 16px;
+    }
+
+    .fields {
+      display: grid;
+      gap: 16px;
+      margin-top: 18px;
+    }
+
+    label {
+      display: grid;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    input,
+    textarea,
+    button,
+    .link-button {
+      font: inherit;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(140, 239, 255, 0.5);
+      box-shadow: 0 0 0 4px rgba(140, 239, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    input[type="file"] {
+      padding: 12px;
+    }
+
+    textarea {
+      min-height: 220px;
+      resize: vertical;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .helper {
+      font-weight: 400;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    button,
+    .link-button {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 11px 16px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 140ms ease, border-color 140ms ease;
+    }
+
+    button:hover,
+    .link-button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(140, 239, 255, 0.45);
+    }
+
+    button.primary {
+      color: var(--accent);
+      border-color: rgba(140, 239, 255, 0.38);
+      background: rgba(140, 239, 255, 0.12);
+    }
+
+    button.warn {
+      color: #ffd8dc;
+      border-color: rgba(255, 154, 165, 0.26);
+      background: rgba(255, 154, 165, 0.12);
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid transparent;
+      line-height: 1.45;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.ok {
+      color: var(--ok);
+      background: rgba(144, 255, 194, 0.1);
+      border-color: rgba(144, 255, 194, 0.2);
+    }
+
+    .message.error {
+      color: #ffd8dc;
+      background: rgba(255, 154, 165, 0.12);
+      border-color: rgba(255, 154, 165, 0.24);
+    }
+
+    .catalog-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .catalog-item {
+      padding: 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.04);
+      display: grid;
+      gap: 12px;
+    }
+
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .item-head h3 {
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .item-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .source-box {
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+
+    .empty {
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--muted);
+      text-align: center;
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 16px;
+      }
+
+      .panel {
+        padding: 18px;
+      }
+
+      .item-head {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="panel">
+      <h1>TV Admin simple</h1>
+      <p>
+        Solo titulo y tres formas de meter la fuente: pegar link, pegar XML MPD o subir archivo MPD.
+        Si rellenas el link, tiene prioridad.
+      </p>
+
+      <div class="top-actions">
+        <a class="link-button" href="tv.html" target="_blank" rel="noopener">Abrir TV</a>
+        <button id="reloadButton" type="button">Recargar catalogo</button>
+        <button id="clearButton" type="button">Limpiar</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Nuevo item</h2>
+      <div class="fields">
+        <label>
+          Titulo
+          <input id="title" type="text" placeholder="Pelicula, evento o nombre corto">
+        </label>
+
+        <label>
+          Link del stream
+          <input id="sourceUrl" type="text" placeholder="https://.../manifest.mpd o .m3u8 o .mp4">
+          <span class="helper">La forma mas rapida. Si esta relleno, esta opcion manda.</span>
+        </label>
+
+        <label>
+          Pegar XML MPD
+          <textarea id="manifestXml" placeholder="<MPD>...</MPD>"></textarea>
+        </label>
+
+        <label>
+          Subir archivo MPD
+          <input id="manifestFile" type="file" accept=".mpd,.xml,text/xml,application/dash+xml">
+        </label>
+
+        <div class="button-row">
+          <button id="saveButton" class="primary" type="button">Guardar item</button>
+          <button id="prefillResetButton" type="button">Vaciar formulario</button>
+        </div>
+      </div>
+
+      <div id="message" class="message"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Catalogo actual</h2>
+      <p>
+        Lo del poster automatico desde un segundo concreto no lo activo aqui porque con DASH remoto suele romper
+        por CORS o porque haria falta ffmpeg en el servidor. Mejor dejarlo simple primero.
+      </p>
+
+      <div id="catalogList" class="catalog-list"></div>
+    </section>
+  </div>
+
+  <script>
+    const titleInput = document.getElementById("title");
+    const sourceUrlInput = document.getElementById("sourceUrl");
+    const manifestXmlInput = document.getElementById("manifestXml");
+    const manifestFileInput = document.getElementById("manifestFile");
+    const message = document.getElementById("message");
+    const catalogList = document.getElementById("catalogList");
+
+    let currentCatalog = [];
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function inferTypeFromSource(source) {
+      const lower = String(source || "").toLowerCase().split("?")[0];
+
+      if (lower.endsWith(".mpd")) {
+        return "DASH";
+      }
+
+      if (lower.endsWith(".m3u8")) {
+        return "HLS";
+      }
+
+      if (lower.endsWith(".mp4") || lower.endsWith(".webm") || lower.endsWith(".mov")) {
+        return "VIDEO";
+      }
+
+      return "STREAM";
+    }
+
+    function normalizeItem(item, index) {
+      const source = String(item.source || item.manifest || "").trim();
+
+      return {
+        id: String(item.id || ("legacy-" + index)),
+        title: String(item.title || ("Video " + (index + 1))).trim(),
+        source: source,
+        type: String(item.type || inferTypeFromSource(source)).toUpperCase()
+      };
+    }
+
+    function showMessage(kind, text) {
+      message.className = "message show " + kind;
+      message.textContent = text;
+    }
+
+    function clearMessage() {
+      message.className = "message";
+      message.textContent = "";
+    }
+
+    function resetForm() {
+      titleInput.value = "";
+      sourceUrlInput.value = "";
+      manifestXmlInput.value = "";
+      manifestFileInput.value = "";
+    }
+
+    async function fetchCatalog() {
+      const response = await fetch("catalogo.json?t=" + Date.now(), { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error("No se pudo leer catalogo.json");
+      }
+
+      const data = await response.json();
+      currentCatalog = Array.isArray(data) ? data.map(normalizeItem) : [];
+      renderCatalog();
+    }
+
+    function renderCatalog() {
+      if (!currentCatalog.length) {
+        catalogList.innerHTML = '<div class="empty">No hay items todavia.</div>';
+        return;
+      }
+
+      catalogList.innerHTML = currentCatalog.map(function(item, index) {
+        return '' +
+          '<article class="catalog-item">' +
+            '<div class="item-head">' +
+              '<div>' +
+                '<h3>' + escapeHtml(item.title) + '</h3>' +
+              '</div>' +
+              '<span class="item-meta">' + item.type + ' · Posicion ' + (index + 1) + '</span>' +
+            '</div>' +
+            '<div class="source-box">' + escapeHtml(item.source || "Sin fuente") + '</div>' +
+            '<div class="item-actions">' +
+              '<button type="button" data-action="use" data-id="' + escapeHtml(item.id) + '">Usar datos</button>' +
+              '<button type="button" data-action="move" data-dir="up" data-id="' + escapeHtml(item.id) + '">Subir</button>' +
+              '<button type="button" data-action="move" data-dir="down" data-id="' + escapeHtml(item.id) + '">Bajar</button>' +
+              '<button type="button" class="warn" data-action="delete" data-id="' + escapeHtml(item.id) + '">Borrar</button>' +
+            '</div>' +
+          '</article>';
+      }).join("");
+    }
+
+    function buildCreateFormData() {
+      const formData = new FormData();
+      formData.append("action", "create");
+      formData.append("title", titleInput.value.trim());
+      formData.append("source_url", sourceUrlInput.value.trim());
+      formData.append("manifest_xml", manifestXmlInput.value.trim());
+
+      if (manifestFileInput.files[0]) {
+        formData.append("manifest_file", manifestFileInput.files[0]);
+      }
+
+      return formData;
+    }
+
+    async function sendAction(payload) {
+      const formData = new FormData();
+
+      Object.keys(payload).forEach(function(key) {
+        formData.append(key, payload[key]);
+      });
+
+      const response = await fetch("guardar.php", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.json().catch(function() {
+        return { ok: false, message: "Respuesta invalida del servidor." };
+      });
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || "No se pudo completar la accion.");
+      }
+
+      return result;
+    }
+
+    function useItemData(id) {
+      const item = currentCatalog.find(function(entry) {
+        return entry.id === id;
+      });
+
+      if (!item) {
+        return;
+      }
+
+      titleInput.value = item.title;
+      sourceUrlInput.value = item.source;
+      manifestXmlInput.value = "";
+      manifestFileInput.value = "";
+      showMessage("ok", "Datos cargados en el formulario.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    catalogList.addEventListener("click", async function(event) {
+      const button = event.target.closest("button[data-action]");
+
+      if (!button) {
+        return;
+      }
+
+      const action = button.dataset.action;
+      const id = button.dataset.id || "";
+
+      try {
+        if (action === "use") {
+          useItemData(id);
+          return;
+        }
+
+        if (action === "delete") {
+          if (!window.confirm("Borrar este item del catalogo?")) {
+            return;
+          }
+
+          await sendAction({ action: "delete", id: id });
+          showMessage("ok", "Item borrado.");
+        }
+
+        if (action === "move") {
+          await sendAction({ action: "move", id: id, direction: button.dataset.dir || "up" });
+          showMessage("ok", "Orden actualizado.");
+        }
+
+        await fetchCatalog();
+      } catch (error) {
+        showMessage("error", error.message || "No se pudo completar la accion.");
+      }
+    });
+
+    document.getElementById("saveButton").addEventListener("click", async function() {
+      clearMessage();
+
+      if (!titleInput.value.trim()) {
+        showMessage("error", "Falta el titulo.");
+        titleInput.focus();
+        return;
+      }
+
+      if (!sourceUrlInput.value.trim() && !manifestXmlInput.value.trim() && !manifestFileInput.files[0]) {
+        showMessage("error", "Debes poner un link, pegar XML MPD o subir un MPD.");
+        return;
+      }
+
+      try {
+        const response = await fetch("guardar.php", {
+          method: "POST",
+          body: buildCreateFormData()
+        });
+
+        const result = await response.json().catch(function() {
+          return { ok: false, message: "Respuesta invalida del servidor." };
+        });
+
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || "No se pudo guardar el item.");
+        }
+
+        showMessage("ok", result.message || "Item guardado.");
+        resetForm();
+        await fetchCatalog();
+      } catch (error) {
+        showMessage("error", error.message || "No se pudo guardar el item.");
+      }
+    });
+
+    document.getElementById("reloadButton").addEventListener("click", async function() {
+      try {
+        await fetchCatalog();
+        showMessage("ok", "Catalogo recargado.");
+      } catch (error) {
+        showMessage("error", error.message || "No se pudo recargar el catalogo.");
+      }
+    });
+
+    document.getElementById("clearButton").addEventListener("click", function() {
+      resetForm();
+      clearMessage();
+    });
+
+    document.getElementById("prefillResetButton").addEventListener("click", function() {
+      resetForm();
+      showMessage("ok", "Formulario vaciado.");
+    });
+
+    fetchCatalog().catch(function(error) {
+      showMessage("error", error.message || "No se pudo cargar el catalogo.");
+    });
+  </script>
+</body>
+</html>

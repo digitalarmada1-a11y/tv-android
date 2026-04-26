@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TV Admin</title>
+  <style>
+    :root {
+      --bg: #08111d;
+      --panel: rgba(7, 18, 31, 0.82);
+      --panel-soft: rgba(255, 255, 255, 0.05);
+      --text: #f3f7fb;
+      --muted: #9cb4ca;
+      --line: rgba(255, 255, 255, 0.09);
+      --accent: #76e3ff;
+      --accent-2: #a9f5ff;
+      --danger: #ff8f9a;
+      --ok: #8dffbe;
+      --shadow: 0 26px 60px rgba(0, 0, 0, 0.34);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(118, 227, 255, 0.14), transparent 28%),
+        radial-gradient(circle at 100% 0%, rgba(92, 121, 255, 0.12), transparent 24%),
+        linear-gradient(160deg, #05070d 0%, #091321 52%, #05070d 100%);
+      padding: 28px;
+    }
+
+    .shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      gap: 24px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 16px;
+      padding: 28px;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-top,
+    .hero-actions,
+    .card-meta,
+    .catalog-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .pill,
+    .tiny-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 14px;
+      letter-spacing: 0.03em;
+    }
+
+    .pill.live {
+      color: var(--accent-2);
+      background: rgba(118, 227, 255, 0.15);
+      border-color: rgba(169, 245, 255, 0.44);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(34px, 6vw, 58px);
+      line-height: 0.94;
+      letter-spacing: -0.04em;
+      max-width: 860px;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 920px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel {
+      padding: 24px;
+      border-radius: 26px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .panel h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .panel p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+      margin-top: 20px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    label {
+      display: grid;
+      gap: 9px;
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 14px 16px;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: rgba(169, 245, 255, 0.52);
+      box-shadow: 0 0 0 4px rgba(118, 227, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    input[type="file"] {
+      padding: 12px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    textarea {
+      min-height: 190px;
+      resize: vertical;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .helper {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    button,
+    .link-button {
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+      text-decoration: none;
+    }
+
+    button:hover,
+    .link-button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(169, 245, 255, 0.48);
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, rgba(118, 227, 255, 0.22), rgba(255, 255, 255, 0.1));
+      border-color: rgba(169, 245, 255, 0.44);
+      color: var(--accent-2);
+    }
+
+    button.warn {
+      color: #ffd6da;
+      border-color: rgba(255, 143, 154, 0.3);
+      background: rgba(255, 143, 154, 0.12);
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.ok {
+      background: rgba(141, 255, 190, 0.12);
+      color: var(--ok);
+      border-color: rgba(141, 255, 190, 0.24);
+    }
+
+    .message.error {
+      background: rgba(255, 143, 154, 0.12);
+      color: #ffd9dd;
+      border-color: rgba(255, 143, 154, 0.26);
+    }
+
+    .mini-preview {
+      display: grid;
+      gap: 10px;
+    }
+
+    .preview-card {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      align-items: center;
+    }
+
+    .preview-art {
+      width: 100px;
+      aspect-ratio: 2 / 3;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(118, 227, 255, 0.24), transparent 36%),
+        linear-gradient(160deg, rgba(26, 64, 112, 0.92), rgba(7, 18, 31, 0.96));
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 10px;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .preview-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-copy h3,
+    .catalog-card h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .preview-copy p,
+    .catalog-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .catalog-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .catalog-card {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      align-items: start;
+    }
+
+    .catalog-art {
+      width: 116px;
+      aspect-ratio: 2 / 3;
+      border-radius: 18px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(118, 227, 255, 0.24), transparent 36%),
+        linear-gradient(160deg, rgba(26, 64, 112, 0.92), rgba(7, 18, 31, 0.96));
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .catalog-art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .catalog-source {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      word-break: break-all;
+    }
+
+    .catalog-actions {
+      margin-top: 14px;
+    }
+
+    .empty {
+      padding: 28px;
+      border-radius: 24px;
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    @media (max-width: 1080px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding: 18px;
+      }
+
+      .hero,
+      .panel {
+        padding: 20px;
+      }
+
+      .grid.two {
+        grid-template-columns: 1fr;
+      }
+
+      .catalog-card,
+      .preview-card {
+        grid-template-columns: 1fr;
+      }
+
+      .catalog-art,
+      .preview-art {
+        width: 100%;
+        max-width: 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="hero">
+      <div class="hero-top">
+        <span class="pill live">Admin TV</span>
+        <span class="pill" id="itemCountPill">0 items</span>
+        <span class="pill">Alta rapida desde movil</span>
+      </div>
+
+      <h1>Panel simple por fuera, mas serio por dentro.</h1>
+      <p>
+        Aqui puedes cargar una fuente DASH, HLS o video directo, mover el orden del catalogo, borrar items y
+        reutilizar datos para crear otros. La clave se guarda solo en este navegador para no dejarla fija en el JavaScript.
+      </p>
+
+      <div class="hero-actions">
+        <a class="link-button" href="tv.html" target="_blank" rel="noopener">Abrir TV</a>
+        <button id="reloadButton" type="button">Recargar catalogo</button>
+        <button id="clearDraftButton" type="button">Limpiar formulario</button>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <h2>Nuevo item</h2>
+        <p>Puedes pegar una URL, pegar XML MPD, subir un archivo MPD o usar una imagen local como poster.</p>
+
+        <form id="createForm" class="grid" autocomplete="off">
+          <div class="grid two">
+            <label>
+              Clave admin
+              <input id="password" type="password" placeholder="1234" required>
+              <span class="helper">Se guarda localmente en este navegador para no volver a escribirla cada vez.</span>
+            </label>
+
+            <label>
+              Titulo
+              <input id="title" type="text" placeholder="Pelicula o evento" required>
+            </label>
+          </div>
+
+          <div class="grid two">
+            <label>
+              Descripcion
+              <input id="description" type="text" placeholder="Opcional">
+            </label>
+
+            <label>
+              URL del stream
+              <input id="sourceUrl" type="text" placeholder="https://.../video.mpd o .m3u8 o .mp4">
+              <span class="helper">Si pegas URL, esta opcion tiene prioridad sobre archivo o XML.</span>
+            </label>
+          </div>
+
+          <div class="grid two">
+            <label>
+              Poster por URL
+              <input id="posterUrl" type="text" placeholder="https://.../poster.jpg">
+            </label>
+
+            <label>
+              Poster por archivo
+              <input id="posterFile" type="file" accept="image/jpeg,image/png,image/webp,image/*">
+            </label>
+          </div>
+
+          <div class="grid two">
+            <label>
+              Archivo MPD
+              <input id="manifestFile" type="file" accept=".mpd,.xml,text/xml,application/dash+xml">
+            </label>
+
+            <label>
+              XML MPD
+              <textarea id="manifestXml" placeholder="<MPD>...</MPD>"></textarea>
+            </label>
+          </div>
+
+          <div class="button-row">
+            <button class="primary" type="submit">Guardar item</button>
+            <button id="prefillResetButton" type="button">Reset rapido</button>
+          </div>
+        </form>
+
+        <div id="message" class="message"></div>
+      </div>
+
+      <aside class="panel">
+        <h2>Vista previa</h2>
+        <p>Esto ayuda a revisar como quedaria el item antes de guardarlo en el catalogo.</p>
+
+        <div class="mini-preview" style="margin-top: 20px;">
+          <div class="preview-card">
+            <div class="preview-art" id="previewArt">Poster</div>
+            <div class="preview-copy">
+              <div class="card-meta">
+                <span class="tiny-pill" id="previewType">STREAM</span>
+                <span class="tiny-pill" id="previewState">Sin guardar</span>
+              </div>
+              <h3 id="previewTitle">Nuevo item</h3>
+              <p id="previewDescription">La descripcion aparecera aqui. Si no escribes nada, el player mostrara un texto generico.</p>
+            </div>
+          </div>
+
+          <div class="preview-card">
+            <div class="preview-copy">
+              <div class="card-meta">
+                <span class="tiny-pill">Tips</span>
+              </div>
+              <p>
+                Si quieres algo rapido desde movil, pega la URL del stream y guarda. Si prefieres asegurar el manifiesto,
+                pega el XML MPD o sube el archivo. Luego desde abajo puedes cambiar el orden o borrar items.
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <h2>Catalogo actual</h2>
+      <p>Gestion directa del orden y del contenido sin tener que abrir el JSON a mano.</p>
+
+      <div id="catalogList" class="catalog-list"></div>
+    </section>
+  </div>
+
+  <script>
+    const PASSWORD_STORAGE_KEY = "tv-admin-pass-v1";
+    const countPill = document.getElementById("itemCountPill");
+    const catalogList = document.getElementById("catalogList");
+    const message = document.getElementById("message");
+    const form = document.getElementById("createForm");
+    const passwordInput = document.getElementById("password");
+    const titleInput = document.getElementById("title");
+    const descriptionInput = document.getElementById("description");
+    const sourceUrlInput = document.getElementById("sourceUrl");
+    const posterUrlInput = document.getElementById("posterUrl");
+    const manifestXmlInput = document.getElementById("manifestXml");
+    const manifestFileInput = document.getElementById("manifestFile");
+    const posterFileInput = document.getElementById("posterFile");
+    const previewArt = document.getElementById("previewArt");
+    const previewType = document.getElementById("previewType");
+    const previewState = document.getElementById("previewState");
+    const previewTitle = document.getElementById("previewTitle");
+    const previewDescription = document.getElementById("previewDescription");
+
+    let currentCatalog = [];
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function inferTypeFromSource(source) {
+      const lower = String(source || "").toLowerCase().split("?")[0];
+
+      if (lower.endsWith(".mpd")) {
+        return "DASH";
+      }
+
+      if (lower.endsWith(".m3u8")) {
+        return "HLS";
+      }
+
+      if (lower.endsWith(".mp4") || lower.endsWith(".webm") || lower.endsWith(".mov")) {
+        return "VIDEO";
+      }
+
+      return "STREAM";
+    }
+
+    function normalizeItem(item, index) {
+      const source = String(item.source || item.manifest || "").trim();
+      return {
+        id: String(item.id || ("legacy-" + index)),
+        title: String(item.title || ("Video " + (index + 1))).trim(),
+        description: String(item.description || "").trim(),
+        poster: String(item.poster || "").trim(),
+        source,
+        type: String(item.type || inferTypeFromSource(source)).toUpperCase()
+      };
+    }
+
+    function showMessage(kind, text) {
+      message.className = "message show " + kind;
+      message.textContent = text;
+    }
+
+    function clearMessage() {
+      message.className = "message";
+      message.textContent = "";
+    }
+
+    function resetForm() {
+      form.reset();
+      passwordInput.value = localStorage.getItem(PASSWORD_STORAGE_KEY) || "";
+      refreshPreview();
+    }
+
+    function refreshPreview() {
+      const title = titleInput.value.trim() || "Nuevo item";
+      const description = descriptionInput.value.trim() || "La descripcion aparecera aqui. Si no escribes nada, el player mostrara un texto generico.";
+      const source = sourceUrlInput.value.trim();
+      const posterUrl = posterUrlInput.value.trim();
+
+      previewTitle.textContent = title;
+      previewDescription.textContent = description;
+      previewType.textContent = inferTypeFromSource(source);
+      previewState.textContent = source || manifestXmlInput.value.trim() || manifestFileInput.files[0] ? "Listo para guardar" : "Sin guardar";
+
+      if (posterFileInput.files[0]) {
+        const objectUrl = URL.createObjectURL(posterFileInput.files[0]);
+        previewArt.innerHTML = '<img src="' + objectUrl + '" alt="Poster temporal">';
+        return;
+      }
+
+      if (posterUrl) {
+        previewArt.innerHTML = '<img src="' + escapeHtml(posterUrl) + '" alt="Poster remoto">';
+        return;
+      }
+
+      previewArt.textContent = "Poster";
+    }
+
+    async function fetchCatalog() {
+      const response = await fetch("catalogo.json?t=" + Date.now(), { cache: "no-store" });
+
+      if (!response.ok) {
+        throw new Error("No se pudo leer catalogo.json");
+      }
+
+      const data = await response.json();
+      currentCatalog = Array.isArray(data) ? data.map(normalizeItem) : [];
+      countPill.textContent = currentCatalog.length + (currentCatalog.length === 1 ? " item" : " items");
+      renderCatalog();
+    }
+
+    function renderCatalog() {
+      if (!currentCatalog.length) {
+        catalogList.innerHTML = '<div class="empty">No hay items todavia. Guarda el primero desde el formulario de arriba.</div>';
+        return;
+      }
+
+      catalogList.innerHTML = currentCatalog.map(function(item, index) {
+        const artMarkup = item.poster
+          ? '<img src="' + escapeHtml(item.poster) + '" alt="' + escapeHtml(item.title) + '">'
+          : escapeHtml(item.title);
+
+        return '' +
+          '<article class="catalog-card">' +
+            '<div class="catalog-art">' + artMarkup + '</div>' +
+            '<div>' +
+              '<div class="card-meta">' +
+                '<span class="tiny-pill">' + item.type + '</span>' +
+                '<span class="tiny-pill">Posicion ' + (index + 1) + '</span>' +
+              '</div>' +
+              '<h3>' + escapeHtml(item.title) + '</h3>' +
+              '<p>' + escapeHtml(item.description || "Sin descripcion") + '</p>' +
+              '<div class="catalog-source">' + escapeHtml(item.source || "Sin fuente") + '</div>' +
+              '<div class="catalog-actions">' +
+                '<button type="button" data-action="prefill" data-id="' + escapeHtml(item.id) + '">Usar datos</button>' +
+                '<button type="button" data-action="move" data-dir="up" data-id="' + escapeHtml(item.id) + '">Subir</button>' +
+                '<button type="button" data-action="move" data-dir="down" data-id="' + escapeHtml(item.id) + '">Bajar</button>' +
+                '<button type="button" class="warn" data-action="delete" data-id="' + escapeHtml(item.id) + '">Borrar</button>' +
+              '</div>' +
+            '</div>' +
+          '</article>';
+      }).join("");
+    }
+
+    async function sendAction(payload) {
+      const formData = new FormData();
+      formData.append("pass", passwordInput.value.trim());
+
+      Object.keys(payload).forEach(function(key) {
+        formData.append(key, payload[key]);
+      });
+
+      const response = await fetch("guardar.php", {
+        method: "POST",
+        body: formData
+      });
+
+      const result = await response.json().catch(function() {
+        return { ok: false, message: "Respuesta invalida del servidor." };
+      });
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || "No se pudo completar la accion.");
+      }
+
+      return result;
+    }
+
+    function buildCreateFormData() {
+      const formData = new FormData();
+      formData.append("action", "create");
+      formData.append("pass", passwordInput.value.trim());
+      formData.append("title", titleInput.value.trim());
+      formData.append("description", descriptionInput.value.trim());
+      formData.append("source_url", sourceUrlInput.value.trim());
+      formData.append("poster_url", posterUrlInput.value.trim());
+      formData.append("manifest_xml", manifestXmlInput.value.trim());
+
+      if (manifestFileInput.files[0]) {
+        formData.append("manifest_file", manifestFileInput.files[0]);
+      }
+
+      if (posterFileInput.files[0]) {
+        formData.append("poster_file", posterFileInput.files[0]);
+      }
+
+      return formData;
+    }
+
+    function prefillFromItem(id) {
+      const item = currentCatalog.find(function(entry) {
+        return entry.id === id;
+      });
+
+      if (!item) {
+        return;
+      }
+
+      titleInput.value = item.title;
+      descriptionInput.value = item.description;
+      sourceUrlInput.value = item.source;
+      posterUrlInput.value = item.poster;
+      manifestXmlInput.value = "";
+      manifestFileInput.value = "";
+      posterFileInput.value = "";
+      refreshPreview();
+      showMessage("ok", "Datos cargados en el formulario. Ajusta lo que quieras y guarda como nuevo item.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    catalogList.addEventListener("click", async function(event) {
+      const button = event.target.closest("button[data-action]");
+
+      if (!button) {
+        return;
+      }
+
+      const action = button.dataset.action;
+      const id = button.dataset.id;
+
+      if (action === "prefill") {
+        prefillFromItem(id);
+        return;
+      }
+
+      if (!passwordInput.value.trim()) {
+        showMessage("error", "Escribe la clave admin antes de modificar el catalogo.");
+        passwordInput.focus();
+        return;
+      }
+
+      try {
+        if (action === "delete") {
+          const confirmed = window.confirm("Borrar este item del catalogo?");
+
+          if (!confirmed) {
+            return;
+          }
+
+          await sendAction({ action: "delete", id: id });
+          showMessage("ok", "Item borrado.");
+        }
+
+        if (action === "move") {
+          await sendAction({ action: "move", id: id, direction: button.dataset.dir || "up" });
+          showMessage("ok", "Orden actualizado.");
+        }
+
+        await fetchCatalog();
+      } catch (error) {
+        showMessage("error", error.message || "No se pudo completar la accion.");
+      }
+    });
+
+    form.addEventListener("submit", async function(event) {
+      event.preventDefault();
+      clearMessage();
+
+      const password = passwordInput.value.trim();
+
+      if (!password) {
+        showMessage("error", "Escribe la clave admin.");
+        passwordInput.focus();
+        return;
+      }
+
+      localStorage.setItem(PASSWORD_STORAGE_KEY, password);
+
+      try {
+        const response = await fetch("guardar.php", {
+          method: "POST",
+          body: buildCreateFormData()
+        });
+
+        const result = await response.json().catch(function() {
+          return { ok: false, message: "Respuesta invalida del servidor." };
+        });
+
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || "No se pudo guardar el item.");
+        }
+
+        showMessage("ok", result.message || "Item guardado.");
+        resetForm();
+        await fetchCatalog();
+      } catch (error) {
+        showMessage("error", error.message || "No se pudo guardar el item.");
+      }
+    });
+
+    document.getElementById("reloadButton").addEventListener("click", function() {
+      fetchCatalog().then(function() {
+        showMessage("ok", "Catalogo recargado.");
+      }).catch(function(error) {
+        showMessage("error", error.message || "No se pudo recargar el catalogo.");
+      });
+    });
+
+    document.getElementById("clearDraftButton").addEventListener("click", function() {
+      resetForm();
+      clearMessage();
+    });
+
+    document.getElementById("prefillResetButton").addEventListener("click", function() {
+      resetForm();
+      showMessage("ok", "Formulario limpio.");
+    });
+
+    [
+      titleInput,
+      descriptionInput,
+      sourceUrlInput,
+      posterUrlInput,
+      manifestXmlInput,
+      manifestFileInput,
+      posterFileInput
+    ].forEach(function(element) {
+      element.addEventListener("input", refreshPreview);
+      element.addEventListener("change", refreshPreview);
+    });
+
+    passwordInput.value = localStorage.getItem(PASSWORD_STORAGE_KEY) || "";
+    refreshPreview();
+    fetchCatalog().catch(function(error) {
+      showMessage("error", error.message || "No se pudo cargar el catalogo.");
+    });
+  </script>
+</body>
+</html>

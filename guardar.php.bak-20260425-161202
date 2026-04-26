@@ -1,0 +1,152 @@
+<?php
+
+$PASSWORD = "1234";
+
+$pass = $_POST["pass"] ?? "";
+
+if ($pass !== $PASSWORD) {
+    http_response_code(403);
+    exit("Clave incorrecta");
+}
+
+$title = trim($_POST["title"] ?? "");
+$description = trim($_POST["description"] ?? "");
+$manifestUrl = trim($_POST["manifest_url"] ?? "");
+$manifestXml = trim($_POST["manifest_xml"] ?? "");
+
+if ($title === "") {
+    http_response_code(400);
+    exit("Falta el título");
+}
+
+$catalogFile = __DIR__ . "/catalogo.json";
+$manifestDir = __DIR__ . "/manifests";
+$posterDir = __DIR__ . "/posters";
+
+if (!is_dir($manifestDir)) {
+    mkdir($manifestDir, 0775, true);
+}
+
+if (!is_dir($posterDir)) {
+    mkdir($posterDir, 0775, true);
+}
+
+function slugify($text) {
+    $text = strtolower($text);
+    $text = iconv("UTF-8", "ASCII//TRANSLIT", $text);
+    $text = preg_replace("/[^a-z0-9]+/", "-", $text);
+    $text = trim($text, "-");
+
+    if ($text === "") {
+        $text = "video";
+    }
+
+    return $text;
+}
+
+$slug = slugify($title);
+$unique = $slug . "-" . time();
+
+$manifestPathPublic = "";
+$posterPathPublic = "";
+
+if ($manifestUrl !== "") {
+    if (!filter_var($manifestUrl, FILTER_VALIDATE_URL)) {
+        http_response_code(400);
+        exit("La URL del MPD no es válida");
+    }
+
+    $manifestPathPublic = $manifestUrl;
+}
+
+elseif (isset($_FILES["manifest_file"]) && $_FILES["manifest_file"]["error"] === UPLOAD_ERR_OK) {
+    $content = file_get_contents($_FILES["manifest_file"]["tmp_name"]);
+
+    if (stripos($content, "<MPD") === false) {
+        http_response_code(400);
+        exit("El archivo no parece ser un MPD válido");
+    }
+
+    $filename = $unique . ".mpd";
+    $target = $manifestDir . "/" . $filename;
+
+    file_put_contents($target, $content);
+
+    $manifestPathPublic = "manifests/" . $filename;
+}
+
+elseif ($manifestXml !== "") {
+    if (stripos($manifestXml, "<MPD") === false) {
+        http_response_code(400);
+        exit("El texto pegado no parece ser un MPD válido");
+    }
+
+    $filename = $unique . ".mpd";
+    $target = $manifestDir . "/" . $filename;
+
+    file_put_contents($target, $manifestXml);
+
+    $manifestPathPublic = "manifests/" . $filename;
+}
+
+else {
+    http_response_code(400);
+    exit("Debes pegar una URL, pegar XML o subir un archivo MPD");
+}
+
+if (isset($_FILES["poster_file"]) && $_FILES["poster_file"]["error"] === UPLOAD_ERR_OK) {
+    $tmp = $_FILES["poster_file"]["tmp_name"];
+    $info = getimagesize($tmp);
+
+    if ($info === false) {
+        http_response_code(400);
+        exit("El poster no parece ser una imagen válida");
+    }
+
+    $mime = $info["mime"];
+
+    if ($mime === "image/jpeg") {
+        $ext = "jpg";
+    } elseif ($mime === "image/png") {
+        $ext = "png";
+    } elseif ($mime === "image/webp") {
+        $ext = "webp";
+    } else {
+        http_response_code(400);
+        exit("Formato de poster no soportado");
+    }
+
+    $posterName = $unique . "." . $ext;
+    $posterTarget = $posterDir . "/" . $posterName;
+
+    move_uploaded_file($tmp, $posterTarget);
+
+    $posterPathPublic = "posters/" . $posterName;
+}
+
+$catalog = [];
+
+if (file_exists($catalogFile)) {
+    $json = file_get_contents($catalogFile);
+    $decoded = json_decode($json, true);
+
+    if (is_array($decoded)) {
+        $catalog = $decoded;
+    }
+}
+
+$item = [
+    "title" => $title,
+    "description" => $description,
+    "manifest" => $manifestPathPublic,
+    "poster" => $posterPathPublic
+];
+
+$catalog[] = $item;
+
+file_put_contents(
+    $catalogFile,
+    json_encode($catalog, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)
+);
+
+echo "OK";
