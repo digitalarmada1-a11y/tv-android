@@ -1,19 +1,5 @@
 [
     {
-        "id": "got-talent-spain-4d4c913be176",
-        "title": "Got Talent Spain",
-        "description": "",
-        "source": "https://stream-3991-48-215.pkcdn.org/dash/liohoyesbqikkfn2maqpsmilfxejgui2ibhuhwzbhfcdqwj6y3vfzrmxpe/manifest.mpd",
-        "manifest": "https://stream-3991-48-215.pkcdn.org/dash/liohoyesbqikkfn2maqpsmilfxejgui2ibhuhwzbhfcdqwj6y3vfzrmxpe/manifest.mpd",
-        "poster": "posters/poster-b7b1fe358011.jpg",
-        "collectionTitle": "Got Talent España",
-        "episodeLabel": "Capitulo 14",
-        "category": "series",
-        "type": "dash",
-        "createdAt": "2026-04-25T21:23:10+00:00",
-        "updatedAt": "2026-04-25T21:23:10+00:00"
-    },
-    {
         "id": "donde-estan-las-rubias-7339aae00b0d",
         "title": "Donde estan las rubias",
         "description": "",
