@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    protected void Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
         // Ocultar barras de sistema para modo TV inmersivo
