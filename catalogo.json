@@ -68,5 +68,19 @@
         "type": "dash",
         "createdAt": "2026-04-26T08:03:39.426Z",
         "updatedAt": "2026-04-26T08:03:39.426Z"
+    },
+    {
+        "id": "got-talent-espana-bde6f1910a8e",
+        "title": "Got Talent Espana",
+        "description": "",
+        "source": "https://stream-4491-212-99.pkcdn.org/dash/keohostjb4ikkfn2maw7snkihttjvnzgxt4uuttl6x6hbna6pqomhz6ama/manifest.mpd",
+        "manifest": "https://stream-4491-212-99.pkcdn.org/dash/keohostjb4ikkfn2maw7snkihttjvnzgxt4uuttl6x6hbna6pqomhz6ama/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjliN2Q2NTEtOGNjZC00YTYzLThkMmQtNjBmMmU4MDVmZTE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Got Talent Espana",
+        "episodeLabel": "Capitulo 10",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-04-26T08:05:19.331Z",
+        "updatedAt": "2026-04-26T08:05:19.331Z"
     }
 ]
