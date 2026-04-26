@@ -12,5 +12,19 @@
         "type": "dash",
         "createdAt": "2026-04-25T22:17:05+00:00",
         "updatedAt": "2026-04-25T22:17:05+00:00"
+    },
+    {
+        "id": "got-talent-espana-a5359b0c492c",
+        "title": "Got Talent Espana",
+        "description": "",
+        "source": "https://stream-4291-31-166.pkcdn.org/dash/k4ohoz5qbqikkfn2mar7smineletfid7ye7dvm4qmx6lyquza44depaa2u/manifest.mpd",
+        "manifest": "https://stream-4291-31-166.pkcdn.org/dash/k4ohoz5qbqikkfn2mar7smineletfid7ye7dvm4qmx6lyquza44depaa2u/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjliN2Q2NTEtOGNjZC00YTYzLThkMmQtNjBmMmU4MDVmZTE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Got Talent Espana",
+        "episodeLabel": "Capitulo 13",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-04-26T07:47:30.685Z",
+        "updatedAt": "2026-04-26T07:47:30.685Z"
     }
 ]
