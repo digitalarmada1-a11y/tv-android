@@ -82,5 +82,19 @@
         "type": "dash",
         "createdAt": "2026-04-26T08:05:19.331Z",
         "updatedAt": "2026-04-26T08:05:19.331Z"
+    },
+    {
+        "id": "got-talent-espana-5c56ef2ca2e4",
+        "title": "Got Talent Espana",
+        "description": "",
+        "source": "https://stream-3791-48-223.pkcdn.org/dash/laohp2d4b4ikkfn2mawpsmcjemae3mt2r7qknhh5btysmdtqbmyjligmce/manifest.mpd",
+        "manifest": "https://stream-3791-48-223.pkcdn.org/dash/laohp2d4b4ikkfn2mawpsmcjemae3mt2r7qknhh5btysmdtqbmyjligmce/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjliN2Q2NTEtOGNjZC00YTYzLThkMmQtNjBmMmU4MDVmZTE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Got Talent Espana",
+        "episodeLabel": "Capitulo 9",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-04-26T08:06:30.644Z",
+        "updatedAt": "2026-04-26T08:06:30.644Z"
     }
 ]
