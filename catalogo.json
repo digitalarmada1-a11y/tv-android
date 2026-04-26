@@ -152,5 +152,19 @@
         "type": "dash",
         "createdAt": "2026-04-26T08:11:54.161Z",
         "updatedAt": "2026-04-26T08:11:54.161Z"
+    },
+    {
+        "id": "got-talent-espana-87b179ad0854",
+        "title": "Got Talent Espana",
+        "description": "",
+        "source": "https://stream-3638-215-22.pkcdn.org/dash/leohoqgvb4ikkfn2mav7sicmgmo5kn7kfqjuo4jsq6ur6gkxlqd5uix4yy/manifest.mpd",
+        "manifest": "https://stream-3638-215-22.pkcdn.org/dash/leohoqgvb4ikkfn2mav7sicmgmo5kn7kfqjuo4jsq6ur6gkxlqd5uix4yy/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjliN2Q2NTEtOGNjZC00YTYzLThkMmQtNjBmMmU4MDVmZTE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Got Talent Espana",
+        "episodeLabel": "Capitulo 4",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-04-26T08:13:16.747Z",
+        "updatedAt": "2026-04-26T08:13:16.747Z"
     }
 ]
