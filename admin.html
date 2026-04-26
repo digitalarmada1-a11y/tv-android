@@ -19,9 +19,7 @@
     * { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 24px;
+      margin: 0; min-height: 100vh; padding: 24px;
       color: var(--text);
       font-family: "Trebuchet MS", "Segoe UI", sans-serif;
       background:
@@ -32,117 +30,94 @@
     .shell { max-width: 1040px; margin: 0 auto; display: grid; gap: 20px; }
 
     .panel {
-      padding: 22px;
-      border-radius: 24px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
+      padding: 22px; border-radius: 24px; background: var(--panel);
+      border: 1px solid var(--line); box-shadow: var(--shadow); backdrop-filter: blur(16px);
     }
 
     h1, h2, h3, p { margin: 0; }
     h1 { font-size: clamp(34px, 6vw, 52px); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 10px; }
     h2 { font-size: 24px; letter-spacing: -0.02em; margin-bottom: 8px; }
-
     p { color: var(--muted); line-height: 1.45; }
 
-    .top-actions, .button-row, .item-actions {
+    .top-actions, .button-row, .item-actions, .poster-tools {
       display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
     }
     .top-actions { margin-top: 16px; }
-
     .fields { display: grid; gap: 16px; margin-top: 18px; }
-
     label { display: grid; gap: 8px; font-weight: 700; font-size: 15px; }
-
-    input, select, textarea, button {
-      font: inherit;
-    }
+    input, select, textarea, button { font: inherit; }
 
     input, select, textarea {
-      width: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.05);
-      color: var(--text);
-      padding: 14px 16px;
-      outline: none;
+      width: 100%; border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+      background: rgba(255,255,255,0.05); color: var(--text); padding: 14px 16px; outline: none;
       transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
     }
-
     input:focus, select:focus, textarea:focus {
-      border-color: rgba(140, 239, 255, 0.5);
-      box-shadow: 0 0 0 4px rgba(140, 239, 255, 0.12);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    textarea {
-      min-height: 120px;
-      resize: vertical;
-      font-family: Consolas, Monaco, monospace;
-      font-size: 13px;
+      border-color: rgba(140,239,255,0.5); box-shadow: 0 0 0 4px rgba(140,239,255,0.12);
+      background: rgba(255,255,255,0.08);
     }
 
     .helper { font-weight: 400; font-size: 13px; color: var(--muted); }
 
     button {
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.07);
-      color: var(--text);
-      border-radius: 999px;
-      padding: 11px 16px;
-      cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.07);
+      color: var(--text); border-radius: 999px; padding: 11px 16px; cursor: pointer;
       transition: transform 140ms ease, border-color 140ms ease;
     }
-
-    button:hover { transform: translateY(-1px); border-color: rgba(140, 239, 255, 0.45); }
-    button.primary { color: var(--accent); border-color: rgba(140, 239, 255, 0.38); background: rgba(140, 239, 255, 0.12); }
-    button.warn { color: #ffd8dc; border-color: rgba(255, 154, 165, 0.26); background: rgba(255, 154, 165, 0.12); }
+    button:hover { transform: translateY(-1px); border-color: rgba(140,239,255,0.45); }
+    button.primary { color: var(--accent); border-color: rgba(140,239,255,0.38); background: rgba(140,239,255,0.12); }
+    button.warn { color: #ffd8dc; border-color: rgba(255,154,165,0.26); background: rgba(255,154,165,0.12); }
 
     .message {
       display: none; margin-top: 16px; padding: 14px 16px;
       border-radius: 16px; border: 1px solid transparent; line-height: 1.45;
     }
     .message.show { display: block; }
-    .message.ok { color: var(--ok); background: rgba(144, 255, 194, 0.1); border-color: rgba(144, 255, 194, 0.2); }
-    .message.error { color: #ffd8dc; background: rgba(255, 154, 165, 0.12); border-color: rgba(255, 154, 165, 0.24); }
+    .message.ok { color: var(--ok); background: rgba(144,255,194,0.1); border-color: rgba(144,255,194,0.2); }
+    .message.error { color: #ffd8dc; background: rgba(255,154,165,0.12); border-color: rgba(255,154,165,0.24); }
+
+    .poster-preview {
+      display: none; grid-template-columns: 84px minmax(0,1fr); gap: 14px; align-items: center;
+      padding: 14px; border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+    }
+    .poster-preview.show { display: grid; }
+    .poster-preview img { width: 84px; aspect-ratio: 2/3; border-radius: 14px; object-fit: cover; display: block; background: rgba(255,255,255,0.06); }
+    .poster-preview h3 { font-size: 18px; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .poster-preview p { font-size: 14px; }
+
+    .collection-suggest {
+      display: none; margin-top: 6px; padding: 8px; border-radius: 14px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+    }
+    .collection-suggest.show { display: block; }
+    .collection-suggest button {
+      display: block; width: 100%; text-align: left; padding: 10px 12px;
+      border: none; background: transparent; color: var(--text); border-radius: 10px;
+      margin-bottom: 4px;
+    }
+    .collection-suggest button:hover { background: rgba(140,239,255,0.12); }
 
     .catalog-item {
-      padding: 18px; border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.07);
-      background: rgba(255, 255, 255, 0.04);
-      display: grid; gap: 12px;
+      padding: 18px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.04); display: grid; gap: 12px;
     }
-
     .item-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
     .item-head h3 { font-size: 22px; letter-spacing: -0.02em; }
-
     .item-meta {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 7px 12px; border-radius: 999px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(255, 255, 255, 0.05);
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.05);
       color: var(--muted); font-size: 13px; white-space: nowrap;
     }
-
     .source-box {
-      padding: 12px 14px; border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      color: var(--muted); font-size: 13px; word-break: break-all;
+      padding: 12px 14px; border-radius: 16px; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06); color: var(--muted); font-size: 13px; word-break: break-all;
     }
-
     .catalog-list { display: grid; gap: 14px; margin-top: 18px; }
     .empty {
-      padding: 24px; border-radius: 18px;
-      border: 1px dashed rgba(255, 255, 255, 0.16);
-      background: rgba(255, 255, 255, 0.03);
-      color: var(--muted); text-align: center;
+      padding: 24px; border-radius: 18px; border: 1px dashed rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.03); color: var(--muted); text-align: center;
     }
-
-    .token-bar {
-      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-    }
+    .token-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
     .token-bar input { max-width: 400px; }
     .token-status { font-size: 13px; }
     .token-status.ok { color: var(--ok); }
@@ -160,7 +135,7 @@
   <div class="shell">
     <section class="panel">
       <h1>Streafler Admin</h1>
-      <p>Gestiona tu catalogo. Los cambios se guardan directamente en GitHub y se publican via GitHub Pages.</p>
+      <p>Gestiona tu catalogo. Los cambios se guardan en GitHub y se publican via GitHub Pages.</p>
 
       <div class="fields" style="margin-top:14px">
         <label>
@@ -197,13 +172,14 @@
         </label>
 
         <label>
-          Serie / coleccion (opcional)
-          <input id="collectionTitle" type="text" placeholder="Got Talent Espana">
-          <span class="helper">Si varios items comparten este valor, en la TV apareceran como una sola ficha.</span>
+          Serie / coleccion
+          <input id="collectionTitle" type="text" placeholder="Got Talent Espana" autocomplete="off">
+          <div id="collectionSuggest" class="collection-suggest"></div>
+          <span class="helper">Escribe y te sugerira series existentes. Si coincide, el episodio se anade a esa serie.</span>
         </label>
 
         <label>
-          Etiqueta episodio (opcional)
+          Etiqueta episodio
           <input id="episodeLabel" type="text" placeholder="Capitulo 1 / T12E04">
         </label>
 
@@ -212,10 +188,23 @@
           <input id="sourceUrl" type="text" placeholder="https://.../manifest.mpd o .m3u8 o .mp4">
         </label>
 
+        <div class="poster-tools">
+          <button id="lookupPosterBtn" type="button">Buscar poster IMDb</button>
+          <button id="clearPosterBtn" type="button">Quitar poster</button>
+        </div>
+
+        <div id="posterPreview" class="poster-preview">
+          <img id="posterPreviewImg" alt="Poster">
+          <div>
+            <h3 id="posterPreviewTitle">Poster listo</h3>
+            <p id="posterPreviewMeta">Se usara al guardar el item.</p>
+          </div>
+        </div>
+
         <label>
-          Poster URL (opcional)
+          Poster URL (manual)
           <input id="posterUrl" type="text" placeholder="https://...poster.jpg">
-          <span class="helper">URL directa a una imagen de poster.</span>
+          <span class="helper">Se rellena automaticamente al buscar en IMDb, o pegalo manualmente.</span>
         </label>
 
         <div class="button-row">
@@ -238,142 +227,241 @@
     const REPO_NAME = "tv-android";
     const CATALOG_PATH = "catalogo.json";
     const TOKEN_KEY = "streafler-gh-token";
+    const CORS_PROXY = "https://api.allorigins.win/raw?url=";
 
     let currentCatalog = [];
     let catalogSha = "";
+    let selectedPosterUrl = "";
 
-    // --- Token management ---
+    // ──── Token ────
     function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
+    function saveToken(t) { localStorage.setItem(TOKEN_KEY, t.trim()); updateTokenUI(); }
 
-    function saveToken(t) {
-      localStorage.setItem(TOKEN_KEY, t.trim());
-      updateTokenStatus();
-    }
-
-    function updateTokenStatus() {
-      const el = document.getElementById("tokenStatus");
-      if (getToken()) {
-        el.textContent = "Token guardado";
-        el.className = "token-status ok";
-      } else {
-        el.textContent = "Sin token";
-        el.className = "token-status missing";
-      }
+    function updateTokenUI() {
+      var el = document.getElementById("tokenStatus");
+      if (getToken()) { el.textContent = "Token guardado"; el.className = "token-status ok"; }
+      else { el.textContent = "Sin token"; el.className = "token-status missing"; }
     }
 
     document.getElementById("saveTokenBtn").addEventListener("click", function() {
-      const val = document.getElementById("tokenInput").value.trim();
+      var val = document.getElementById("tokenInput").value.trim();
       if (!val) { showMsg("error", "Pega un token valido."); return; }
       saveToken(val);
       document.getElementById("tokenInput").value = "";
-      showMsg("ok", "Token guardado en tu navegador.");
+      showMsg("ok", "Token guardado.");
     });
 
-    // --- GitHub API helpers ---
+    // ──── GitHub API ────
     async function ghGet(path) {
-      const token = getToken();
-      const headers = { Accept: "application/vnd.github+json" };
-      if (token) headers.Authorization = "token " + token;
-      const res = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, { headers });
-      if (!res.ok) throw new Error("GitHub API error: " + res.status);
-      return res.json();
+      var token = getToken();
+      var h = { Accept: "application/vnd.github+json" };
+      if (token) h.Authorization = "token " + token;
+      var r = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, { headers: h });
+      if (!r.ok) throw new Error("GitHub API error: " + r.status);
+      return r.json();
     }
 
     async function ghPut(path, content, sha, message) {
-      const token = getToken();
+      var token = getToken();
       if (!token) throw new Error("Necesitas un GitHub token para guardar.");
-      const body = {
-        message: message || "Update " + path,
-        content: btoa(unescape(encodeURIComponent(content))),
-        sha: sha
-      };
-      const res = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, {
+      var body = { message: message, content: btoa(unescape(encodeURIComponent(content))), sha: sha };
+      var r = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, {
         method: "PUT",
-        headers: {
-          Authorization: "token " + token,
-          Accept: "application/vnd.github+json",
-          "Content-Type": "application/json"
-        },
+        headers: { Authorization: "token " + token, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
         body: JSON.stringify(body)
       });
-      if (!res.ok) {
-        const err = await res.json().catch(function() { return {}; });
-        throw new Error(err.message || "No se pudo guardar en GitHub (" + res.status + ")");
-      }
-      return res.json();
+      if (!r.ok) { var e = await r.json().catch(function(){return{};}); throw new Error(e.message || "Error " + r.status); }
+      return r.json();
     }
 
-    // --- Catalog CRUD ---
+    // ──── Catalog CRUD ────
     async function fetchCatalog() {
       try {
-        const data = await ghGet(CATALOG_PATH);
+        var data = await ghGet(CATALOG_PATH);
         catalogSha = data.sha;
-        const decoded = decodeURIComponent(escape(atob(data.content)));
-        currentCatalog = JSON.parse(decoded);
+        currentCatalog = JSON.parse(decodeURIComponent(escape(atob(data.content))));
         if (!Array.isArray(currentCatalog)) currentCatalog = [];
-      } catch (e) {
-        currentCatalog = [];
-        catalogSha = "";
-      }
+      } catch(e) { currentCatalog = []; catalogSha = ""; }
       renderCatalog();
     }
 
     async function saveCatalog(msg) {
-      const content = JSON.stringify(currentCatalog, null, 4) + "\n";
-      const result = await ghPut(CATALOG_PATH, content, catalogSha, msg || "Update catalogo");
+      var content = JSON.stringify(currentCatalog, null, 4) + "\n";
+      var result = await ghPut(CATALOG_PATH, content, catalogSha, msg);
       catalogSha = result.content.sha;
     }
 
-    function generateId(title) {
-      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-      const rand = Math.random().toString(16).slice(2, 14);
-      return (slug || "item") + "-" + rand;
+    function genId(title) {
+      return title.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,40)
+        + "-" + Math.random().toString(16).slice(2,14);
     }
 
-    // --- UI helpers ---
-    function escapeHtml(v) {
-      return String(v || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    function inferType(source) {
+      var s = source.toLowerCase().split("?")[0];
+      if (s.endsWith(".m3u8")) return "hls";
+      if (s.endsWith(".mp4") || s.endsWith(".webm")) return "video";
+      return "dash";
     }
 
-    function showMsg(kind, text) {
-      const el = document.getElementById("message");
-      el.className = "message show " + kind;
-      el.textContent = text;
+    // ──── IMDb Poster Lookup ────
+    function normalizeSearch(text) {
+      return text.trim().toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
     }
 
-    function clearMsg() {
-      document.getElementById("message").className = "message";
+    async function lookupImdbPoster(title) {
+      var query = normalizeSearch(title);
+      if (!query) return null;
+      var first = query[0];
+      var url = "https://v2.sg.media-imdb.com/suggestion/" + encodeURIComponent(first) + "/" + encodeURIComponent(query) + ".json";
+
+      try {
+        var r = await fetch(CORS_PROXY + encodeURIComponent(url));
+        if (!r.ok) return null;
+        var data = await r.json();
+        if (!data || !Array.isArray(data.d)) return null;
+
+        var best = null, bestScore = -1;
+        var normQuery = normalizeSearch(title);
+
+        data.d.forEach(function(item) {
+          if (!item.l || !item.i || !item.i.imageUrl) return;
+          var normTitle = normalizeSearch(item.l);
+          var score = 0;
+          if (normTitle === normQuery) score += 200;
+          if (normTitle.indexOf(normQuery) === 0) score += 90;
+          if (normTitle.indexOf(normQuery) >= 0) score += 60;
+          if (item.i && item.i.imageUrl) score += 25;
+          if (["movie","tvSeries","tvMiniSeries","tvMovie"].indexOf(item.qid) >= 0) score += 10;
+          if (score > bestScore) { bestScore = score; best = item; }
+        });
+
+        if (!best) return null;
+        return {
+          title: best.l,
+          year: best.y || null,
+          posterUrl: best.i.imageUrl,
+          imdbId: best.id || ""
+        };
+      } catch(e) { return null; }
     }
+
+    document.getElementById("lookupPosterBtn").addEventListener("click", async function() {
+      clearMsg();
+      var query = document.getElementById("title").value.trim() || document.getElementById("collectionTitle").value.trim();
+      if (!query) { showMsg("error", "Escribe primero el titulo."); return; }
+      showMsg("ok", "Buscando poster en IMDb...");
+
+      var match = await lookupImdbPoster(query);
+      if (!match || !match.posterUrl) { showMsg("error", "No se encontro poster en IMDb."); return; }
+
+      selectedPosterUrl = match.posterUrl;
+      document.getElementById("posterUrl").value = match.posterUrl;
+      var label = match.year ? match.title + " (" + match.year + ")" : match.title;
+      document.getElementById("posterPreviewImg").src = match.posterUrl;
+      document.getElementById("posterPreviewTitle").textContent = label;
+      document.getElementById("posterPreviewMeta").textContent = "Poster encontrado en IMDb.";
+      document.getElementById("posterPreview").classList.add("show");
+      showMsg("ok", "Poster encontrado: " + label);
+    });
+
+    document.getElementById("clearPosterBtn").addEventListener("click", function() {
+      selectedPosterUrl = "";
+      document.getElementById("posterUrl").value = "";
+      document.getElementById("posterPreview").classList.remove("show");
+      showMsg("ok", "Poster quitado.");
+    });
+
+    // ──── Collection suggest ────
+    function getExistingCollections() {
+      var map = {};
+      currentCatalog.forEach(function(item) {
+        var ct = (item.collectionTitle || "").trim();
+        if (ct) {
+          if (!map[ct]) map[ct] = { count: 0, lastEp: "" };
+          map[ct].count++;
+          if (item.episodeLabel) map[ct].lastEp = item.episodeLabel;
+        }
+      });
+      return map;
+    }
+
+    function guessNextEpisode(lastEp) {
+      // Try to increment a number at the end: "Capitulo 14" -> "Capitulo 15"
+      var match = lastEp.match(/(\d+)\s*$/);
+      if (match) {
+        var num = parseInt(match[1]) + 1;
+        return lastEp.replace(/\d+\s*$/, num);
+      }
+      return "";
+    }
+
+    document.getElementById("collectionTitle").addEventListener("input", function() {
+      var val = this.value.trim().toLowerCase();
+      var suggest = document.getElementById("collectionSuggest");
+      if (val.length < 2) { suggest.classList.remove("show"); suggest.innerHTML = ""; return; }
+
+      var collections = getExistingCollections();
+      var matches = Object.keys(collections).filter(function(name) {
+        return name.toLowerCase().indexOf(val) >= 0;
+      });
+
+      if (!matches.length) { suggest.classList.remove("show"); suggest.innerHTML = ""; return; }
+
+      suggest.innerHTML = matches.map(function(name) {
+        var info = collections[name];
+        return '<button type="button" data-collection="' + esc(name) + '" data-lastep="' + esc(info.lastEp) + '">'
+          + esc(name) + ' (' + info.count + ' EP)</button>';
+      }).join("");
+      suggest.classList.add("show");
+    });
+
+    document.getElementById("collectionSuggest").addEventListener("click", function(e) {
+      var btn = e.target.closest("button[data-collection]");
+      if (!btn) return;
+      document.getElementById("collectionTitle").value = btn.dataset.collection;
+      document.getElementById("category").value = "series";
+      var nextEp = guessNextEpisode(btn.dataset.lastep || "");
+      if (nextEp) document.getElementById("episodeLabel").value = nextEp;
+      this.classList.remove("show");
+      this.innerHTML = "";
+    });
+
+    // ──── UI helpers ────
+    function esc(v) { return String(v||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+    function showMsg(k, t) { var el=document.getElementById("message"); el.className="message show "+k; el.textContent=t; }
+    function clearMsg() { document.getElementById("message").className="message"; }
 
     function resetForm() {
-      ["title","collectionTitle","episodeLabel","sourceUrl","posterUrl"].forEach(function(id) {
-        document.getElementById(id).value = "";
-      });
+      ["title","collectionTitle","episodeLabel","sourceUrl","posterUrl"].forEach(function(id){document.getElementById(id).value="";});
       document.getElementById("category").value = "movie";
+      selectedPosterUrl = "";
+      document.getElementById("posterPreview").classList.remove("show");
+      document.getElementById("collectionSuggest").classList.remove("show");
     }
 
     function renderCatalog() {
-      const list = document.getElementById("catalogList");
-      if (!currentCatalog.length) {
-        list.innerHTML = '<div class="empty">No hay items todavia.</div>';
-        return;
-      }
+      var list = document.getElementById("catalogList");
+      if (!currentCatalog.length) { list.innerHTML = '<div class="empty">No hay items todavia.</div>'; return; }
       list.innerHTML = currentCatalog.map(function(item, i) {
         var cat = item.category === "series" ? "Serie" : "Pelicula";
         var type = String(item.type || "dash").toUpperCase();
         return '<article class="catalog-item">' +
-          '<div class="item-head"><div><h3>' + escapeHtml(item.title) + '</h3></div>' +
-          '<span class="item-meta">' + cat + ' - ' + type + ' - #' + (i+1) + '</span></div>' +
-          '<div class="source-box">' + escapeHtml(item.source || "Sin fuente") + '</div>' +
+          '<div class="item-head"><div><h3>' + esc(item.title) + '</h3></div>' +
+          '<span class="item-meta">' + cat + ' · ' + type + ' · #' + (i+1) + '</span></div>' +
+          '<div class="source-box">' + esc(item.source || "Sin fuente") + '</div>' +
           '<div class="item-actions">' +
-            (item.collectionTitle ? '<span class="item-meta">Serie: ' + escapeHtml(item.collectionTitle) + '</span>' : '') +
-            (item.episodeLabel ? '<span class="item-meta">' + escapeHtml(item.episodeLabel) + '</span>' : '') +
-            '<button type="button" data-action="delete" data-index="' + i + '" class="warn">Borrar</button>' +
+            (item.poster ? '<span class="item-meta">Con poster</span>' : '') +
+            (item.collectionTitle ? '<span class="item-meta">Serie: ' + esc(item.collectionTitle) + '</span>' : '') +
+            (item.episodeLabel ? '<span class="item-meta">' + esc(item.episodeLabel) + '</span>' : '') +
+            '<button type="button" data-action="use" data-index="' + i + '">Usar datos</button>' +
+            '<button type="button" data-action="up" data-index="' + i + '">Subir</button>' +
+            '<button type="button" data-action="down" data-index="' + i + '">Bajar</button>' +
+            '<button type="button" class="warn" data-action="delete" data-index="' + i + '">Borrar</button>' +
           '</div></article>';
       }).join("");
     }
 
-    // --- Event listeners ---
+    // ──── Save / Delete / Move / Use ────
     document.getElementById("saveButton").addEventListener("click", async function() {
       clearMsg();
       var title = document.getElementById("title").value.trim();
@@ -381,63 +469,90 @@
       if (!title) { showMsg("error", "Falta el titulo."); return; }
       if (!source) { showMsg("error", "Falta el link del stream."); return; }
 
-      var newItem = {
-        id: generateId(title),
+      var poster = document.getElementById("posterUrl").value.trim() || selectedPosterUrl;
+
+      var item = {
+        id: genId(title),
         title: title,
         description: "",
         source: source,
         manifest: source,
-        poster: document.getElementById("posterUrl").value.trim(),
+        poster: poster,
         collectionTitle: document.getElementById("collectionTitle").value.trim(),
         episodeLabel: document.getElementById("episodeLabel").value.trim(),
         category: document.getElementById("category").value,
-        type: source.toLowerCase().includes(".m3u8") ? "hls" : source.toLowerCase().includes(".mp4") ? "video" : "dash",
+        type: inferType(source),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString()
       };
 
-      currentCatalog.push(newItem);
-
+      currentCatalog.push(item);
       try {
         await saveCatalog("Add: " + title);
-        showMsg("ok", "Item guardado en GitHub.");
+        showMsg("ok", "Item guardado.");
         resetForm();
         renderCatalog();
-      } catch (e) {
-        currentCatalog.pop();
-        showMsg("error", e.message);
-      }
+      } catch(e) { currentCatalog.pop(); showMsg("error", e.message); }
     });
 
     document.getElementById("catalogList").addEventListener("click", async function(e) {
-      var btn = e.target.closest("button[data-action='delete']");
+      var btn = e.target.closest("button[data-action]");
       if (!btn) return;
+      var action = btn.dataset.action;
       var idx = parseInt(btn.dataset.index);
-      if (!confirm("Borrar este item?")) return;
 
-      var removed = currentCatalog.splice(idx, 1)[0];
-      try {
-        await saveCatalog("Delete: " + (removed.title || "item"));
-        showMsg("ok", "Item borrado.");
-        renderCatalog();
-      } catch (e) {
-        currentCatalog.splice(idx, 0, removed);
-        showMsg("error", e.message);
-        renderCatalog();
+      if (action === "use") {
+        var item = currentCatalog[idx];
+        if (!item) return;
+        document.getElementById("title").value = item.title;
+        document.getElementById("category").value = item.category || "movie";
+        document.getElementById("collectionTitle").value = item.collectionTitle || "";
+        document.getElementById("episodeLabel").value = item.episodeLabel || "";
+        document.getElementById("sourceUrl").value = item.source || "";
+        document.getElementById("posterUrl").value = item.poster || "";
+        if (item.poster) {
+          selectedPosterUrl = item.poster;
+          document.getElementById("posterPreviewImg").src = item.poster;
+          document.getElementById("posterPreviewTitle").textContent = item.title;
+          document.getElementById("posterPreviewMeta").textContent = "Poster de este item.";
+          document.getElementById("posterPreview").classList.add("show");
+        }
+        showMsg("ok", "Datos cargados en el formulario.");
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      if (action === "delete") {
+        if (!confirm("Borrar este item?")) return;
+        var removed = currentCatalog.splice(idx, 1)[0];
+        try { await saveCatalog("Delete: " + (removed.title||"item")); showMsg("ok", "Borrado."); renderCatalog(); }
+        catch(e) { currentCatalog.splice(idx, 0, removed); showMsg("error", e.message); renderCatalog(); }
+        return;
+      }
+
+      if (action === "up" && idx > 0) {
+        var tmp = currentCatalog[idx]; currentCatalog[idx] = currentCatalog[idx-1]; currentCatalog[idx-1] = tmp;
+        try { await saveCatalog("Move up: " + (tmp.title||"")); renderCatalog(); }
+        catch(e) { currentCatalog[idx-1] = currentCatalog[idx]; currentCatalog[idx] = tmp; showMsg("error", e.message); renderCatalog(); }
+        return;
+      }
+
+      if (action === "down" && idx < currentCatalog.length - 1) {
+        var tmp2 = currentCatalog[idx]; currentCatalog[idx] = currentCatalog[idx+1]; currentCatalog[idx+1] = tmp2;
+        try { await saveCatalog("Move down: " + (tmp2.title||"")); renderCatalog(); }
+        catch(e) { currentCatalog[idx+1] = currentCatalog[idx]; currentCatalog[idx] = tmp2; showMsg("error", e.message); renderCatalog(); }
       }
     });
 
     document.getElementById("reloadButton").addEventListener("click", async function() {
       try { await fetchCatalog(); showMsg("ok", "Catalogo recargado."); }
-      catch (e) { showMsg("error", e.message); }
+      catch(e) { showMsg("error", e.message); }
     });
 
-    document.getElementById("resetButton").addEventListener("click", function() {
-      resetForm(); clearMsg();
-    });
+    document.getElementById("resetButton").addEventListener("click", function() { resetForm(); clearMsg(); });
 
-    // --- Init ---
-    updateTokenStatus();
+    // ──── Init ────
+    updateTokenUI();
     fetchCatalog();
   </script>
 </body>
