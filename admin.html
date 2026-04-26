@@ -490,7 +490,15 @@
       try {
         await saveCatalog("Add: " + title);
         showMsg("ok", "Item guardado.");
-        resetForm();
+        // If we are adding to a series, keep the series info for the next episode
+        if (item.collectionTitle) {
+          var nextEp = guessNextEpisode(item.episodeLabel);
+          document.getElementById("episodeLabel").value = nextEp;
+          document.getElementById("sourceUrl").value = "";
+          document.getElementById("title").value = item.collectionTitle + (nextEp ? " " + nextEp : "");
+        } else {
+          resetForm();
+        }
         renderCatalog();
       } catch(e) { currentCatalog.pop(); showMsg("error", e.message); }
     });

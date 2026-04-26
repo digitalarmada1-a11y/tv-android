@@ -400,102 +400,102 @@
     #detailScreen {
       --detail-image: none;
       background:
-        linear-gradient(90deg, rgba(4, 7, 12, 0.96) 0%, rgba(4, 7, 12, 0.78) 38%, rgba(4, 7, 12, 0.88) 100%),
-        linear-gradient(180deg, rgba(4, 7, 12, 0.2), rgba(4, 7, 12, 0.96)),
+        linear-gradient(90deg, rgba(4, 7, 12, 0.97) 0%, rgba(4, 7, 12, 0.82) 40%, rgba(4, 7, 12, 0.92) 100%),
+        linear-gradient(180deg, rgba(4, 7, 12, 0.1), rgba(4, 7, 12, 0.98)),
         var(--detail-image) center/cover no-repeat;
     }
 
     .detail-shell {
       position: relative;
       z-index: 1;
-      display: grid;
-      grid-template-columns: minmax(0, 0.9fr) minmax(340px, 0.8fr);
-      gap: 28px;
+      display: flex;
+      flex-direction: column;
       height: 100%;
-      padding: 40px 52px 34px;
-      align-items: start;
+      padding: 32px 48px 24px;
+      gap: 20px;
+      overflow: hidden;
     }
 
     .detail-copy {
-      max-width: 560px;
-      padding-top: 18px;
+      max-width: 700px;
       display: grid;
-      gap: 18px;
+      gap: 10px;
+      flex-shrink: 0;
     }
 
     .detail-copy h2 {
       margin: 0;
-      font-size: clamp(44px, 6vw, 76px);
-      line-height: 0.92;
+      font-size: clamp(36px, 5vw, 58px);
+      line-height: 0.95;
       letter-spacing: -0.04em;
-      text-wrap: balance;
     }
 
     .detail-copy p {
       margin: 0;
       max-width: 500px;
       color: var(--muted);
-      font-size: 18px;
-      line-height: 1.42;
+      font-size: 16px;
+      line-height: 1.35;
     }
 
     .detail-rail {
       min-width: 0;
-      height: 100%;
-      max-height: calc(100vh - 74px);
-      display: grid;
-      align-content: start;
-      gap: 14px;
-      padding: 20px;
-      border-radius: 28px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(7, 18, 31, 0.72);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(18px);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
     }
 
     .detail-rail h3 {
       margin: 0;
-      font-size: 22px;
+      font-size: 20px;
       letter-spacing: -0.02em;
+      flex-shrink: 0;
+      color: var(--muted);
     }
 
     .episode-list {
-      display: grid;
-      gap: 12px;
-      overflow-y: auto;
-      padding-right: 4px;
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 8px 4px 16px;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex: 1;
+      align-items: stretch;
     }
 
     .episode-list::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .episode-list::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.18);
-      border-radius: 999px;
+      display: none;
     }
 
     .episode-item {
-      width: 100%;
-      display: grid;
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      gap: 14px;
-      align-items: center;
-      padding: 14px 16px;
+      width: 220px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.07);
       background: rgba(255, 255, 255, 0.04);
       color: var(--text);
       text-align: left;
       cursor: pointer;
-      transition: border-color 160ms ease, transform 160ms ease, background 160ms ease;
+      transition: border-color 200ms cubic-bezier(.4,0,.2,1), transform 200ms cubic-bezier(.4,0,.2,1), background 200ms ease, box-shadow 200ms ease;
+      scroll-snap-align: start;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
     .episode-item.is-active {
-      border-color: rgba(159, 242, 255, 0.58);
-      background: rgba(118, 227, 255, 0.12);
-      transform: translateX(4px);
+      border-color: rgba(159, 242, 255, 0.6);
+      background: rgba(118, 227, 255, 0.1);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.35);
     }
 
     .episode-item:focus-visible {
@@ -503,47 +503,50 @@
     }
 
     .episode-index {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       display: grid;
       place-items: center;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.08);
-      color: var(--muted);
-      font-size: 13px;
+      color: var(--accent);
+      font-size: 14px;
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.02em;
     }
 
     .episode-text {
       min-width: 0;
       display: grid;
-      gap: 5px;
+      gap: 4px;
+      flex: 1;
     }
 
     .episode-name {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       letter-spacing: -0.02em;
+      line-height: 1.2;
     }
 
     .episode-meta {
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.35;
+      font-size: 12px;
+      line-height: 1.3;
     }
 
     .episode-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 10px;
+      align-self: flex-start;
+      gap: 5px;
+      padding: 6px 10px;
       border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       background: rgba(255, 255, 255, 0.04);
       color: var(--muted);
-      font-size: 12px;
-      letter-spacing: 0.05em;
+      font-size: 11px;
+      letter-spacing: 0.04em;
       text-transform: uppercase;
       white-space: nowrap;
     }
@@ -1308,7 +1311,24 @@
 
       entries.forEach(function(entry) {
         entry.items.sort(function(a, b) {
-          return getSortTimestamp(a.createdAt || a.updatedAt) - getSortTimestamp(b.createdAt || b.updatedAt);
+          var labelA = (a.episodeLabel || a.title || "").toLowerCase();
+          var labelB = (b.episodeLabel || b.title || "").toLowerCase();
+          // Natural sort: split into text and number chunks for proper ordering
+          var partsA = labelA.match(/(\d+|\D+)/g) || [];
+          var partsB = labelB.match(/(\d+|\D+)/g) || [];
+          for (var i = 0; i < Math.max(partsA.length, partsB.length); i++) {
+            if (i >= partsA.length) return -1;
+            if (i >= partsB.length) return 1;
+            var pA = partsA[i], pB = partsB[i];
+            var nA = Number(pA), nB = Number(pB);
+            if (!isNaN(nA) && !isNaN(nB)) {
+              if (nA !== nB) return nA - nB;
+            } else {
+              if (pA < pB) return -1;
+              if (pA > pB) return 1;
+            }
+          }
+          return 0;
         });
       });
 
@@ -2264,13 +2284,13 @@
         return;
       }
 
-      if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+      if (event.key === "ArrowRight") {
         event.preventDefault();
         state.selectedEpisodeIndex = Math.min(state.selectedEpisodeIndex + 1, entry.items.length - 1);
         syncEpisodeSelection();
       }
 
-      if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+      if (event.key === "ArrowLeft") {
         event.preventDefault();
         state.selectedEpisodeIndex = Math.max(state.selectedEpisodeIndex - 1, 0);
         syncEpisodeSelection();
