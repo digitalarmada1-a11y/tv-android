@@ -16,9 +16,7 @@
       --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -31,12 +29,7 @@
         linear-gradient(160deg, #05070d 0%, #091321 52%, #05070d 100%);
     }
 
-    .shell {
-      max-width: 1040px;
-      margin: 0 auto;
-      display: grid;
-      gap: 20px;
-    }
+    .shell { max-width: 1040px; margin: 0 auto; display: grid; gap: 20px; }
 
     .panel {
       padding: 22px;
@@ -47,69 +40,26 @@
       backdrop-filter: blur(16px);
     }
 
-    h1,
-    h2,
-    h3,
-    p {
-      margin: 0;
-    }
+    h1, h2, h3, p { margin: 0; }
+    h1 { font-size: clamp(34px, 6vw, 52px); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 10px; }
+    h2 { font-size: 24px; letter-spacing: -0.02em; margin-bottom: 8px; }
 
-    h1 {
-      font-size: clamp(34px, 6vw, 52px);
-      line-height: 0.95;
-      letter-spacing: -0.04em;
-      margin-bottom: 10px;
-    }
+    p { color: var(--muted); line-height: 1.45; }
 
-    h2 {
-      font-size: 24px;
-      letter-spacing: -0.02em;
-      margin-bottom: 8px;
+    .top-actions, .button-row, .item-actions {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
     }
+    .top-actions { margin-top: 16px; }
 
-    p {
-      color: var(--muted);
-      line-height: 1.45;
-    }
+    .fields { display: grid; gap: 16px; margin-top: 18px; }
 
-    .top-actions,
-    .button-row,
-    .item-actions,
-    .poster-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
+    label { display: grid; gap: 8px; font-weight: 700; font-size: 15px; }
 
-    .top-actions {
-      margin-top: 16px;
-    }
-
-    .fields {
-      display: grid;
-      gap: 16px;
-      margin-top: 18px;
-    }
-
-    label {
-      display: grid;
-      gap: 8px;
-      font-weight: 700;
-      font-size: 15px;
-    }
-
-    input,
-    select,
-    textarea,
-    button,
-    .link-button {
+    input, select, textarea, button {
       font: inherit;
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width: 100%;
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
@@ -120,198 +70,89 @@
       transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
     }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
+    input:focus, select:focus, textarea:focus {
       border-color: rgba(140, 239, 255, 0.5);
       box-shadow: 0 0 0 4px rgba(140, 239, 255, 0.12);
       background: rgba(255, 255, 255, 0.08);
     }
 
-    input[type="file"] {
-      padding: 12px;
-    }
-
     textarea {
-      min-height: 210px;
+      min-height: 120px;
       resize: vertical;
       font-family: Consolas, Monaco, monospace;
       font-size: 13px;
-      line-height: 1.45;
     }
 
-    .helper {
-      font-weight: 400;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.4;
-    }
+    .helper { font-weight: 400; font-size: 13px; color: var(--muted); }
 
-    button,
-    .link-button {
+    button {
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.07);
       color: var(--text);
       border-radius: 999px;
       padding: 11px 16px;
       cursor: pointer;
-      text-decoration: none;
       transition: transform 140ms ease, border-color 140ms ease;
     }
 
-    button:hover,
-    .link-button:hover {
-      transform: translateY(-1px);
-      border-color: rgba(140, 239, 255, 0.45);
-    }
-
-    button.primary {
-      color: var(--accent);
-      border-color: rgba(140, 239, 255, 0.38);
-      background: rgba(140, 239, 255, 0.12);
-    }
-
-    button.warn {
-      color: #ffd8dc;
-      border-color: rgba(255, 154, 165, 0.26);
-      background: rgba(255, 154, 165, 0.12);
-    }
+    button:hover { transform: translateY(-1px); border-color: rgba(140, 239, 255, 0.45); }
+    button.primary { color: var(--accent); border-color: rgba(140, 239, 255, 0.38); background: rgba(140, 239, 255, 0.12); }
+    button.warn { color: #ffd8dc; border-color: rgba(255, 154, 165, 0.26); background: rgba(255, 154, 165, 0.12); }
 
     .message {
-      display: none;
-      margin-top: 16px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px solid transparent;
-      line-height: 1.45;
+      display: none; margin-top: 16px; padding: 14px 16px;
+      border-radius: 16px; border: 1px solid transparent; line-height: 1.45;
     }
-
-    .message.show {
-      display: block;
-    }
-
-    .message.ok {
-      color: var(--ok);
-      background: rgba(144, 255, 194, 0.1);
-      border-color: rgba(144, 255, 194, 0.2);
-    }
-
-    .message.error {
-      color: #ffd8dc;
-      background: rgba(255, 154, 165, 0.12);
-      border-color: rgba(255, 154, 165, 0.24);
-    }
-
-    .poster-preview {
-      display: none;
-      grid-template-columns: 84px minmax(0, 1fr);
-      gap: 14px;
-      align-items: center;
-      padding: 14px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-
-    .poster-preview.show {
-      display: grid;
-    }
-
-    .poster-preview img {
-      width: 84px;
-      aspect-ratio: 2 / 3;
-      border-radius: 14px;
-      object-fit: cover;
-      display: block;
-      background: rgba(255, 255, 255, 0.06);
-    }
-
-    .poster-preview h3 {
-      font-size: 18px;
-      letter-spacing: -0.02em;
-      margin-bottom: 6px;
-    }
-
-    .poster-preview p {
-      font-size: 14px;
-    }
-
-    .catalog-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 18px;
-    }
+    .message.show { display: block; }
+    .message.ok { color: var(--ok); background: rgba(144, 255, 194, 0.1); border-color: rgba(144, 255, 194, 0.2); }
+    .message.error { color: #ffd8dc; background: rgba(255, 154, 165, 0.12); border-color: rgba(255, 154, 165, 0.24); }
 
     .catalog-item {
-      padding: 18px;
-      border-radius: 20px;
+      padding: 18px; border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.07);
       background: rgba(255, 255, 255, 0.04);
-      display: grid;
-      gap: 12px;
+      display: grid; gap: 12px;
     }
 
-    .item-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 14px;
-    }
-
-    .item-head h3 {
-      font-size: 22px;
-      letter-spacing: -0.02em;
-    }
+    .item-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+    .item-head h3 { font-size: 22px; letter-spacing: -0.02em; }
 
     .item-meta {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 7px 12px; border-radius: 999px;
       border: 1px solid rgba(255, 255, 255, 0.08);
       background: rgba(255, 255, 255, 0.05);
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
+      color: var(--muted); font-size: 13px; white-space: nowrap;
     }
 
     .source-box {
-      padding: 12px 14px;
-      border-radius: 16px;
+      padding: 12px 14px; border-radius: 16px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(255, 255, 255, 0.06);
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
-      word-break: break-all;
+      color: var(--muted); font-size: 13px; word-break: break-all;
     }
 
+    .catalog-list { display: grid; gap: 14px; margin-top: 18px; }
     .empty {
-      padding: 24px;
-      border-radius: 18px;
+      padding: 24px; border-radius: 18px;
       border: 1px dashed rgba(255, 255, 255, 0.16);
       background: rgba(255, 255, 255, 0.03);
-      color: var(--muted);
-      text-align: center;
+      color: var(--muted); text-align: center;
     }
 
+    .token-bar {
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+    }
+    .token-bar input { max-width: 400px; }
+    .token-status { font-size: 13px; }
+    .token-status.ok { color: var(--ok); }
+    .token-status.missing { color: var(--danger); }
+
     @media (max-width: 720px) {
-      body {
-        padding: 16px;
-      }
-
-      .panel {
-        padding: 18px;
-      }
-
-      .item-head {
-        flex-direction: column;
-      }
-
-      .poster-preview {
-        grid-template-columns: 1fr;
-      }
+      body { padding: 16px; }
+      .panel { padding: 18px; }
+      .item-head { flex-direction: column; }
+      .token-bar input { max-width: 100%; }
     }
   </style>
 </head>
@@ -319,12 +160,23 @@
   <div class="shell">
     <section class="panel">
       <h1>Streafler Admin</h1>
-      <p>Titulo, categoria, stream y poster IMDb opcional, con agrupacion por serie para capitulos.</p>
+      <p>Gestiona tu catalogo. Los cambios se guardan directamente en GitHub y se publican via GitHub Pages.</p>
+
+      <div class="fields" style="margin-top:14px">
+        <label>
+          GitHub Token
+          <div class="token-bar">
+            <input id="tokenInput" type="password" placeholder="ghp_xxxxx...">
+            <button id="saveTokenBtn" type="button">Guardar</button>
+            <span id="tokenStatus" class="token-status missing">Sin token</span>
+          </div>
+          <span class="helper">Necesario para guardar cambios. Se almacena solo en tu navegador.</span>
+        </label>
+      </div>
 
       <div class="top-actions">
-        <a class="link-button" href="tv.html" target="_blank" rel="noopener">Abrir TV</a>
+        <a style="border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.07);color:var(--text);border-radius:999px;padding:11px 16px;text-decoration:none" href="tv.html" target="_blank">Abrir TV</a>
         <button id="reloadButton" type="button">Recargar catalogo</button>
-        <button id="clearButton" type="button">Limpiar</button>
       </div>
     </section>
 
@@ -353,41 +205,22 @@
         <label>
           Etiqueta episodio (opcional)
           <input id="episodeLabel" type="text" placeholder="Capitulo 1 / T12E04">
-          <span class="helper">Es el texto que saldra dentro de la serie al entrar.</span>
         </label>
-
-        <div class="poster-tools">
-          <button id="lookupPosterButton" type="button">Buscar poster IMDb</button>
-          <button id="clearPosterButton" type="button">Quitar poster</button>
-        </div>
-
-        <div id="posterPreview" class="poster-preview">
-          <img id="posterPreviewImage" alt="Poster encontrado">
-          <div>
-            <h3 id="posterPreviewTitle">Poster listo</h3>
-            <p id="posterPreviewMeta">Se usara al guardar el item.</p>
-          </div>
-        </div>
 
         <label>
           Link del stream
           <input id="sourceUrl" type="text" placeholder="https://.../manifest.mpd o .m3u8 o .mp4">
-          <span class="helper">La forma mas rapida. Si esta relleno, esta opcion tiene prioridad.</span>
         </label>
 
         <label>
-          Pegar XML MPD
-          <textarea id="manifestXml" placeholder="<MPD>...</MPD>"></textarea>
-        </label>
-
-        <label>
-          Subir archivo MPD
-          <input id="manifestFile" type="file" accept=".mpd,.xml,text/xml,application/dash+xml">
+          Poster URL (opcional)
+          <input id="posterUrl" type="text" placeholder="https://...poster.jpg">
+          <span class="helper">URL directa a una imagen de poster.</span>
         </label>
 
         <div class="button-row">
           <button id="saveButton" class="primary" type="button">Guardar item</button>
-          <button id="prefillResetButton" type="button">Vaciar formulario</button>
+          <button id="resetButton" type="button">Vaciar formulario</button>
         </div>
       </div>
 
@@ -396,377 +229,216 @@
 
     <section class="panel">
       <h2>Catalogo actual</h2>
-      <p>El poster se busca por titulo y se intenta guardar localmente en `posters/` al crear el item.</p>
       <div id="catalogList" class="catalog-list"></div>
     </section>
   </div>
 
   <script>
-    const titleInput = document.getElementById("title");
-    const categoryInput = document.getElementById("category");
-    const collectionTitleInput = document.getElementById("collectionTitle");
-    const episodeLabelInput = document.getElementById("episodeLabel");
-    const sourceUrlInput = document.getElementById("sourceUrl");
-    const manifestXmlInput = document.getElementById("manifestXml");
-    const manifestFileInput = document.getElementById("manifestFile");
-    const message = document.getElementById("message");
-    const catalogList = document.getElementById("catalogList");
-    const lookupPosterButton = document.getElementById("lookupPosterButton");
-    const clearPosterButton = document.getElementById("clearPosterButton");
-    const posterPreview = document.getElementById("posterPreview");
-    const posterPreviewImage = document.getElementById("posterPreviewImage");
-    const posterPreviewTitle = document.getElementById("posterPreviewTitle");
-    const posterPreviewMeta = document.getElementById("posterPreviewMeta");
+    const REPO_OWNER = "digitalarmada1-a11y";
+    const REPO_NAME = "tv-android";
+    const CATALOG_PATH = "catalogo.json";
+    const TOKEN_KEY = "streafler-gh-token";
 
     let currentCatalog = [];
-    let selectedPosterUrl = "";
-    let selectedPosterLabel = "";
+    let catalogSha = "";
 
-    function escapeHtml(value) {
-      return String(value || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#39;");
+    // --- Token management ---
+    function getToken() { return localStorage.getItem(TOKEN_KEY) || ""; }
+
+    function saveToken(t) {
+      localStorage.setItem(TOKEN_KEY, t.trim());
+      updateTokenStatus();
     }
 
-    function inferTypeFromSource(source) {
-      const lower = String(source || "").toLowerCase().split("?")[0];
-
-      if (lower.endsWith(".mpd")) {
-        return "DASH";
+    function updateTokenStatus() {
+      const el = document.getElementById("tokenStatus");
+      if (getToken()) {
+        el.textContent = "Token guardado";
+        el.className = "token-status ok";
+      } else {
+        el.textContent = "Sin token";
+        el.className = "token-status missing";
       }
-
-      if (lower.endsWith(".m3u8")) {
-        return "HLS";
-      }
-
-      if (lower.endsWith(".mp4") || lower.endsWith(".webm") || lower.endsWith(".mov")) {
-        return "VIDEO";
-      }
-
-      return "STREAM";
     }
 
-    function normalizeCategory(value, item) {
-      const normalized = String(value || "").trim().toLowerCase();
+    document.getElementById("saveTokenBtn").addEventListener("click", function() {
+      const val = document.getElementById("tokenInput").value.trim();
+      if (!val) { showMsg("error", "Pega un token valido."); return; }
+      saveToken(val);
+      document.getElementById("tokenInput").value = "";
+      showMsg("ok", "Token guardado en tu navegador.");
+    });
 
-      if (normalized === "series" || normalized === "serie") {
-        return "series";
-      }
-
-      if (normalized === "movie" || normalized === "pelicula" || normalized === "película") {
-        return "movie";
-      }
-
-      return (item && (item.collectionTitle || item.episodeLabel)) ? "series" : "movie";
+    // --- GitHub API helpers ---
+    async function ghGet(path) {
+      const token = getToken();
+      const headers = { Accept: "application/vnd.github+json" };
+      if (token) headers.Authorization = "token " + token;
+      const res = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, { headers });
+      if (!res.ok) throw new Error("GitHub API error: " + res.status);
+      return res.json();
     }
 
-    function formatCategoryLabel(value) {
-      return normalizeCategory(value) === "series" ? "Serie" : "Pelicula";
-    }
-
-    function normalizeItem(item, index) {
-      const source = String(item.source || item.manifest || "").trim();
-
-      return {
-        id: String(item.id || ("legacy-" + index)),
-        title: String(item.title || ("Video " + (index + 1))).trim(),
-        source: source,
-        type: String(item.type || inferTypeFromSource(source)).toUpperCase(),
-        poster: String(item.poster || "").trim(),
-        collectionTitle: String(item.collectionTitle || "").trim(),
-        episodeLabel: String(item.episodeLabel || "").trim(),
-        category: normalizeCategory(item.category, item)
+    async function ghPut(path, content, sha, message) {
+      const token = getToken();
+      if (!token) throw new Error("Necesitas un GitHub token para guardar.");
+      const body = {
+        message: message || "Update " + path,
+        content: btoa(unescape(encodeURIComponent(content))),
+        sha: sha
       };
-    }
-
-    function showMessage(kind, text) {
-      message.className = "message show " + kind;
-      message.textContent = text;
-    }
-
-    function clearMessage() {
-      message.className = "message";
-      message.textContent = "";
-    }
-
-    function clearPosterSelection(showInfo) {
-      selectedPosterUrl = "";
-      selectedPosterLabel = "";
-      posterPreviewImage.removeAttribute("src");
-      posterPreview.classList.remove("show");
-
-      if (showInfo) {
-        showMessage("ok", "Poster quitado.");
+      const res = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, {
+        method: "PUT",
+        headers: {
+          Authorization: "token " + token,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(body)
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(function() { return {}; });
+        throw new Error(err.message || "No se pudo guardar en GitHub (" + res.status + ")");
       }
+      return res.json();
     }
 
-    function setPosterSelection(url, label, meta) {
-      selectedPosterUrl = String(url || "").trim();
-      selectedPosterLabel = String(label || "").trim();
-
-      if (!selectedPosterUrl) {
-        clearPosterSelection(false);
-        return;
-      }
-
-      posterPreviewImage.src = selectedPosterUrl;
-      posterPreviewTitle.textContent = label || "Poster listo";
-      posterPreviewMeta.textContent = meta || "Se usara al guardar el item.";
-      posterPreview.classList.add("show");
-    }
-
-    function resetForm() {
-      titleInput.value = "";
-      categoryInput.value = "movie";
-      collectionTitleInput.value = "";
-      episodeLabelInput.value = "";
-      sourceUrlInput.value = "";
-      manifestXmlInput.value = "";
-      manifestFileInput.value = "";
-      clearPosterSelection(false);
-    }
-
+    // --- Catalog CRUD ---
     async function fetchCatalog() {
-      const response = await fetch("catalogo.json?t=" + Date.now(), { cache: "no-store" });
-
-      if (!response.ok) {
-        throw new Error("No se pudo leer catalogo.json");
+      try {
+        const data = await ghGet(CATALOG_PATH);
+        catalogSha = data.sha;
+        const decoded = decodeURIComponent(escape(atob(data.content)));
+        currentCatalog = JSON.parse(decoded);
+        if (!Array.isArray(currentCatalog)) currentCatalog = [];
+      } catch (e) {
+        currentCatalog = [];
+        catalogSha = "";
       }
-
-      const data = await response.json();
-      currentCatalog = Array.isArray(data) ? data.map(normalizeItem) : [];
       renderCatalog();
     }
 
+    async function saveCatalog(msg) {
+      const content = JSON.stringify(currentCatalog, null, 4) + "\n";
+      const result = await ghPut(CATALOG_PATH, content, catalogSha, msg || "Update catalogo");
+      catalogSha = result.content.sha;
+    }
+
+    function generateId(title) {
+      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const rand = Math.random().toString(16).slice(2, 14);
+      return (slug || "item") + "-" + rand;
+    }
+
+    // --- UI helpers ---
+    function escapeHtml(v) {
+      return String(v || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
+
+    function showMsg(kind, text) {
+      const el = document.getElementById("message");
+      el.className = "message show " + kind;
+      el.textContent = text;
+    }
+
+    function clearMsg() {
+      document.getElementById("message").className = "message";
+    }
+
+    function resetForm() {
+      ["title","collectionTitle","episodeLabel","sourceUrl","posterUrl"].forEach(function(id) {
+        document.getElementById(id).value = "";
+      });
+      document.getElementById("category").value = "movie";
+    }
+
     function renderCatalog() {
+      const list = document.getElementById("catalogList");
       if (!currentCatalog.length) {
-        catalogList.innerHTML = '<div class="empty">No hay items todavia.</div>';
+        list.innerHTML = '<div class="empty">No hay items todavia.</div>';
         return;
       }
-
-      catalogList.innerHTML = currentCatalog.map(function(item, index) {
-        return '' +
-          '<article class="catalog-item">' +
-            '<div class="item-head">' +
-              '<div><h3>' + escapeHtml(item.title) + '</h3></div>' +
-              '<span class="item-meta">' + formatCategoryLabel(item.category) + ' - ' + item.type + ' - Posicion ' + (index + 1) + '</span>' +
-            '</div>' +
-            '<div class="source-box">' + escapeHtml(item.source || "Sin fuente") + '</div>' +
-            '<div class="item-actions">' +
-              (item.poster ? '<span class="item-meta">Con poster</span>' : "") +
-              '<span class="item-meta">' + formatCategoryLabel(item.category) + '</span>' +
-              (item.collectionTitle ? '<span class="item-meta">Serie: ' + escapeHtml(item.collectionTitle) + '</span>' : "") +
-              (item.episodeLabel ? '<span class="item-meta">' + escapeHtml(item.episodeLabel) + '</span>' : "") +
-              '<button type="button" data-action="use" data-id="' + escapeHtml(item.id) + '">Usar datos</button>' +
-              '<button type="button" data-action="move" data-dir="up" data-id="' + escapeHtml(item.id) + '">Subir</button>' +
-              '<button type="button" data-action="move" data-dir="down" data-id="' + escapeHtml(item.id) + '">Bajar</button>' +
-              '<button type="button" class="warn" data-action="delete" data-id="' + escapeHtml(item.id) + '">Borrar</button>' +
-            '</div>' +
-          '</article>';
+      list.innerHTML = currentCatalog.map(function(item, i) {
+        var cat = item.category === "series" ? "Serie" : "Pelicula";
+        var type = String(item.type || "dash").toUpperCase();
+        return '<article class="catalog-item">' +
+          '<div class="item-head"><div><h3>' + escapeHtml(item.title) + '</h3></div>' +
+          '<span class="item-meta">' + cat + ' - ' + type + ' - #' + (i+1) + '</span></div>' +
+          '<div class="source-box">' + escapeHtml(item.source || "Sin fuente") + '</div>' +
+          '<div class="item-actions">' +
+            (item.collectionTitle ? '<span class="item-meta">Serie: ' + escapeHtml(item.collectionTitle) + '</span>' : '') +
+            (item.episodeLabel ? '<span class="item-meta">' + escapeHtml(item.episodeLabel) + '</span>' : '') +
+            '<button type="button" data-action="delete" data-index="' + i + '" class="warn">Borrar</button>' +
+          '</div></article>';
       }).join("");
     }
 
-    function buildCreateFormData() {
-      const formData = new FormData();
-      formData.append("action", "create");
-      formData.append("title", titleInput.value.trim());
-      formData.append("category", categoryInput.value);
-      formData.append("collection_title", collectionTitleInput.value.trim());
-      formData.append("episode_label", episodeLabelInput.value.trim());
-      formData.append("source_url", sourceUrlInput.value.trim());
-      formData.append("manifest_xml", manifestXmlInput.value.trim());
-      formData.append("poster_url", selectedPosterUrl);
-
-      if (manifestFileInput.files[0]) {
-        formData.append("manifest_file", manifestFileInput.files[0]);
-      }
-
-      return formData;
-    }
-
-    async function sendAction(payload) {
-      const formData = new FormData();
-
-      Object.keys(payload).forEach(function(key) {
-        formData.append(key, payload[key]);
-      });
-
-      const response = await fetch("guardar.php", {
-        method: "POST",
-        body: formData
-      });
-
-      const result = await response.json().catch(function() {
-        return { ok: false, message: "Respuesta invalida del servidor." };
-      });
-
-      if (!response.ok || !result.ok) {
-        throw new Error(result.message || "No se pudo completar la accion.");
-      }
-
-      return result;
-    }
-
-    function useItemData(id) {
-      const item = currentCatalog.find(function(entry) {
-        return entry.id === id;
-      });
-
-      if (!item) {
-        return;
-      }
-
-      titleInput.value = item.title;
-      categoryInput.value = normalizeCategory(item.category, item);
-      collectionTitleInput.value = item.collectionTitle || "";
-      episodeLabelInput.value = item.episodeLabel || "";
-      sourceUrlInput.value = item.source;
-      manifestXmlInput.value = "";
-      manifestFileInput.value = "";
-
-      if (item.poster) {
-        setPosterSelection(item.poster, item.title, "Poster ya guardado en este item.");
-      } else {
-        clearPosterSelection(false);
-      }
-
-      showMessage("ok", "Datos cargados en el formulario.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    lookupPosterButton.addEventListener("click", async function() {
-      clearMessage();
-
-      const posterQuery = titleInput.value.trim() || collectionTitleInput.value.trim();
-
-      if (!posterQuery) {
-        showMessage("error", "Escribe primero el titulo para buscar poster.");
-        titleInput.focus();
-        return;
-      }
-
-      try {
-        const result = await sendAction({
-          action: "poster_lookup",
-          title: posterQuery
-        });
-
-        if (!result.found || !result.match || !result.match.posterUrl) {
-          clearPosterSelection(false);
-          showMessage("error", result.message || "No se encontro poster.");
-          return;
-        }
-
-        const match = result.match;
-        const label = match.year ? (match.title + " (" + match.year + ")") : match.title;
-        setPosterSelection(match.posterUrl, label, "Poster encontrado en IMDb y listo para guardarse al crear el item.");
-        showMessage("ok", result.message || "Poster encontrado.");
-      } catch (error) {
-        showMessage("error", error.message || "No se pudo buscar el poster.");
-      }
-    });
-
-    clearPosterButton.addEventListener("click", function() {
-      clearPosterSelection(true);
-    });
-
-    catalogList.addEventListener("click", async function(event) {
-      const button = event.target.closest("button[data-action]");
-
-      if (!button) {
-        return;
-      }
-
-      const action = button.dataset.action;
-      const id = button.dataset.id || "";
-
-      try {
-        if (action === "use") {
-          useItemData(id);
-          return;
-        }
-
-        if (action === "delete") {
-          if (!window.confirm("Borrar este item del catalogo?")) {
-            return;
-          }
-
-          await sendAction({ action: "delete", id: id });
-          showMessage("ok", "Item borrado.");
-        }
-
-        if (action === "move") {
-          await sendAction({ action: "move", id: id, direction: button.dataset.dir || "up" });
-          showMessage("ok", "Orden actualizado.");
-        }
-
-        await fetchCatalog();
-      } catch (error) {
-        showMessage("error", error.message || "No se pudo completar la accion.");
-      }
-    });
-
+    // --- Event listeners ---
     document.getElementById("saveButton").addEventListener("click", async function() {
-      clearMessage();
+      clearMsg();
+      var title = document.getElementById("title").value.trim();
+      var source = document.getElementById("sourceUrl").value.trim();
+      if (!title) { showMsg("error", "Falta el titulo."); return; }
+      if (!source) { showMsg("error", "Falta el link del stream."); return; }
 
-      if (!titleInput.value.trim()) {
-        showMessage("error", "Falta el titulo.");
-        titleInput.focus();
-        return;
-      }
+      var newItem = {
+        id: generateId(title),
+        title: title,
+        description: "",
+        source: source,
+        manifest: source,
+        poster: document.getElementById("posterUrl").value.trim(),
+        collectionTitle: document.getElementById("collectionTitle").value.trim(),
+        episodeLabel: document.getElementById("episodeLabel").value.trim(),
+        category: document.getElementById("category").value,
+        type: source.toLowerCase().includes(".m3u8") ? "hls" : source.toLowerCase().includes(".mp4") ? "video" : "dash",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
 
-      if (!sourceUrlInput.value.trim() && !manifestXmlInput.value.trim() && !manifestFileInput.files[0]) {
-        showMessage("error", "Debes poner un link, pegar XML MPD o subir un MPD.");
-        return;
-      }
+      currentCatalog.push(newItem);
 
       try {
-        const response = await fetch("guardar.php", {
-          method: "POST",
-          body: buildCreateFormData()
-        });
-
-        const result = await response.json().catch(function() {
-          return { ok: false, message: "Respuesta invalida del servidor." };
-        });
-
-        if (!response.ok || !result.ok) {
-          throw new Error(result.message || "No se pudo guardar el item.");
-        }
-
-        showMessage("ok", result.message || "Item guardado.");
+        await saveCatalog("Add: " + title);
+        showMsg("ok", "Item guardado en GitHub.");
         resetForm();
-        await fetchCatalog();
-      } catch (error) {
-        showMessage("error", error.message || "No se pudo guardar el item.");
+        renderCatalog();
+      } catch (e) {
+        currentCatalog.pop();
+        showMsg("error", e.message);
+      }
+    });
+
+    document.getElementById("catalogList").addEventListener("click", async function(e) {
+      var btn = e.target.closest("button[data-action='delete']");
+      if (!btn) return;
+      var idx = parseInt(btn.dataset.index);
+      if (!confirm("Borrar este item?")) return;
+
+      var removed = currentCatalog.splice(idx, 1)[0];
+      try {
+        await saveCatalog("Delete: " + (removed.title || "item"));
+        showMsg("ok", "Item borrado.");
+        renderCatalog();
+      } catch (e) {
+        currentCatalog.splice(idx, 0, removed);
+        showMsg("error", e.message);
+        renderCatalog();
       }
     });
 
     document.getElementById("reloadButton").addEventListener("click", async function() {
-      try {
-        await fetchCatalog();
-        showMessage("ok", "Catalogo recargado.");
-      } catch (error) {
-        showMessage("error", error.message || "No se pudo recargar el catalogo.");
-      }
+      try { await fetchCatalog(); showMsg("ok", "Catalogo recargado."); }
+      catch (e) { showMsg("error", e.message); }
     });
 
-    document.getElementById("clearButton").addEventListener("click", function() {
-      resetForm();
-      clearMessage();
+    document.getElementById("resetButton").addEventListener("click", function() {
+      resetForm(); clearMsg();
     });
 
-    document.getElementById("prefillResetButton").addEventListener("click", function() {
-      resetForm();
-      showMessage("ok", "Formulario vaciado.");
-    });
-
-    fetchCatalog().catch(function(error) {
-      showMessage("error", error.message || "No se pudo cargar el catalogo.");
-    });
+    // --- Init ---
+    updateTokenStatus();
+    fetchCatalog();
   </script>
 </body>
 </html>

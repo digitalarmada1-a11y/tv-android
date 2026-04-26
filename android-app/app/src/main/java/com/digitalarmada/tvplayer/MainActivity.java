@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
     private WebView webView;
     // CAMBIA ESTA URL POR LA DE TU VPS
-    private static final String APP_URL = "https://stiflercr7.qzz.io/tv.html";
+    private static final String APP_URL = "https://digitalarmada1-a11y.github.io/tv-android/tv.html";
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
