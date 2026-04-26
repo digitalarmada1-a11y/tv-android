@@ -180,5 +180,19 @@
         "type": "dash",
         "createdAt": "2026-04-26T08:14:35.382Z",
         "updatedAt": "2026-04-26T08:14:35.382Z"
+    },
+    {
+        "id": "got-talent-espana-c2cd8619a87d",
+        "title": "Got Talent Espana",
+        "description": "",
+        "source": "https://stream-4291-31-166.pkcdn.org/dash/k4ohp6xzb4ikkfn2ma27slqphqo3btvjopvv3et7zjj7y5fktn47zuo7ru/manifest.mpd",
+        "manifest": "https://stream-4291-31-166.pkcdn.org/dash/k4ohp6xzb4ikkfn2ma27slqphqo3btvjopvv3et7zjj7y5fktn47zuo7ru/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjliN2Q2NTEtOGNjZC00YTYzLThkMmQtNjBmMmU4MDVmZTE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Got Talent Espana",
+        "episodeLabel": "Capitulo 2",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-04-26T08:15:37.204Z",
+        "updatedAt": "2026-04-26T08:15:37.204Z"
     }
 ]
