@@ -110,5 +110,19 @@
         "type": "dash",
         "createdAt": "2026-04-26T08:07:36.483Z",
         "updatedAt": "2026-04-26T08:07:36.483Z"
+    },
+    {
+        "id": "got-talent-espana-a749d5dc57c1",
+        "title": "Got Talent Espana",
+        "description": "",
+        "source": "https://stream-96255-141-139.pkcdn.org/dash/dqobprjob4ikkfn2mau7soqxmtyvsg27gnmhti5fvpnju3xsgkr64ju2hy/manifest.mpd",
+        "manifest": "https://stream-96255-141-139.pkcdn.org/dash/dqobprjob4ikkfn2mau7soqxmtyvsg27gnmhti5fvpnju3xsgkr64ju2hy/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZjliN2Q2NTEtOGNjZC00YTYzLThkMmQtNjBmMmU4MDVmZTE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Got Talent Espana",
+        "episodeLabel": "Capitulo 7",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-04-26T08:08:46.120Z",
+        "updatedAt": "2026-04-26T08:08:46.120Z"
     }
 ]
