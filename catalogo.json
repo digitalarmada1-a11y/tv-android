@@ -222,19 +222,5 @@
         "type": "dash",
         "createdAt": "2026-04-26T21:08:59.933Z",
         "updatedAt": "2026-04-26T21:08:59.934Z"
-    },
-    {
-        "id": "from-dd279cf14683",
-        "title": "From",
-        "description": "",
-        "source": "https://nw35.seedr.cc/media/stream/video/lq/3246866/5910885417/d6059d77f74687d90ff9e91e1ca5e93d4f4a97a8/vid.m3u8?st=SHPte6bZbr--h-HZisnbiQ&e=1777257284",
-        "manifest": "https://nw35.seedr.cc/media/stream/video/lq/3246866/5910885417/d6059d77f74687d90ff9e91e1ca5e93d4f4a97a8/vid.m3u8?st=SHPte6bZbr--h-HZisnbiQ&e=1777257284",
-        "poster": "https://m.media-amazon.com/images/M/MV5BNDAwNDljNWEtNWE1Zi00YjFlLWEzM2UtY2E3ZTM1MTcxMTcyXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "From",
-        "episodeLabel": "Capitulo 2",
-        "category": "series",
-        "type": "hls",
-        "createdAt": "2026-04-27T02:07:43.495Z",
-        "updatedAt": "2026-04-27T02:07:43.495Z"
     }
 ]
