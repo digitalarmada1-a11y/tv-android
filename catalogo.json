@@ -250,5 +250,19 @@
         "type": "hls",
         "createdAt": "2026-04-28T01:21:19.148Z",
         "updatedAt": "2026-04-28T01:21:19.148Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-4ffb540774bb",
+        "title": "La isla de las tentaciones",
+        "description": "",
+        "source": "https://vbd.mediaset.es/orivod/vod/bitmovin/c5/0c/c50c59a4-7d88-4318-9073-81e89c357003/main.ism/picky.m3u8?hdnts=st=1777339436~exp=1777353836~acl=*/bitmovin/c5/0c/c50c59a4-7d88-4318-9073-81e89c357003/*~hmac=ecd203fad79addfe51d681d39bf3904e84e791a4743f8507f77eff30629aa472",
+        "manifest": "https://vbd.mediaset.es/orivod/vod/bitmovin/c5/0c/c50c59a4-7d88-4318-9073-81e89c357003/main.ism/picky.m3u8?hdnts=st=1777339436~exp=1777353836~acl=*/bitmovin/c5/0c/c50c59a4-7d88-4318-9073-81e89c357003/*~hmac=ecd203fad79addfe51d681d39bf3904e84e791a4743f8507f77eff30629aa472",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 7",
+        "category": "series",
+        "type": "hls",
+        "createdAt": "2026-04-28T01:27:32.280Z",
+        "updatedAt": "2026-04-28T01:27:32.280Z"
     }
 ]
