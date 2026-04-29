@@ -250,5 +250,19 @@
         "type": "hls",
         "createdAt": "2026-04-29T03:17:21.030Z",
         "updatedAt": "2026-04-29T03:17:21.030Z"
+    },
+    {
+        "id": "el-chiringuito-edc5d5eeac2a",
+        "title": "El Chiringuito",
+        "description": "",
+        "source": "https://atres-live.atresmedia.com/ab00f5ee9f0f25ab3844b2af0561ac5ce69eab64_ES_1777500829_1777529569/hlsts/live/mega_usp/mega_usp.isml/mega_usp-audio_spa=128000-video=1440000.m3u8",
+        "manifest": "https://atres-live.atresmedia.com/ab00f5ee9f0f25ab3844b2af0561ac5ce69eab64_ES_1777500829_1777529569/hlsts/live/mega_usp/mega_usp.isml/mega_usp-audio_spa=128000-video=1440000.m3u8",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZTlmYWUyYzMtYTFhNi00ODBhLWJlYzctMjdiNjQ1Mjk3MTlkXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "hls",
+        "createdAt": "2026-04-29T22:13:53.913Z",
+        "updatedAt": "2026-04-29T22:13:53.913Z"
     }
 ]
