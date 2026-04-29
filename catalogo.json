@@ -250,19 +250,5 @@
         "type": "dash",
         "createdAt": "2026-04-29T02:10:49.627Z",
         "updatedAt": "2026-04-29T02:10:49.627Z"
-    },
-    {
-        "id": "psg-vs-bayern-munchen-86de2ef3d084",
-        "title": "PSG vs Bayern Munchen",
-        "description": "",
-        "source": "https://minochinos.com/stream/RZRDGqCd1ADe2RKHbmaSrA/hjkrhuihghfvu/1777475473/40273094/master.m3u8",
-        "manifest": "https://minochinos.com/stream/RZRDGqCd1ADe2RKHbmaSrA/hjkrhuihghfvu/1777475473/40273094/master.m3u8",
-        "poster": "https://m.media-amazon.com/images/M/MV5BZGJiYjcwMzEtNmVhNy00NmZkLThiNzItYzdmMjYxYjczNjY2XkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "hls",
-        "createdAt": "2026-04-29T03:13:53.019Z",
-        "updatedAt": "2026-04-29T03:13:53.019Z"
     }
 ]
