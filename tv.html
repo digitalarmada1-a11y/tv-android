@@ -562,15 +562,7 @@
       background: #000;
     }
 
-    #playerScreen::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at center, rgba(118, 227, 255, 0.08), transparent 38%),
-        linear-gradient(180deg, rgba(2, 6, 10, 0.62), rgba(2, 6, 10, 0.18), rgba(2, 6, 10, 0.82));
-      pointer-events: none;
-    }
+    /* ::before removed — gradient was permanently visible causing dark bands on screen */
 
     #playerUi {
       position: absolute;
@@ -579,9 +571,14 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 16px 24px 14px;
+      /* Gradient only shows while controls are visible — disappears completely with is-dimmed */
       background:
-        linear-gradient(180deg, rgba(2, 6, 10, 0.55), rgba(2, 6, 10, 0) 18%, rgba(2, 6, 10, 0) 78%, rgba(2, 6, 10, 0.65) 100%);
-      transition: opacity 180ms ease;
+        linear-gradient(180deg,
+          rgba(2, 6, 10, 0.72) 0%,
+          rgba(2, 6, 10, 0) 22%,
+          rgba(2, 6, 10, 0) 76%,
+          rgba(2, 6, 10, 0.72) 100%);
+      transition: opacity 280ms ease;
     }
 
     #playerUi.is-dimmed {
