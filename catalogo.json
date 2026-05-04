@@ -250,5 +250,19 @@
         "type": "hls",
         "createdAt": "2026-04-30T00:50:43.583Z",
         "updatedAt": "2026-04-30T00:50:43.584Z"
+    },
+    {
+        "id": "sophies-choice-2c13a06fdc64",
+        "title": "Sophies Choice",
+        "description": "",
+        "source": "https://stream-9251-178-118.pkcdn.org/dash/emocq6yagyikkfn2mcs7qoqve5p44royizgeiz2hhobxq7jlbbthvf2tpi/manifest.mpd",
+        "manifest": "https://stream-9251-178-118.pkcdn.org/dash/emocq6yagyikkfn2mcs7qoqve5p44royizgeiz2hhobxq7jlbbthvf2tpi/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZDZiZGY3OWYtY2E3My00ZTY0LTk4NTEtYjMzMWZkNGJiMjNiXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "dash",
+        "createdAt": "2026-05-04T23:40:37.414Z",
+        "updatedAt": "2026-05-04T23:40:37.414Z"
     }
 ]
