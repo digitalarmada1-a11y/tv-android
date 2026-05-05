@@ -264,5 +264,19 @@
         "type": "hls",
         "createdAt": "2026-05-05T00:48:27.907Z",
         "updatedAt": "2026-05-05T00:48:27.908Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-5d0cc8454c3d",
+        "title": "La isla de las tentaciones",
+        "description": "",
+        "source": "https://stream-4491-212-99.pkcdn.org/dash/keohptmlbqikkfn2maq7soaimzqvo43lx4vmerdozjt37w7wedtn26wadq/manifest.mpd",
+        "manifest": "https://stream-4491-212-99.pkcdn.org/dash/keohptmlbqikkfn2maq7soaimzqvo43lx4vmerdozjt37w7wedtn26wadq/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 14",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-05-05T04:03:13.115Z",
+        "updatedAt": "2026-05-05T04:03:13.115Z"
     }
 ]
