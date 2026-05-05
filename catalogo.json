@@ -278,5 +278,19 @@
         "type": "dash",
         "createdAt": "2026-05-05T04:03:13.115Z",
         "updatedAt": "2026-05-05T04:03:13.115Z"
+    },
+    {
+        "id": "from-58d59d555562",
+        "title": "From",
+        "description": "",
+        "source": "https://stream-4338-55-56.pkcdn.org/dash/kyohoimebqikkfn2maq7s3cjm7k4mc2pjko2kd4xayasle6xfwzhswbeu4/manifest.mpd",
+        "manifest": "https://stream-4338-55-56.pkcdn.org/dash/kyohoimebqikkfn2maq7s3cjm7k4mc2pjko2kd4xayasle6xfwzhswbeu4/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDAwNDljNWEtNWE1Zi00YjFlLWEzM2UtY2E3ZTM1MTcxMTcyXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "From",
+        "episodeLabel": "Capitulo 3",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-05-05T07:15:26.063Z",
+        "updatedAt": "2026-05-05T07:15:26.064Z"
     }
 ]
