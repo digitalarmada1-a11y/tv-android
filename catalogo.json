@@ -278,5 +278,19 @@
         "type": "dash",
         "createdAt": "2026-05-05T07:15:26.063Z",
         "updatedAt": "2026-05-05T07:15:26.064Z"
+    },
+    {
+        "id": "psg-vs-bayern-munchen-a502e66e9781",
+        "title": "PSG vs Bayern Munchen",
+        "description": "",
+        "source": "https://archive.org/download/psg-vs-bay-semi-final-1st-leg-ucl-25-26-temmatchthai.hd/PSG_BAY_UCL_28.04.2026_MLC_Spanish_1080p.mp4",
+        "manifest": "https://archive.org/download/psg-vs-bay-semi-final-1st-leg-ucl-25-26-temmatchthai.hd/PSG_BAY_UCL_28.04.2026_MLC_Spanish_1080p.mp4",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZGJiYjcwMzEtNmVhNy00NmZkLThiNzItYzdmMjYxYjczNjY2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "video",
+        "createdAt": "2026-05-05T07:52:04.175Z",
+        "updatedAt": "2026-05-05T07:52:04.176Z"
     }
 ]
