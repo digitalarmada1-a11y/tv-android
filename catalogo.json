@@ -278,19 +278,5 @@
         "type": "dash",
         "createdAt": "2026-05-05T07:15:26.063Z",
         "updatedAt": "2026-05-05T07:15:26.064Z"
-    },
-    {
-        "id": "psg-vs-d7df43cd61df",
-        "title": "PSG vs",
-        "description": "",
-        "source": "[archiveorg psg-vs-bay-semi-final-1st-leg-ucl-25-26-temmatchthai.hd/PSG_BAY_UCL_28.04.2026_MLC_Spanish_1080p.mkv width=560 height=384 frameborder=0 webkitallowfullscreen=true mozallowfullscreen=true]",
-        "manifest": "[archiveorg psg-vs-bay-semi-final-1st-leg-ucl-25-26-temmatchthai.hd/PSG_BAY_UCL_28.04.2026_MLC_Spanish_1080p.mkv width=560 height=384 frameborder=0 webkitallowfullscreen=true mozallowfullscreen=true]",
-        "poster": "",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "dash",
-        "createdAt": "2026-05-05T07:42:22.524Z",
-        "updatedAt": "2026-05-05T07:42:22.525Z"
     }
 ]
