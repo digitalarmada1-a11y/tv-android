@@ -238,20 +238,6 @@
         "updatedAt": "2026-04-29T02:10:49.627Z"
     },
     {
-        "id": "el-chiringuito-75157812adcb",
-        "title": "El Chiringuito",
-        "description": "",
-        "source": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets17/2026/04/30/7A4945AF-4593-4B3D-A21F-FE6ADDF20582/hls.smil/playlist.m3u8?pulse=assets17%2F2026%2F04%2F30%2F7A4945AF-4593-4B3D-A21F-FE6ADDF20582%2F%7C1777525200%7C2ce8fd0303486fcc5d17682bdede707a",
-        "manifest": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets17/2026/04/30/7A4945AF-4593-4B3D-A21F-FE6ADDF20582/hls.smil/playlist.m3u8?pulse=assets17%2F2026%2F04%2F30%2F7A4945AF-4593-4B3D-A21F-FE6ADDF20582%2F%7C1777525200%7C2ce8fd0303486fcc5d17682bdede707a",
-        "poster": "https://m.media-amazon.com/images/M/MV5BZTlmYWUyYzMtYTFhNi00ODBhLWJlYzctMjdiNjQ1Mjk3MTlkXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "hls",
-        "createdAt": "2026-04-30T00:50:43.583Z",
-        "updatedAt": "2026-04-30T00:50:43.584Z"
-    },
-    {
         "id": "sophies-choice-2c13a06fdc64",
         "title": "Sophies Choice",
         "description": "",
