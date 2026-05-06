@@ -292,5 +292,19 @@
         "type": "video",
         "createdAt": "2026-05-05T07:52:04.175Z",
         "updatedAt": "2026-05-05T07:52:04.176Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-a0a3fed3f6bd",
+        "title": "La isla de las tentaciones",
+        "description": "",
+        "source": "https://stream-3991-48-215.pkcdn.org/dash/liohof4kbqikkfn2maq7smqhg4irbs4wgokhgliold6zd2o6zxdyk2o674/manifest.mpd",
+        "manifest": "https://stream-3991-48-215.pkcdn.org/dash/liohof4kbqikkfn2maq7smqhg4irbs4wgokhgliold6zd2o6zxdyk2o674/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 15",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-05-06T01:37:26.482Z",
+        "updatedAt": "2026-05-06T01:37:26.482Z"
     }
 ]
