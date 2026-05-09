@@ -320,5 +320,19 @@
         "type": "dash",
         "createdAt": "2026-05-08T02:03:06.312Z",
         "updatedAt": "2026-05-08T02:03:06.312Z"
+    },
+    {
+        "id": "amigos-y-vecinos-132eeb91864f",
+        "title": "Amigos y Vecinos",
+        "description": "",
+        "source": "https://stream-4291-31-166.pkcdn.org/dash/k4ohpwptbqikkfn2matpsjauequcyxnw54fsr4hqxouloeer4xhxexmc2i/manifest.mpd",
+        "manifest": "https://stream-4291-31-166.pkcdn.org/dash/k4ohpwptbqikkfn2matpsjauequcyxnw54fsr4hqxouloeer4xhxexmc2i/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BMjM0ZWFhMzEtOWVlYS00Y2VkLTk1MzEtZWQwM2E1YjFkNjlmXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Amigos y Vecinos",
+        "episodeLabel": "Capitulo 6",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-05-09T08:42:30.450Z",
+        "updatedAt": "2026-05-09T08:42:30.450Z"
     }
 ]
