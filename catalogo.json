@@ -362,5 +362,19 @@
         "type": "dash",
         "createdAt": "2026-05-13T01:17:25.731Z",
         "updatedAt": "2026-05-13T01:17:25.731Z"
+    },
+    {
+        "id": "entrevista-a-florentino-2089a201b532",
+        "title": "Entrevista a Florentino",
+        "description": "",
+        "source": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets7/2026/05/13/4DC7B3FA-4CC9-4836-922F-0E8282D2C97F/hls.smil/playlist.m3u8?pulse=assets7%2F2026%2F05%2F13%2F4DC7B3FA-4CC9-4836-922F-0E8282D2C97F%2F%7C1778716800%7C59729c79f088c058b67c6b8b8bceb23a",
+        "manifest": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets7/2026/05/13/4DC7B3FA-4CC9-4836-922F-0E8282D2C97F/hls.smil/playlist.m3u8?pulse=assets7%2F2026%2F05%2F13%2F4DC7B3FA-4CC9-4836-922F-0E8282D2C97F%2F%7C1778716800%7C59729c79f088c058b67c6b8b8bceb23a",
+        "poster": "https://m.media-amazon.com/images/M/MV5BODgyNTQwOTYtZDI1Yy00MmY4LWE1YjMtNjkwYTgxMWE0M2RhXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "hls",
+        "createdAt": "2026-05-13T19:47:12.293Z",
+        "updatedAt": "2026-05-13T19:47:12.293Z"
     }
 ]
