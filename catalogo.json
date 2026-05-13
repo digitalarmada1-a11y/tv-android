@@ -362,19 +362,5 @@
         "type": "dash",
         "createdAt": "2026-05-13T01:17:25.731Z",
         "updatedAt": "2026-05-13T01:17:25.731Z"
-    },
-    {
-        "id": "la-sexta-canal-301f26ace698",
-        "title": "La Sexta Canal",
-        "description": "",
-        "source": "https://live.tvup.edge2befaster.io/lasexta/lasexta.mpd",
-        "manifest": "https://live.tvup.edge2befaster.io/lasexta/lasexta.mpd",
-        "poster": "https://m.media-amazon.com/images/M/MV5BODgyNTQwOTYtZDI1Yy00MmY4LWE1YjMtNjkwYTgxMWE0M2RhXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "dash",
-        "createdAt": "2026-05-13T19:44:36.873Z",
-        "updatedAt": "2026-05-13T19:44:36.873Z"
     }
 ]
