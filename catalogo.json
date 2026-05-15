@@ -294,20 +294,6 @@
         "updatedAt": "2026-05-06T01:37:26.482Z"
     },
     {
-        "id": "el-chiringuito-4ba714271ba9",
-        "title": "El Chiringuito",
-        "description": "",
-        "source": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets7/2026/05/07/F0DC0FBC-521B-4698-A4A9-EA81B6727839/hls.smil/playlist.m3u8?pulse=assets7%2F2026%2F05%2F07%2FF0DC0FBC-521B-4698-A4A9-EA81B6727839%2F%7C1778140800%7C2a86a8ce597f7c9e35d311d2e2dcd175",
-        "manifest": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets7/2026/05/07/F0DC0FBC-521B-4698-A4A9-EA81B6727839/hls.smil/playlist.m3u8?pulse=assets7%2F2026%2F05%2F07%2FF0DC0FBC-521B-4698-A4A9-EA81B6727839%2F%7C1778140800%7C2a86a8ce597f7c9e35d311d2e2dcd175",
-        "poster": "https://m.media-amazon.com/images/M/MV5BZTlmYWUyYzMtYTFhNi00ODBhLWJlYzctMjdiNjQ1Mjk3MTlkXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "hls",
-        "createdAt": "2026-05-07T03:47:15.258Z",
-        "updatedAt": "2026-05-07T03:47:15.259Z"
-    },
-    {
         "id": "la-isla-de-las-tentaciones-b10d4e457fb5",
         "title": "La isla de las tentaciones",
         "description": "",
