@@ -348,5 +348,19 @@
         "type": "dash",
         "createdAt": "2026-05-13T01:17:25.731Z",
         "updatedAt": "2026-05-13T01:17:25.731Z"
+    },
+    {
+        "id": "el-chiringuito-6ca27cc30404",
+        "title": "El Chiringuito",
+        "description": "",
+        "source": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets11/2026/05/15/2264C813-6CB4-49F3-88A3-3920667069C2/hls.smil/playlist.m3u8?pulse=assets11%2F2026%2F05%2F15%2F2264C813-6CB4-49F3-88A3-3920667069C2%2F%7C1778835600%7Cbf66eb3c0e6727b0c6451d28c47ff286",
+        "manifest": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets11/2026/05/15/2264C813-6CB4-49F3-88A3-3920667069C2/hls.smil/playlist.m3u8?pulse=assets11%2F2026%2F05%2F15%2F2264C813-6CB4-49F3-88A3-3920667069C2%2F%7C1778835600%7Cbf66eb3c0e6727b0c6451d28c47ff286",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZTlmYWUyYzMtYTFhNi00ODBhLWJlYzctMjdiNjQ1Mjk3MTlkXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "hls",
+        "createdAt": "2026-05-15T04:04:23.443Z",
+        "updatedAt": "2026-05-15T04:04:23.444Z"
     }
 ]
