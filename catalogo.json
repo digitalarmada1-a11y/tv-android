@@ -376,5 +376,19 @@
         "type": "dash",
         "createdAt": "2026-05-21T00:36:11.889Z",
         "updatedAt": "2026-05-21T00:36:11.889Z"
+    },
+    {
+        "id": "aida-y-vuelta-b4a35630ef1c",
+        "title": "Aida y Vuelta",
+        "description": "",
+        "source": "https://cloud-s84178-118-164.spcdn.cc/dash/h75a4tumdle2alhulpbt4l6qjqyok77aad7yivgc2rdii5sqpjgqvuvazrya/manifest.mpd",
+        "manifest": "https://cloud-s84178-118-164.spcdn.cc/dash/h75a4tumdle2alhulpbt4l6qjqyok77aad7yivgc2rdii5sqpjgqvuvazrya/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BYTg4YjI3MzEtODcwNC00MzcxLTljZWMtMGE0OGVlODUzYmE3XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "dash",
+        "createdAt": "2026-05-22T06:29:51.708Z",
+        "updatedAt": "2026-05-22T06:29:51.708Z"
     }
 ]
