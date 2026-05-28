@@ -432,5 +432,19 @@
         "type": "dash",
         "createdAt": "2026-05-25T00:00:22.647Z",
         "updatedAt": "2026-05-25T00:00:22.647Z"
+    },
+    {
+        "id": "la-revuelta-f70b09826f7f",
+        "title": "La Revuelta",
+        "description": "",
+        "source": "https://stream-4291-31-166.pkcdn.org/dash/k4ohpzg3bqikkfn2maspsiq2efecs2nvlbjd5cxyvfjcyfr6b6p5f5ioeq/manifest.mpd",
+        "manifest": "https://stream-4291-31-166.pkcdn.org/dash/k4ohpzg3bqikkfn2maspsiq2efecs2nvlbjd5cxyvfjcyfr6b6p5f5ioeq/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BM2ZiYzNlMzMtOTA0Yy00YThiLTg1NjktYTM3NmQzYjEyMDQ4XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La Revuelta",
+        "episodeLabel": "Borja Iglesias",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-05-28T08:26:19.513Z",
+        "updatedAt": "2026-05-28T08:26:19.514Z"
     }
 ]
