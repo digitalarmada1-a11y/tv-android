@@ -406,20 +406,6 @@
         "updatedAt": "2026-05-24T23:59:15.495Z"
     },
     {
-        "id": "la-isla-de-las-tentaciones-07269a6fd8bc",
-        "title": "La isla de las tentaciones",
-        "description": "",
-        "source": "https://stream-3891-64-63.pkcdn.org/dash/lmohoogxbqikkfn2maspszy4gzvoneefcbrmj4crumxo6v6mbcn34ts27q/manifest.mpd",
-        "manifest": "https://stream-3891-64-63.pkcdn.org/dash/lmohoogxbqikkfn2maspszy4gzvoneefcbrmj4crumxo6v6mbcn34ts27q/manifest.mpd",
-        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "La isla de las tentaciones",
-        "episodeLabel": "Capitulo 23",
-        "category": "series",
-        "type": "dash",
-        "createdAt": "2026-05-25T00:00:22.647Z",
-        "updatedAt": "2026-05-25T00:00:22.647Z"
-    },
-    {
         "id": "la-revuelta-18bc93e11a00",
         "title": "La Revuelta",
         "description": "",
