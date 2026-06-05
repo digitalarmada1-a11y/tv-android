@@ -446,19 +446,5 @@
         "type": "hls",
         "createdAt": "2026-06-03T03:59:36.816Z",
         "updatedAt": "2026-06-03T03:59:36.817Z"
-    },
-    {
-        "id": "navidad-en-el-nilo-2a862829f6d7",
-        "title": "Navidad en el Nilo",
-        "description": "",
-        "source": "https://vd655.okcdn.ru/?expires=1780736129275&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1335630616&ms=178.237.23.6&type=1&sig=Zxf4vlDDiQQ&ct=6&urls=185.226.52.36&clientType=0&zs=43&id=2654340254374 https://vd655.okcdn.ru/?expires=1780736112575&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1335630616&ms=178.237.23.6&type=1&sig=CtBYwjC7iB0&ct=6&urls=185.226.52.36&clientType=0&zs=43&id=2654340254374 https://vd737.okcdn.ru/?expires=1780736106981&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1431425162&ms=95.163.35.14&type=4&sig=jKpne1PKXBc&ct=6&urls=185.226.55.17&clientType=0&zs=43&id=1568678611572 https://vd737.okcdn.ru/?expires=1780736099300&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1431425162&ms=95.163.35.14&type=4&sig=Zjyry1UCNrE&ct=6&urls=185.226.55.17&clientType=0&zs=43&id=1568678611572 https://vd655.okcdn.ru/?expires=1780736055324&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1335630616&ms=178.237.23.6&type=1&sig=Pj8KUFK2wTU&ct=6&urls=95.163.35.70&clientType=0&zs=43&id=2654340254374 https://vd678.okcdn.ru/?expires=1780736012349&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1751120160&ms=178.237.23.29&type=1&sig=x3M7TbFMyq0&ct=6&urls=95.163.35.5&clientType=0&zs=43&id=45603883736",
-        "manifest": "https://vd655.okcdn.ru/?expires=1780736129275&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1335630616&ms=178.237.23.6&type=1&sig=Zxf4vlDDiQQ&ct=6&urls=185.226.52.36&clientType=0&zs=43&id=2654340254374 https://vd655.okcdn.ru/?expires=1780736112575&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1335630616&ms=178.237.23.6&type=1&sig=CtBYwjC7iB0&ct=6&urls=185.226.52.36&clientType=0&zs=43&id=2654340254374 https://vd737.okcdn.ru/?expires=1780736106981&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1431425162&ms=95.163.35.14&type=4&sig=jKpne1PKXBc&ct=6&urls=185.226.55.17&clientType=0&zs=43&id=1568678611572 https://vd737.okcdn.ru/?expires=1780736099300&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1431425162&ms=95.163.35.14&type=4&sig=Zjyry1UCNrE&ct=6&urls=185.226.55.17&clientType=0&zs=43&id=1568678611572 https://vd655.okcdn.ru/?expires=1780736055324&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1335630616&ms=178.237.23.6&type=1&sig=Pj8KUFK2wTU&ct=6&urls=95.163.35.70&clientType=0&zs=43&id=2654340254374 https://vd678.okcdn.ru/?expires=1780736012349&srcIp=35.145.103.105&pr=10&srcAg=CHROME&ch=-1751120160&ms=178.237.23.29&type=1&sig=x3M7TbFMyq0&ct=6&urls=95.163.35.5&clientType=0&zs=43&id=45603883736",
-        "poster": "https://ok.ru/video/4087932193446",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "dash",
-        "createdAt": "2026-06-05T09:05:29.822Z",
-        "updatedAt": "2026-06-05T09:05:29.822Z"
     }
 ]
