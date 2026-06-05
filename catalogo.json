@@ -460,5 +460,19 @@
         "type": "hls",
         "createdAt": "2026-06-05T09:36:10.442Z",
         "updatedAt": "2026-06-05T09:36:10.443Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-a11c042a5387",
+        "title": "La isla de las tentaciones",
+        "description": "",
+        "source": "https://gate-1-an.vmeas.cloud/hls2/02/02406/0kc87jaz184h_n/master.m3u8?t=ARDPo55cp1nemTT4SmwEbRY6e4Y9JacvLMNUFyKWy94=&s=1780699500&e=43200&v=&srv=box-1643-d1&i=0.4&sp=0&asn=33363",
+        "manifest": "https://gate-1-an.vmeas.cloud/hls2/02/02406/0kc87jaz184h_n/master.m3u8?t=ARDPo55cp1nemTT4SmwEbRY6e4Y9JacvLMNUFyKWy94=&s=1780699500&e=43200&v=&srv=box-1643-d1&i=0.4&sp=0&asn=33363",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 23",
+        "category": "series",
+        "type": "hls",
+        "createdAt": "2026-06-05T22:46:00.534Z",
+        "updatedAt": "2026-06-05T22:46:00.535Z"
     }
 ]
