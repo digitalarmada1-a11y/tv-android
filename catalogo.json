@@ -460,19 +460,5 @@
         "type": "dash",
         "createdAt": "2026-06-05T09:08:56.070Z",
         "updatedAt": "2026-06-05T09:08:56.070Z"
-    },
-    {
-        "id": "mujeres-al-mar-191ab387ff68",
-        "title": "Mujeres al Mar",
-        "description": "",
-        "source": "https://vd403.okcdn.ru/expires/1780737236014/clientType/0/srcIp/35.145.103.105/type/2/mid/14812641495766/id/15990505802454/ms/185.226.52.45/zs/43/srcAg/CHROME/urls/185.226.53.62/pr/10/ct/29/sig/52GkCDftplk/ondemand/dash4_15990505802454.CNaV8LGNrwMw1s3j6r8aQNbN4-q_GlAKQpKJhpe_VOw.mpd",
-        "manifest": "https://vd403.okcdn.ru/expires/1780737236014/clientType/0/srcIp/35.145.103.105/type/2/mid/14812641495766/id/15990505802454/ms/185.226.52.45/zs/43/srcAg/CHROME/urls/185.226.53.62/pr/10/ct/29/sig/52GkCDftplk/ondemand/dash4_15990505802454.CNaV8LGNrwMw1s3j6r8aQNbN4-q_GlAKQpKJhpe_VOw.mpd",
-        "poster": "https://m.media-amazon.com/images/M/MV5BMjA4MDU1NjE4NV5BMl5BanBnXkFtZTgwMTU2MjY2NzE@._V1_.jpg",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "dash",
-        "createdAt": "2026-06-05T09:15:10.343Z",
-        "updatedAt": "2026-06-05T09:15:10.343Z"
     }
 ]
