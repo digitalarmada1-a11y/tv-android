@@ -474,5 +474,19 @@
         "type": "hls",
         "createdAt": "2026-06-05T22:46:00.534Z",
         "updatedAt": "2026-06-05T22:46:00.535Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-a3f866429b45",
+        "title": "La isla de las tentaciones",
+        "description": "",
+        "source": "https://box-1421-v10.vmeas.cloud/hls2/02/02419/suqgtgs5y15l_l/master.m3u8?t=WOhvTQnaE7KKdOIyb2ewvHKYyNZwFqCkhojvvpPLSsg=&s=1780699589&e=43200&v=&i=0.4&sp=0&asn=33363",
+        "manifest": "https://box-1421-v10.vmeas.cloud/hls2/02/02419/suqgtgs5y15l_l/master.m3u8?t=WOhvTQnaE7KKdOIyb2ewvHKYyNZwFqCkhojvvpPLSsg=&s=1780699589&e=43200&v=&i=0.4&sp=0&asn=33363",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 24",
+        "category": "series",
+        "type": "hls",
+        "createdAt": "2026-06-05T22:47:16.238Z",
+        "updatedAt": "2026-06-05T22:47:16.238Z"
     }
 ]
