@@ -544,5 +544,19 @@
         "type": "dash",
         "createdAt": "2026-06-06T08:23:23.732Z",
         "updatedAt": "2026-06-06T08:23:23.732Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-capitulo-29-82a304d264f4",
+        "title": "La isla de las tentaciones Capitulo 29",
+        "description": "",
+        "source": "https://stream-4891-212-105.pkcdn.org/dash/juohoqjtbqikkfn2mas7sn2nmk6a6v72kulq7kupwvrz6vetgoznzu4eva/manifest.mpd",
+        "manifest": "https://stream-4891-212-105.pkcdn.org/dash/juohoqjtbqikkfn2mas7sn2nmk6a6v72kulq7kupwvrz6vetgoznzu4eva/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 29",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-06T08:24:27.217Z",
+        "updatedAt": "2026-06-06T08:24:27.217Z"
     }
 ]
