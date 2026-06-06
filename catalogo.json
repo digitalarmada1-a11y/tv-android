@@ -516,5 +516,19 @@
         "type": "dash",
         "createdAt": "2026-06-06T08:20:48.233Z",
         "updatedAt": "2026-06-06T08:20:48.234Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-capitulo-27-9082d8e72e8b",
+        "title": "La isla de las tentaciones Capitulo 27",
+        "description": "",
+        "source": "https://stream-45165-48-68.pkcdn.org/dash/kaohpbolbqikkfn2mas7soaymf4zu4brn62lnqfp5zjoynporex3ui75ri/manifest.mpd",
+        "manifest": "https://stream-45165-48-68.pkcdn.org/dash/kaohpbolbqikkfn2mas7soaymf4zu4brn62lnqfp5zjoynporex3ui75ri/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 27",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-06T08:22:08.957Z",
+        "updatedAt": "2026-06-06T08:22:08.957Z"
     }
 ]
