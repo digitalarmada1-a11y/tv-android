@@ -558,5 +558,19 @@
         "type": "dash",
         "createdAt": "2026-06-06T08:24:27.217Z",
         "updatedAt": "2026-06-06T08:24:27.217Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-capitulo-30-bfd03105dd94",
+        "title": "La isla de las tentaciones Capitulo 30",
+        "description": "",
+        "source": "https://cloud-s84178-118-164.spcdn.cc/dash/h75a7lpodle2alhulpat4p45bsr5nh6v64xawq67bzsuo5iqp3roqm6oesnq/manifest.mpd",
+        "manifest": "https://cloud-s84178-118-164.spcdn.cc/dash/h75a7lpodle2alhulpat4p45bsr5nh6v64xawq67bzsuo5iqp3roqm6oesnq/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 30",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-10T02:56:04.935Z",
+        "updatedAt": "2026-06-10T02:56:04.936Z"
     }
 ]
