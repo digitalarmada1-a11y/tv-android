@@ -572,5 +572,19 @@
         "type": "dash",
         "createdAt": "2026-06-10T02:56:04.935Z",
         "updatedAt": "2026-06-10T02:56:04.936Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-capitulo-31-122052eb526e",
+        "title": "La isla de las tentaciones Capitulo 31",
+        "description": "",
+        "source": "https://stream-4338-55-56.pkcdn.org/dash/kyohowrybqikkfn2mbnpszq3h536kqcuo72fy3mmx52acdzgtqe3j27niu/manifest.mpd",
+        "manifest": "https://stream-4338-55-56.pkcdn.org/dash/kyohowrybqikkfn2mbnpszq3h536kqcuo72fy3mmx52acdzgtqe3j27niu/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 31",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-11T06:02:43.183Z",
+        "updatedAt": "2026-06-11T06:02:43.183Z"
     }
 ]
