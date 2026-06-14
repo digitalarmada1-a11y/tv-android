@@ -586,5 +586,19 @@
         "type": "dash",
         "createdAt": "2026-06-11T06:02:43.183Z",
         "updatedAt": "2026-06-11T06:02:43.183Z"
+    },
+    {
+        "id": "lucha-471d7bb55271",
+        "title": "Lucha",
+        "description": "",
+        "source": "https://nl-081-v1.vivocdn.xyz/1781413282/eba2e7e482264b25ba6ce08fbf6433c6/1_JiYoF0zsZSEmwar3H3uBpSt8GZnDrPxl0um8r8yhk/raf-1.m3u8",
+        "manifest": "https://nl-081-v1.vivocdn.xyz/1781413282/eba2e7e482264b25ba6ce08fbf6433c6/1_JiYoF0zsZSEmwar3H3uBpSt8GZnDrPxl0um8r8yhk/raf-1.m3u8",
+        "poster": "",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "hls",
+        "createdAt": "2026-06-14T02:32:21.888Z",
+        "updatedAt": "2026-06-14T02:32:21.889Z"
     }
 ]
