@@ -600,5 +600,19 @@
         "type": "hls",
         "createdAt": "2026-06-14T02:32:21.888Z",
         "updatedAt": "2026-06-14T02:32:21.889Z"
+    },
+    {
+        "id": "fifa-world-cup-bfe1a757c3cc",
+        "title": "Fifa World Cup",
+        "description": "",
+        "source": "https://nl-081-v1.vivocdn.xyz/1781413742/6309a551b32d440aa80ff324443c3bf7/p7JzTRukOZvJfJdz9lYsnBX7bfFNQN1o5hlM8REpXO8/telemundo-usa.m3u8",
+        "manifest": "https://nl-081-v1.vivocdn.xyz/1781413742/6309a551b32d440aa80ff324443c3bf7/p7JzTRukOZvJfJdz9lYsnBX7bfFNQN1o5hlM8REpXO8/telemundo-usa.m3u8",
+        "poster": "",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "hls",
+        "createdAt": "2026-06-14T02:41:02.285Z",
+        "updatedAt": "2026-06-14T02:41:02.286Z"
     }
 ]
