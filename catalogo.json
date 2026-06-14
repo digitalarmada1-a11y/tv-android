@@ -600,5 +600,19 @@
         "type": "hls",
         "createdAt": "2026-06-14T02:32:21.888Z",
         "updatedAt": "2026-06-14T02:32:21.889Z"
+    },
+    {
+        "id": "fifa-world-cup-b9393acc8812",
+        "title": "Fifa World Cup",
+        "description": "",
+        "source": "https://nl-081-v1.vivocdn.xyz/1781413943/4d5a5becef1749068932121075536e58/vVoEJzS61TOuyXn1Ao5lbJ2J_phSWZcZZuhd7OlIsqk/fox4k-usa.m3u8",
+        "manifest": "https://nl-081-v1.vivocdn.xyz/1781413943/4d5a5becef1749068932121075536e58/vVoEJzS61TOuyXn1Ao5lbJ2J_phSWZcZZuhd7OlIsqk/fox4k-usa.m3u8",
+        "poster": "",
+        "collectionTitle": "",
+        "episodeLabel": "",
+        "category": "movie",
+        "type": "hls",
+        "createdAt": "2026-06-14T02:46:57.851Z",
+        "updatedAt": "2026-06-14T02:46:57.851Z"
     }
 ]
