@@ -642,5 +642,19 @@
         "type": "dash",
         "createdAt": "2026-06-16T01:00:59.019Z",
         "updatedAt": "2026-06-16T01:00:59.020Z"
+    },
+    {
+        "id": "from-3a9770e5ed63",
+        "title": "From",
+        "description": "",
+        "source": "https://stream-45165-48-68.pkcdn.org/dash/kaohpcjabqikkfn2mbnpslsnet7qrb4ggzx6rolknyq3lntfkyevm6mkgi/manifest.mpd",
+        "manifest": "https://stream-45165-48-68.pkcdn.org/dash/kaohpcjabqikkfn2mbnpslsnet7qrb4ggzx6rolknyq3lntfkyevm6mkgi/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDAwNDljNWEtNWE1Zi00YjFlLWEzM2UtY2E3ZTM1MTcxMTcyXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "From",
+        "episodeLabel": "Capitulo 8",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-16T06:35:47.248Z",
+        "updatedAt": "2026-06-16T06:35:47.248Z"
     }
 ]
