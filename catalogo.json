@@ -656,5 +656,19 @@
         "type": "dash",
         "createdAt": "2026-06-16T06:35:47.248Z",
         "updatedAt": "2026-06-16T06:35:47.248Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-capitulo-33-8d26dfffe544",
+        "title": "La isla de las tentaciones Capitulo 33",
+        "description": "",
+        "source": "https://stream-45165-48-68.pkcdn.org/dash/kaohoebfbqikkfn2mbnpsykiedbw4apxz5iatrslpamwyuiycamgdtl5xe/manifest.mpd",
+        "manifest": "https://stream-45165-48-68.pkcdn.org/dash/kaohoebfbqikkfn2mbnpsykiedbw4apxz5iatrslpamwyuiycamgdtl5xe/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 33",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-17T04:37:38.484Z",
+        "updatedAt": "2026-06-17T04:37:38.485Z"
     }
 ]
