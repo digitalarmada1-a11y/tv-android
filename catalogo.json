@@ -420,20 +420,6 @@
         "updatedAt": "2026-05-28T08:50:48.848Z"
     },
     {
-        "id": "el-chiringuito-27f1d7443b4f",
-        "title": "El Chiringuito",
-        "description": "",
-        "source": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets3/2026/06/03/9193A449-110C-49EF-B1A0-CA19E5131A07/hls.smil/playlist.m3u8?pulse=assets3%2F2026%2F06%2F03%2F9193A449-110C-49EF-B1A0-CA19E5131A07%2F%7C1780473600%7C9f4afcc13927bf2a71f75a5f185463ef",
-        "manifest": "https://nogeovod-fy.atresmedia.com/vsg/_definst_/assets3/2026/06/03/9193A449-110C-49EF-B1A0-CA19E5131A07/hls.smil/playlist.m3u8?pulse=assets3%2F2026%2F06%2F03%2F9193A449-110C-49EF-B1A0-CA19E5131A07%2F%7C1780473600%7C9f4afcc13927bf2a71f75a5f185463ef",
-        "poster": "https://m.media-amazon.com/images/M/MV5BZTlmYWUyYzMtYTFhNi00ODBhLWJlYzctMjdiNjQ1Mjk3MTlkXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "",
-        "episodeLabel": "",
-        "category": "movie",
-        "type": "hls",
-        "createdAt": "2026-06-03T03:59:36.816Z",
-        "updatedAt": "2026-06-03T03:59:36.817Z"
-    },
-    {
         "id": "navidad-en-el-nilo-3e90c74bf598",
         "title": "Navidad en el Nilo",
         "description": "",
