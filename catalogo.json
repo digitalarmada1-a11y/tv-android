@@ -670,5 +670,19 @@
         "type": "dash",
         "createdAt": "2026-06-17T04:37:38.484Z",
         "updatedAt": "2026-06-17T04:37:38.485Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-capitulo-34-24cce28d62b8",
+        "title": "La isla de las tentaciones Capitulo 34",
+        "description": "",
+        "source": "https://stream-45165-48-68.pkcdn.org/dash/kaohpwzkbqikkfn2mbnpsikintdk2eispqsm326p5uy6bxdjt5b4z2gih4/manifest.mpd",
+        "manifest": "https://stream-45165-48-68.pkcdn.org/dash/kaohpwzkbqikkfn2mbnpsikintdk2eispqsm326p5uy6bxdjt5b4z2gih4/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 34",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-19T01:30:17.888Z",
+        "updatedAt": "2026-06-19T01:30:17.890Z"
     }
 ]
