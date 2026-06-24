@@ -684,5 +684,19 @@
         "type": "hls",
         "createdAt": "2026-06-19T14:01:31.342Z",
         "updatedAt": "2026-06-19T14:01:31.342Z"
+    },
+    {
+        "id": "from-a942a0a3fd0c",
+        "title": "From",
+        "description": "",
+        "source": "https://stream-3891-64-63.pkcdn.org/dash/lmohonrmbqikkfn2mbn7sysomgsweclvvkwcurem3uddw2ddqcjzbnqptm/manifest.mpd",
+        "manifest": "https://stream-3891-64-63.pkcdn.org/dash/lmohonrmbqikkfn2mbn7sysomgsweclvvkwcurem3uddw2ddqcjzbnqptm/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDAwNDljNWEtNWE1Zi00YjFlLWEzM2UtY2E3ZTM1MTcxMTcyXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "From",
+        "episodeLabel": "Capitulo 9",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-06-24T04:13:52.693Z",
+        "updatedAt": "2026-06-24T04:13:52.694Z"
     }
 ]
