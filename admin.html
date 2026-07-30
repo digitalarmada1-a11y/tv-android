@@ -257,8 +257,22 @@
       var h = { Accept: "application/vnd.github+json" };
       if (token) h.Authorization = "token " + token;
       var r = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, { headers: h });
+
+      // If token is invalid/expired, retry without it so reading still works
+      if ((r.status === 401 || r.status === 403) && token) {
+        console.warn("Token invalido o caducado (" + r.status + "). Reintentando sin token...");
+        markTokenInvalid();
+        r = await fetch("https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + path, { headers: { Accept: "application/vnd.github+json" } });
+      }
+
       if (!r.ok) throw new Error("GitHub API error: " + r.status);
       return r.json();
+    }
+
+    function markTokenInvalid() {
+      var el = document.getElementById("tokenStatus");
+      el.textContent = "Token caducado — actualiza";
+      el.className = "token-status missing";
     }
 
     async function ghPut(path, content, sha, message) {
@@ -281,7 +295,14 @@
         catalogSha = data.sha;
         currentCatalog = JSON.parse(decodeURIComponent(escape(atob(data.content))));
         if (!Array.isArray(currentCatalog)) currentCatalog = [];
-      } catch(e) { currentCatalog = []; catalogSha = ""; }
+      } catch(e) {
+        currentCatalog = [];
+        catalogSha = "";
+        // Show error in the catalog area instead of silently failing
+        var list = document.getElementById("catalogList");
+        list.innerHTML = '<div class="empty" style="color:#ff9aa5">Error cargando catalogo: ' + e.message + '<br><small>Si el token caducó, actualízalo arriba y recarga.</small></div>';
+        return;
+      }
       renderCatalog();
     }
 
