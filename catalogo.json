@@ -880,5 +880,19 @@
         "type": "dash",
         "createdAt": "2026-07-31T06:12:44.886Z",
         "updatedAt": "2026-07-31T06:12:44.887Z"
+    },
+    {
+        "id": "silo-180878765a0d",
+        "title": "Silo",
+        "description": "",
+        "source": "https://stream-3891-64-63.pkcdn.org/dash/lmohonkjbqikkfn2mbp7syaohi3jxdi6b34sodaj62j7ry2hd7b4jovoqq/manifest.mpd",
+        "manifest": "https://stream-3891-64-63.pkcdn.org/dash/lmohonkjbqikkfn2mbp7syaohi3jxdi6b34sodaj62j7ry2hd7b4jovoqq/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BN2E5ODJmOTUtYTk0NS00NmFiLTk0MTgtZDRlNzE1YmExMjk4XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Silo",
+        "episodeLabel": "Capitulo 5",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-07-31T08:43:37.232Z",
+        "updatedAt": "2026-07-31T08:43:37.232Z"
     }
 ]
