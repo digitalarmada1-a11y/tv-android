@@ -562,6 +562,20 @@
       background: #000;
     }
 
+    #iframePlayer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+      display: none;
+    }
+
+    #iframePlayer.active {
+      display: block;
+    }
+
     /* ::before removed — gradient was permanently visible causing dark bands on screen */
 
     #playerUi {
@@ -1002,6 +1016,7 @@
 
   <section id="playerScreen" class="screen hidden">
     <video id="video" playsinline preload="auto"></video>
+    <iframe id="iframePlayer" allowfullscreen allow="autoplay; fullscreen; encrypted-media; picture-in-picture"></iframe>
 
     <div id="statusOverlay" class="hidden">
       <div id="statusPanel" class="status-panel">
@@ -2139,6 +2154,26 @@
       playerScreen.classList.remove("hidden");
       resetPlayerUi();
       updatePlayerHead(item);
+
+      var iframeEl = document.getElementById("iframePlayer");
+
+      // ── Iframe mode ──
+      if (item.type === "iframe") {
+        await destroyPlayer();
+        video.style.display = "none";
+        iframeEl.classList.add("active");
+        iframeEl.src = item.source;
+        // Hide native controls — iframe has its own player
+        playerUi.style.display = "none";
+        hideStatus();
+        return;
+      }
+
+      // ── Normal video/dash/hls mode ──
+      iframeEl.classList.remove("active");
+      iframeEl.src = "";
+      video.style.display = "";
+      playerUi.style.display = "";
       showControls();
       showStatus("loading", "Preparando video", "Cargando fuente y calentando el buffer inicial.", true);
 
@@ -2200,6 +2235,16 @@
     async function exitPlayback() {
       rememberProgress(false);
       await destroyPlayer();
+
+      // Clean up iframe if active
+      var iframeEl = document.getElementById("iframePlayer");
+      if (iframeEl.classList.contains("active")) {
+        iframeEl.classList.remove("active");
+        iframeEl.src = "";
+        video.style.display = "";
+        playerUi.style.display = "";
+      }
+
       state.currentItem = null;
       playerScreen.classList.add("hidden");
       resetPlayerUi();
