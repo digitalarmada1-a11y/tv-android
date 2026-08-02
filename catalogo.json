@@ -908,19 +908,5 @@
         "type": "dash",
         "createdAt": "2026-08-01T16:23:53.443Z",
         "updatedAt": "2026-08-01T16:23:53.443Z"
-    },
-    {
-        "id": "silo-daa18c3d9d88",
-        "title": "Silo",
-        "description": "",
-        "source": "https://prx-1328-ant.vmpx.online/hls2/01/02727/kd8v3f2mztng_n/index-v1-a1.m3u8?t=qWDAcKrvQj1xYmFe1HvplrdydHVCIo4zlSGBL02D6x8=&s=1785638277&e=43200&v=&srv=bck-1564-ant-p&i=0.4&sp=0&asn=13335",
-        "manifest": "https://prx-1328-ant.vmpx.online/hls2/01/02727/kd8v3f2mztng_n/index-v1-a1.m3u8?t=qWDAcKrvQj1xYmFe1HvplrdydHVCIo4zlSGBL02D6x8=&s=1785638277&e=43200&v=&srv=bck-1564-ant-p&i=0.4&sp=0&asn=13335",
-        "poster": "https://m.media-amazon.com/images/M/MV5BN2E5ODJmOTUtYTk0NS00NmFiLTk0MTgtZDRlNzE1YmExMjk4XkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "Silo",
-        "episodeLabel": "Capitulo 5",
-        "category": "series",
-        "type": "hls",
-        "createdAt": "2026-08-02T02:38:49.317Z",
-        "updatedAt": "2026-08-02T02:38:49.317Z"
     }
 ]
