@@ -908,5 +908,19 @@
         "type": "dash",
         "createdAt": "2026-08-01T16:23:53.443Z",
         "updatedAt": "2026-08-01T16:23:53.443Z"
+    },
+    {
+        "id": "silo-capitulo-6-d2f57d921be7",
+        "title": "Silo Capitulo 6",
+        "description": "",
+        "source": "https://stream-4091-31-168.pkcdn.org/dash/kuohphcpbqikkfn2mbp7sny3hebdpoqe4iuacb523a6uquie5nptu54vte/manifest.mpd",
+        "manifest": "https://stream-4091-31-168.pkcdn.org/dash/kuohphcpbqikkfn2mbp7sny3hebdpoqe4iuacb523a6uquie5nptu54vte/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BN2E5ODJmOTUtYTk0NS00NmFiLTk0MTgtZDRlNzE1YmExMjk4XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Silo",
+        "episodeLabel": "Capitulo 5",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-08-02T02:49:46.129Z",
+        "updatedAt": "2026-08-02T02:49:46.129Z"
     }
 ]
