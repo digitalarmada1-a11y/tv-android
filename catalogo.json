@@ -908,5 +908,19 @@
         "type": "dash",
         "createdAt": "2026-08-01T16:23:53.443Z",
         "updatedAt": "2026-08-01T16:23:53.443Z"
+    },
+    {
+        "id": "silo-ab9bce877751",
+        "title": "Silo",
+        "description": "",
+        "source": "https://bn0z86rliedh.tnmr.org/hls2/03/04087/4d96c2lh19mt_h/master.m3u8?t=UK8PpaxroET4q6yBKB9MU-HIZJmB4UMc4O87uMWTYIs&s=1785638110&e=28800&f=20439912&i=0.3&sp=0",
+        "manifest": "https://bn0z86rliedh.tnmr.org/hls2/03/04087/4d96c2lh19mt_h/master.m3u8?t=UK8PpaxroET4q6yBKB9MU-HIZJmB4UMc4O87uMWTYIs&s=1785638110&e=28800&f=20439912&i=0.3&sp=0",
+        "poster": "https://m.media-amazon.com/images/M/MV5BN2E5ODJmOTUtYTk0NS00NmFiLTk0MTgtZDRlNzE1YmExMjk4XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Silo",
+        "episodeLabel": "Capitulo 5",
+        "category": "series",
+        "type": "hls",
+        "createdAt": "2026-08-02T02:36:03.461Z",
+        "updatedAt": "2026-08-02T02:36:03.462Z"
     }
 ]
