@@ -852,5 +852,19 @@
         "type": "dash",
         "createdAt": "2026-08-28T00:23:50.015Z",
         "updatedAt": "2026-08-28T00:23:50.015Z"
+    },
+    {
+        "id": "volverias-con-tu-ex-2-34faf6ba8354",
+        "title": "Volverias con tu ex 2",
+        "description": "",
+        "source": "https://stream-3591-48-222.pkcdn.org/dash/lyohorwqbuikkfn2mbi7szsneapqnedmazjpjmsmtcab4dnez4zm2vryxm/manifest.mpd",
+        "manifest": "https://stream-3591-48-222.pkcdn.org/dash/lyohorwqbuikkfn2mbi7szsneapqnedmazjpjmsmtcab4dnez4zm2vryxm/manifest.mpd",
+        "poster": "https://artworks.thetvdb.com/banners/posters/309281-1.jpg",
+        "collectionTitle": "Volverias con tu ex 2",
+        "episodeLabel": "Capitulo 52",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-08-31T22:23:22.901Z",
+        "updatedAt": "2026-08-31T22:23:22.902Z"
     }
 ]
