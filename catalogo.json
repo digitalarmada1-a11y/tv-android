@@ -880,19 +880,5 @@
         "type": "dash",
         "createdAt": "2026-09-02T00:29:37.021Z",
         "updatedAt": "2026-09-02T00:29:37.021Z"
-    },
-    {
-        "id": "volverias-con-tu-ex-2-189d0077b1c9",
-        "title": "Volverias con tu ex 2",
-        "description": "",
-        "source": "https://stream-3991-48-215.pkcdn.org/dash/liohpywybuikkfn2mbi7syy3e35dsab5iworpfo3sypqp7yfa3rb4yadey/manifest.mpd",
-        "manifest": "https://stream-3991-48-215.pkcdn.org/dash/liohpywybuikkfn2mbi7syy3e35dsab5iworpfo3sypqp7yfa3rb4yadey/manifest.mpd",
-        "poster": "https://artworks.thetvdb.com/banners/posters/309281-1.jpg",
-        "collectionTitle": "Volverias con tu ex 2",
-        "episodeLabel": "Capitulo 53",
-        "category": "series",
-        "type": "dash",
-        "createdAt": "2026-09-03T00:32:32.065Z",
-        "updatedAt": "2026-09-03T00:32:32.066Z"
     }
 ]
