@@ -2201,15 +2201,23 @@
 
           state.player.addEventListener("error", function(event) {
             const detail = event.detail || {};
+            const code = detail.code || 0;
             console.error("Shaka error", detail);
-            showStatus("error", "Error de reproduccion", "No se pudo cargar la fuente. Revisa CORS, URL o permisos del stream.", true);
+            var msg = "Error Shaka " + code + ".";
+            if (code === 6012 || code === 6007 || code === 6008) {
+              msg = "DRM no compatible (codigo " + code + "). El stream requiere Widevine/PlayReady. Usa tipo iframe en el admin.";
+            } else if (code >= 1000 && code < 2000) {
+              msg = "Error de red (codigo " + code + "). URL caducada o servidor sin CORS.";
+            } else if (code >= 4000 && code < 5000) {
+              msg = "Manifiesto invalido (codigo " + code + "). La URL no es DASH/HLS valido.";
+            }
+            showStatus("error", "No se pudo iniciar", msg, true);
             document.getElementById("playerState").textContent = "Error";
           });
 
           state.player.addEventListener("buffering", function(event) {
             const buffering = Boolean(event.buffering);
             bufferLabel.textContent = buffering ? "Recuperando buffer..." : "Buffer estable";
-
             if (buffering) {
               showStatus("loading", "Buffering", "La fuente sigue cargando algunos segmentos.", true);
             } else if (!video.paused) {
@@ -2217,7 +2225,33 @@
             }
           });
 
-          await state.player.load(item.source);
+          // Try Shaka; on failure attempt native <video> fallback (HLS en Safari/WebKit)
+          try {
+            await state.player.load(item.source);
+          } catch (shakaErr) {
+            const code = (shakaErr && shakaErr.code) ? shakaErr.code : 0;
+            console.warn("Shaka fallo code=" + code + ", probando fallback nativo...", shakaErr);
+            try {
+              await destroyPlayer();
+              video.src = item.source;
+              await waitForMetadata();
+              console.info("Fallback nativo OK.");
+            } catch (nativeErr) {
+              var hint = "Shaka " + code + ". ";
+              if (code === 6012 || code === 6007 || code === 6008) {
+                hint += "DRM detectado — usa tipo iframe con el embed del proveedor.";
+              } else if (code >= 1000 && code < 2000) {
+                hint += "URL caducada o servidor sin CORS.";
+              } else if (code >= 4000 && code < 5000) {
+                hint += "URL no es DASH/HLS valido.";
+              } else {
+                hint += "Revisa la URL o cambia el tipo a iframe en el admin.";
+              }
+              showStatus("error", "No se pudo iniciar", hint, true);
+              document.getElementById("playerState").textContent = "Error";
+              return;
+            }
+          }
         }
 
         await resumeFromSavedPoint(item);
@@ -2227,7 +2261,7 @@
         document.getElementById("playerState").textContent = "Reproduciendo";
       } catch (error) {
         console.error(error);
-        showStatus("error", "No se pudo iniciar", error.message || "La fuente no pudo reproducirse.", true);
+        showStatus("error", "No se pudo iniciar", (error && error.message) || "La fuente no pudo reproducirse.", true);
         document.getElementById("playerState").textContent = "Error";
       }
     }
