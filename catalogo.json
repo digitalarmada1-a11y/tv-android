@@ -1146,5 +1146,19 @@
         "type": "dash",
         "createdAt": "2026-09-24T22:51:33.626Z",
         "updatedAt": "2026-09-24T22:51:33.626Z"
+    },
+    {
+        "id": "la-isla-de-las-tentaciones-9fb47dc967c3",
+        "title": "La isla de las tentaciones",
+        "description": "",
+        "source": "https://stream-4291-31-166.pkcdn.org/dash/k4ohozqbbuikkfn2mbk7siqxfxky3zzzs455euppnsawi4v2fkd26sqkkm/manifest.mpd",
+        "manifest": "https://stream-4291-31-166.pkcdn.org/dash/k4ohozqbbuikkfn2mbk7siqxfxky3zzzs455euppnsawi4v2fkd26sqkkm/manifest.mpd",
+        "poster": "https://m.media-amazon.com/images/M/MV5BNDYzMzI3MjQtZGZjYi00MGFiLWExNzgtMmFkZTc3NDk1MGE2XkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "La isla de las tentaciones",
+        "episodeLabel": "Capitulo 9",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-09-26T04:48:56.217Z",
+        "updatedAt": "2026-09-26T04:48:56.218Z"
     }
 ]
