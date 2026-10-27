@@ -1384,5 +1384,19 @@
         "type": "dash",
         "createdAt": "2026-10-26T23:11:26.281Z",
         "updatedAt": "2026-10-26T23:11:26.281Z"
+    },
+    {
+        "id": "volverias-con-tu-ex-2-108af4b5ebf0",
+        "title": "Volverias con tu ex 2",
+        "description": "",
+        "source": "https://stream-4291-31-166.pkcdn.org/dash/k4ohotmhaiikkfn2mbh7smajg4jnxvfbnagumacd2guef3zve3xmdh2b6u/manifest.mpd",
+        "manifest": "https://stream-4291-31-166.pkcdn.org/dash/k4ohotmhaiikkfn2mbh7smajg4jnxvfbnagumacd2guef3zve3xmdh2b6u/manifest.mpd",
+        "poster": "https://artworks.thetvdb.com/banners/posters/309281-1.jpg",
+        "collectionTitle": "Volverias con tu ex 2",
+        "episodeLabel": "Capitulo 82",
+        "category": "series",
+        "type": "dash",
+        "createdAt": "2026-10-27T21:10:27.657Z",
+        "updatedAt": "2026-10-27T21:10:27.657Z"
     }
 ]
