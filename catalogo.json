@@ -1440,5 +1440,19 @@
         "type": "dash",
         "createdAt": "2026-11-03T04:18:16.779Z",
         "updatedAt": "2026-11-03T04:18:16.779Z"
+    },
+    {
+        "id": "mobland-9fcf2b38799f",
+        "title": "Mobland",
+        "description": "",
+        "source": "https://VyY3AyGtEHNQnhdR.acek-cdn.com/hls2/01/08780/ovqgtjgy8zb6_n/master.m3u8?t=N6wECU7c_aZL1Oj7-44O_d18kivjWGYrT8gx25xr9Ic&s=1794178911&e=129600&f=43902631&srv=5TICbOQKpSaA&i=0.4&sp=500&p1=5TICbOQKpSaA&p2=5TICbOQKpSaA&asn=33363",
+        "manifest": "https://VyY3AyGtEHNQnhdR.acek-cdn.com/hls2/01/08780/ovqgtjgy8zb6_n/master.m3u8?t=N6wECU7c_aZL1Oj7-44O_d18kivjWGYrT8gx25xr9Ic&s=1794178911&e=129600&f=43902631&srv=5TICbOQKpSaA&i=0.4&sp=500&p1=5TICbOQKpSaA&p2=5TICbOQKpSaA&asn=33363",
+        "poster": "https://m.media-amazon.com/images/M/MV5BZDc4MmYxNTAtM2ViYy00YWQ4LThjZWUtNDZjNTZjNDFhNzBjXkEyXkFqcGc@._V1_.jpg",
+        "collectionTitle": "Mobland",
+        "episodeLabel": "Capitulo 2x08",
+        "category": "series",
+        "type": "hls",
+        "createdAt": "2026-11-08T23:18:14.274Z",
+        "updatedAt": "2026-11-08T23:18:14.277Z"
     }
 ]
