@@ -1440,19 +1440,5 @@
         "type": "dash",
         "createdAt": "2026-11-03T04:18:16.779Z",
         "updatedAt": "2026-11-03T04:18:16.779Z"
-    },
-    {
-        "id": "mobland-4af831abbd78",
-        "title": "Mobland",
-        "description": "",
-        "source": "https://morencius.com/stream/uE1x4Ux1t3VUd3xBCTT_Zg/hjkrhuihghfvu/1794222111/43902631/master.m3u8",
-        "manifest": "https://morencius.com/stream/uE1x4Ux1t3VUd3xBCTT_Zg/hjkrhuihghfvu/1794222111/43902631/master.m3u8",
-        "poster": "https://m.media-amazon.com/images/M/MV5BZDc4MmYxNTAtM2ViYy00YWQ4LThjZWUtNDZjNTZjNDFhNzBjXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "Mobland",
-        "episodeLabel": "Capitulo 2x08",
-        "category": "series",
-        "type": "hls",
-        "createdAt": "2026-11-08T23:07:23.592Z",
-        "updatedAt": "2026-11-08T23:07:23.593Z"
     }
 ]
