@@ -1440,19 +1440,5 @@
         "type": "dash",
         "createdAt": "2026-11-03T04:18:16.779Z",
         "updatedAt": "2026-11-03T04:18:16.779Z"
-    },
-    {
-        "id": "mobland-0cb18095c0e6",
-        "title": "Mobland",
-        "description": "",
-        "source": "https://cdndirector.dailymotion.com/cdn/manifest/video/xbv0fju.m3u8?sec=Ah-re36xPIm5rQzMwFAO_6NbHdRHpAbopUS14Jzc2VEWdg2_8npVI1MkmvaprmXwH6Pae3x5_LHXgBnBrTpn4Q&dmTs=41383&dmV1st=E8E294AFDBD723C391CBF5092AC98219",
-        "manifest": "https://cdndirector.dailymotion.com/cdn/manifest/video/xbv0fju.m3u8?sec=Ah-re36xPIm5rQzMwFAO_6NbHdRHpAbopUS14Jzc2VEWdg2_8npVI1MkmvaprmXwH6Pae3x5_LHXgBnBrTpn4Q&dmTs=41383&dmV1st=E8E294AFDBD723C391CBF5092AC98219",
-        "poster": "https://m.media-amazon.com/images/M/MV5BZDc4MmYxNTAtM2ViYy00YWQ4LThjZWUtNDZjNTZjNDFhNzBjXkEyXkFqcGc@._V1_.jpg",
-        "collectionTitle": "Mobland",
-        "episodeLabel": "Capitulo 2x08",
-        "category": "series",
-        "type": "hls",
-        "createdAt": "2026-11-09T00:27:49.664Z",
-        "updatedAt": "2026-11-09T00:27:49.670Z"
     }
 ]
